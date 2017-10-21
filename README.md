@@ -256,10 +256,10 @@ Where tar is gnu tar (gtar), and make is gnu make (gmake).
 
 Or
 
-   git clone http://github.com/festvox/flite
-   cd flite
-   ./configure
-   make
+    git clone http://github.com/festvox/flite
+    cd flite
+    ./configure
+    make
 
 Configuration should be automatic, but maybe doesn't work in all cases
 especially if you have some new compiler.  You can explicitly set the
@@ -267,14 +267,14 @@ compiler in config/config and add any options you see fit.  Configure
 tries to guess these but it might be unable to guess for cross
 compilation cases Interesting options there are
 
--DWORDS_BIGENDIAN=1  for bigendian machines (e.g. Sparc, M68x, ar9331)
--DNO_UNION_INITIALIZATION=1  For compilers without C 99 union inintialization
--DCST_AUDIO_NONE     if you don't need/want audio support
+    -DWORDS_BIGENDIAN=1  for bigendian machines (e.g. Sparc, M68x, ar9331)
+    -DNO_UNION_INITIALIZATION=1  For compilers without C 99 union inintialization
+    -DCST_AUDIO_NONE     if you don't need/want audio support
 
 There are different sets of voices and languages you can select between
 them (and your own sets if you make config/XXX.lv).  For example
 
-   ./configure --with-langvox=transtac
+    ./configure --with-langvox=transtac
 
 Will use the languages and voices defined in config/transtac.lv
 
@@ -294,12 +294,12 @@ must contain at least one "/")
 If it compiles properly a binary will be put in bin/, note by
 default -g is on so it will be bigger than is actually required
 
-   ./bin/flite "Flite is a small fast run-time synthesis engine" flite.wav
+    ./bin/flite "Flite is a small fast run-time synthesis engine" flite.wav
 
 Will produce an 8KHz riff headered waveform file (riff is Microsoft's
 wave format often called .WAV).
 
-   ./bin/flite doc/alice
+    ./bin/flite doc/alice
 
 Will play the text file doc/alice.  If the first argument contains
 a space it is treated as text otherwise it is treated as a filename.
@@ -309,12 +309,12 @@ write directly to the audio device (if supported).  if "none"
 is given the audio is simply thrown away (used for benchmarking).
 Explicit options are also available.
 
-   ./bin/flite -v doc/alice none
+    ./bin/flite -v doc/alice none
 
 Will synthesize the file without playing the audio and give a summary
 of the speed.
 
-   ./bin/flite doc/alice alice.wav
+    ./bin/flite doc/alice alice.wav
 
 will synthesize the whole of alice into a single file (previoous
 versions would only give the last utterance in the file, but
@@ -328,51 +328,42 @@ are set and therefor this facility is not intended to be made
 available for standard users.  But these are useful for
 debugging.  Some typical examples are
 
-./bin/flite --sets join_type=simple_join doc/intro
+Use simple concatenation of diphones without prosodic modification
+    ./bin/flite --sets join_type=simple_join doc/intro
 
-     Use simple concatenation of diphones without prosodic modification
      
-./bin/flite -pw doc/alice
+Print sentences as they are said
+    ./bin/flite -pw doc/alice
 
-     Print sentences as they are said
-     
-./bin/flite --setf duration_stretch=1.5 doc/alice
+Make it speak slower
+    ./bin/flite --setf duration_stretch=1.5 doc/alice
 
-     Make it speak slower
-     
-./bin/flite --setf int_f0_target_mean=145 doc/alice
-
-     Make it speak higher
+Make it speak higher pitch
+    ./bin/flite --setf int_f0_target_mean=145 doc/alice
 
 The talking clock is an example talking clode as discussed on
 http://festvox.org/ldom it requires a single argument HH:MM
 under Unix you can call it
-
     ./bin/flite_time `date +%H:%M`
 
-./bin/flite -lv
 
-    List the voices linked in directly in this build
+List the voices linked in directly in this build
+    ./bin/flite -lv
 
-./bin/flite -voice rms -f doc/alice
+Speak with the US male rms voice (builtin version)
+    ./bin/flite -voice rms -f doc/alice
 
-    Speak with the US male rms voice
-    
-./bin/flite -voice awb -f doc/alice
+Speak with the "Scottish" male awb voice (builtin version)
+   ./bin/flite -voice awb -f doc/alice
 
-    Speak with the "Scottish" male awb voice
-    
-./bin/flite -voice slt -f doc/alice
+Speak with the US female slt voice
+    ./bin/flite -voice slt -f doc/alice
 
-    Speak with the US female slt voice
+Speak with AEW voice, download on the fly from festvox.org
+   ./bin/flite -voice http://festvox.org/flite/voices/US/cmu_us_aew.flitevox -f doc/alice
 
-./bin/flite -voice http://festvox.org/flite/voices/US/cmu_us_aew.flitevox -f doc/alice
-
-    Speak with AEW voice, download on the fly from festvox.org
-    
-./bin/flite -voice voices/cmu_us_ahw.flitevox -f doc/alice
-
-    Speak with AHW voice loaded from the local file.
+Speak with AHW voice loaded from the local file.
+   ./bin/flite -voice voices/cmu_us_ahw.flitevox -f doc/alice
 
 Voice names are identified as loadable files if the name includes a
 "/" (slash) otherwise they are treated as internal names.  So if you
