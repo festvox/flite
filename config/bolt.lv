@@ -1,0 +1,9 @@
+#
+#  The base languages, lexicons and voices
+LEXES = cmulex cmu_iq_lex 
+LANGS = usenglish cmu_iq_lang
+VOXES = cmu_us_rms 
+VOXES = cmu_us_kal cmu_us_rms
+EXTRABINS = 
+
+

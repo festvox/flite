@@ -1,0 +1,15 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {435A0515-F568-4A0A-B5A3-42844348602F} = s 'FliteCMUGenericCGObj Class'
+		{
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			TypeLib = s '{F585B0AD-7071-4159-B34F-FB10E2D35A1F}'
+			Version = s '1.0'
+		}
+	}
+}

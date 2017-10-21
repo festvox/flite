@@ -1,0 +1,30 @@
+PARAMS
+-ps
+TEST
+Hindi nX
+INPUT
+गाँव में इतने आदमी तो हैं, किस पर बेदखली नहीं आई, किस पर कुड़की नहीं आई।
+OUTPUT
+pau g A: m v m enas i tB nB e A: dB m i: tB o hv aInas pau k i s p A 9r b e dB A kh l i: nB A hv i:nas A: i: pau k i s p A 9r k u rr k i: nB A hv i:nas A: i: pau
+DOIT
+TEST
+Hindi nX 2
+INPUT
+कहीं जंगली सुअरों के गोल।
+OUTPUT
+pau k A hv i:nas J A N g A l i: s u A 9r onas k e g o l pau
+DOIT
+TEST
+Hindi nX 3
+INPUT
+उनको सुंदर सजाकर मेरे सामने लाओं।
+OUTPUT
+pau u nB k o s u nB dB A 9r s A J A: k A 9r m e 9r e s A: m nB e l A: onas pau
+DOIT
+TEST
+Hindi nX 4
+INPUT
+"साहित्य और संगीत के प्रेमी थे." 
+OUTPUT
+pau s A: hv i tB j aU 9r s A N g i: tB k e p 9r e m i: tBh e pau
+DOIT

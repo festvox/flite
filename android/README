@@ -1,0 +1,11 @@
+Android Support for Flite
+-------------------------
+
+This directory provides the source code of an Android app that can use Flite.
+
+This is now in a separate project
+
+  git clone https://github.com/happyalu/Flite-TTS-Engine-for-Android
+
+and follow instructions in Flite-TTS-Engine-for-Android/README.rst
+

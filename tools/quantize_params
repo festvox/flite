@@ -1,0 +1,274 @@
+#!/bin/sh
+###########################################################################
+##                                                                       ##
+##                  Language Technologies Institute                      ##
+##                     Carnegie Mellon University                        ##
+##                         Copyright (c) 2017                            ##
+##                        All Rights Reserved.                           ##
+##                                                                       ##
+##  Permission is hereby granted, free of charge, to use and distribute  ##
+##  this software and its documentation without restriction, including   ##
+##  without limitation the rights to use, copy, modify, merge, publish,  ##
+##  distribute, sublicense, and/or sell copies of this work, and to      ##
+##  permit persons to whom this work is furnished to do so, subject to   ##
+##  the following conditions:                                            ##
+##   1. The code must retain the above copyright notice, this list of    ##
+##      conditions and the following disclaimer.                         ##
+##   2. Any modifications must be clearly marked as such.                ##
+##   3. Original authors' names are not deleted.                         ##
+##   4. The authors' names are not used to endorse or promote products   ##
+##      derived from this software without specific prior written        ##
+##      permission.                                                      ##
+##                                                                       ##
+##  CARNEGIE MELLON UNIVERSITY AND THE CONTRIBUTORS TO THIS WORK         ##
+##  DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING      ##
+##  ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT   ##
+##  SHALL CARNEGIE MELLON UNIVERSITY NOR THE CONTRIBUTORS BE LIABLE      ##
+##  FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    ##
+##  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##
+##  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##
+##  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##
+##  THIS SOFTWARE.                                                       ##
+##                                                                       ##
+###########################################################################
+##             Author:  Alan W Black (awb@cs.cmu.edu)                    ##
+##               Date:  June 2017                                        ##
+###########################################################################
+##  Quantize values in params file for smaller models in flite           ##
+###########################################################################
+
+# Compress (and decompress) a params file
+. ./etc/voice.defs
+
+if [ "$1" = "find_segments_wagon" ]
+then
+    # Note used anymore, but was used to test to find the "best" partition
+    # of the range of values, i.e. minimize mean error.
+    if [ ! -d ch ]
+    then
+        mkdir ch
+    fi
+
+    for i in `seq 0 103`
+    do
+       $ESTDIR/bin/ch_track -c $i festival/trees/old_cmu_us_slt_mcep.params |
+           awk '{print $1,$1}' >ch/$i.out
+       # sss=`echo $i | awk '{if (($1 % 2) == 0) print 15; else print 250}'`
+       sss=250
+       $ESTDIR/bin/wagon -stop $sss -desc x.desc -data ch/$i.out -o x.tree
+       $ESTDIR/bin/wagon_test -desc x.desc -data ch/$i.out -tree x.tree -predict_val >ch/$i.outn
+    done
+
+    paste `seq 0 103 | awk '{for(i=1;i<=NF;i++) printf("ch/%d.outn ",$i)}'` |
+        $ESTDIR/bin/ch_track -itype ascii -otype est_binary -s 0.005 -o new.params
+    
+    exit 0
+fi
+
+if [ "$1" = "find_segments_quant" ]
+then
+    if [ ! -d ch ]
+    then
+        mkdir ch
+    fi
+
+    basemodel=festival/trees/old_cmu_us_slt_mcep.params
+    if [ $# = 2 ]
+    then
+        basemodel=$2
+    fi
+    numquants=255
+#    numquants=16
+    numchannels=`$ESTDIR/bin/ch_track -info $basemodel | grep "Number of channels" | awk '{print $NF-1}'`
+
+    for i in `seq 0 $numchannels`
+    do
+       echo Quantizing q$numquants channel $i of $numchannels
+       $ESTDIR/bin/ch_track -c $i $basemodel |
+           awk '{print $1}' >ch/$i.out
+       ns=`cat ch/$i.out | awk 'END {print NR}'`
+       sort -g ch/$i.out |
+           awk 'BEGIN {numlines='$ns'; segsize=numlines/'$numquants'.0; q=0; seg=0;}
+                { #print NR,(segsize*(1+seg)),t,q,$1
+                  if (NR < (segsize*(1+seg)))
+                  {
+                     t+=$1;
+                     q+=1;
+                  }
+                  else
+                  {
+                     printf("seg[ %d ]= %f \n",seg,t/q);
+                     seg+=1;
+                     q=0;
+                     t=0;
+                  }}' >ch/$i.segs
+       echo "BEGIN {" >x.awk
+       cat ch/$i.segs >>x.awk
+       echo "}
+             { b=0; bs=(\$1-seg[0])*(\$1-seg[0]);
+               for (i=0; i<$numquants; i++)
+               {
+                  d=\$1-seg[i]
+                  if (d*d < bs)
+                  {
+                     bs=d*d; b=i;
+                  }
+                  else if (d*d > bs)
+                     i=$numquants
+               }
+               print b}" >>x.awk
+       awk -f x.awk ch/$i.out >ch/$i.outn
+    done
+
+    # Make the q_table for this params file
+    for i in `seq 0 $numchannels`
+    do
+        awk '{printf("%s ",$NF)} END {printf("\n")}' ch/$i.segs
+    done |
+        $ESTDIR/bin/ch_track -itype ascii -otype est_binary -s 0.005 -o new.q_table        
+
+    paste `seq 0 $numchannels | awk '{for(i=1;i<=NF;i++) printf("ch/%d.outn ",$i)}'` |
+        awk '{ if (NF == 114)
+               {
+                   # This drops vector values that arent actually used to get
+                   # better reduction -- its very specific to current rf3 builds
+                   # no f0, statics, delta stddev, me means and voicing
+                   for (i=3; i<3+50; i+=2)
+                       printf("%d ",($i*256)+$(i+1)); # statics mean/stddev
+                   for (i=53; i<53+48; i+=4)
+                       printf("%d ",($(i+1)*256)+$(i+3));# deltas only stddev +1
+                   printf("%d ",($102*256)+$(103)); # last delta stdev + me[0]
+                   printf("%d ",($105*256)+$(107)); # me[1], me[2]
+                   printf("%d ",($109*256)+$(111)); # me[3], me[4]
+                   printf("%d ",($113*256)+$(114));  # voicing mean,stddev
+                   printf("\n"); 
+                }
+                else
+                {
+                   # A more simple generic 8 bit compression
+                   for (i=1; i<=NF; i+=2)
+                     printf("%d ",($i*256)+$(i+1));
+                   printf("\n");
+               }}' |
+           $ESTDIR/bin/ch_track -itype ascii -otype est_binary -s 0.005 -o new.params
+
+    mv new.params $basemodel.q_params
+    mv new.q_table $basemodel.q_table
+    
+    exit 0
+
+fi
+
+if [ "$1" = "find_segments2" ]
+then
+    # This is used for debugging the params in festival space
+    # it quantizes the values, rather than gives you the index to the values
+    # so you can test the quality of quantization
+    if [ ! -d ch ]
+    then
+        mkdir ch
+    fi
+
+    basemodel=festival/trees/old_cmu_us_slt_mcep.params
+    if [ $# = 2 ]
+    then
+        basemodel=$2
+    fi
+    numquants=255
+    numquants=16
+    numchannels=`$ESTDIR/bin/ch_track -info $basemodel | grep "Number of channels" | awk '{print $NF-1}'`
+
+    for i in `seq 0 $numchannels`
+    do
+       $ESTDIR/bin/ch_track -c $i $basemodel |
+           awk '{print $1}' >ch/$i.out
+       ns=`cat ch/$i.out | awk 'END {print NR}'`
+       sort -g ch/$i.out |
+           awk 'BEGIN {numlines='$ns'; segsize=numlines/'$numquants'.0; q=0; seg=0;}
+                { #print NR,(segsize*(1+seg)),t,q,$1
+                  if (NR < (segsize*(1+seg)))
+                  {
+                     t+=$1;
+                     q+=1;
+                  }
+                  else
+                  {
+                     printf("seg[ %d ]= %f \n",seg,t/q);
+                     seg+=1;
+                     q=0;
+                     t=0;
+                  }}' >ch/$i.segs
+       echo "BEGIN {" >x.awk
+       cat ch/$i.segs >>x.awk
+       echo "}
+             { b=0; bs=(\$1-seg[0])*(\$1-seg[0]);
+               for (i=0; i<$numquants; i++)
+               {
+                  d=\$1-seg[i]
+                  if (d*d < bs)
+                  {
+                     bs=d*d; b=i;
+                  }
+               }
+               print seg[b]}" >>x.awk
+       awk -f x.awk ch/$i.out >ch/$i.outn
+    done
+
+    paste `seq 0 $numchannels | awk '{for(i=1;i<=NF;i++) printf("ch/%d.outn ",$i)}'` |
+        $ESTDIR/bin/ch_track -itype ascii -otype est_binary -s 0.005 -o new.params
+    
+    exit 0
+fi
+
+if [ "$1" = "quantize_rf_models" ]
+then
+    for i in `cat rf_models/mlist`
+    do
+        echo Quantizing model $i
+        $0 find_segments_quant rf_models/trees_$i/${FV_VOICENAME}_mcep.params
+    done
+
+    exit
+fi
+
+if [ "$1" = "find_segments3" ]
+then
+    # Split into equal ranges, ignoring distribution of the ranges (i.e. bad)
+    if [ ! -d ch ]
+    then
+        mkdir ch
+    fi
+
+    for i in `seq 0 103`
+    do
+       $ESTDIR/bin/ch_track -c $i festival/trees/old_cmu_us_slt_mcep.params |
+           awk '{print $1,$1}' >ch/$i.out
+       nmax=`cat ch/$i.out | awk '{if (NR == 1) t=$1; if ($1 > t) t=$1} END {print t}'`
+       nmin=`cat ch/$i.out | awk '{if (NR == 1) t=$1; if ($1 < t) t=$1} END {print t}'`
+       echo $nmin $nmax |
+           awk '{ segsize = ($2-$1)/254.0;
+                  for (i=0; i<254; i++)
+                  {
+                     printf("seg[%d]=%f\n",i,(0.5+i)*segsize);
+                  }}' >ch/$i.segs
+       echo "BEGIN {" >x.awk
+       cat ch/$i.segs >>x.awk
+       echo "}
+             { b=0; bs=(\$1-seg[0])*(\$1-seg[0]);
+               for (i=0; i<254; i++)
+               {
+                  d=\$1-seg[i]
+                  if (d*d < bs)
+                  {
+                     bs=d*d; b=i;
+                  }
+               }
+               print seg[b]}" >>x.awk
+       awk -f x.awk ch/$i.out >ch/$i.outn
+    done
+
+    paste `seq 0 103 | awk '{for(i=1;i<=NF;i++) printf("ch/%d.outn ",$i)}'` |
+        $ESTDIR/bin/ch_track -itype ascii -otype est_binary -s 0.005 -o new.params
+    
+    exit 0
+fi

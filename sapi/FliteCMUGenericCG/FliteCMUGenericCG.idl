@@ -1,0 +1,38 @@
+// FliteCMUGenericCG.idl : IDL source for FliteCMUGenericCG
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (FliteCMUGenericCG.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "sapiddk.idl";
+
+//[
+//	object,
+//	uuid(E2B1A89A-C1AD-4CA6-9F24-ABDD7E0BE05C),
+//	pointer_default(unique)
+//]
+
+//interface IFliteCMUGenericCGObj : IUnknown{
+//};
+
+[
+	uuid(F585B0AD-7071-4159-B34F-FB10E2D35A1F),
+	version(1.0),
+]
+library FliteCMUGenericCGLib
+{
+	importlib("stdole2.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(435A0515-F568-4A0A-B5A3-42844348602F)		
+	]
+	coclass FliteCMUGenericCGObj
+	{
+		[default] interface ISpTTSEngine;
+		interface ISpObjectWithToken;
+	};
+};
+

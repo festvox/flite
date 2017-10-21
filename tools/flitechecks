@@ -1,0 +1,127 @@
+#!/bin/sh
+###########################################################################
+##                                                                       ##
+##                  Language Technologies Institute                      ##
+##                     Carnegie Mellon University                        ##
+##                         Copyright (c) 2016                            ##
+##                        All Rights Reserved.                           ##
+##                                                                       ##
+##  Permission is hereby granted, free of charge, to use and distribute  ##
+##  this software and its documentation without restriction, including   ##
+##  without limitation the rights to use, copy, modify, merge, publish,  ##
+##  distribute, sublicense, and/or sell copies of this work, and to      ##
+##  permit persons to whom this work is furnished to do so, subject to   ##
+##  the following conditions:                                            ##
+##   1. The code must retain the above copyright notice, this list of    ##
+##      conditions and the following disclaimer.                         ##
+##   2. Any modifications must be clearly marked as such.                ##
+##   3. Original authors' names are not deleted.                         ##
+##   4. The authors' names are not used to endorse or promote products   ##
+##      derived from this software without specific prior written        ##
+##      permission.                                                      ##
+##                                                                       ##
+##  CARNEGIE MELLON UNIVERSITY AND THE CONTRIBUTORS TO THIS WORK         ##
+##  DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING      ##
+##  ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT   ##
+##  SHALL CARNEGIE MELLON UNIVERSITY NOR THE CONTRIBUTORS BE LIABLE      ##
+##  FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    ##
+##  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##
+##  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##
+##  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##
+##  THIS SOFTWARE.                                                       ##
+##                                                                       ##
+###########################################################################
+##                                                                       ##
+##  Run tests for flite front ends                                       ##
+##                                                                       ##
+##  flitechecks VOICE.flitechecks tests/tamil.flitecheck                 ##
+##                                                                       ##
+###########################################################################
+
+LANG=C; export LANG
+
+if [ $# != 2 ]
+then
+    echo "flitecheck VOICE.flitevox [TESTFILE.flitecheck]"
+    echo "if TESTFILE.flitecheck isn't give it will guess one from the library"
+    exit 1
+fi
+
+FLITE=$FLITEDIR/bin/flite
+VOICE=$1
+FC=$2
+
+rm -f test.out.$$
+
+cat $2 |
+while read x
+do
+   if [ "$x" = "INPUT" ]
+   then
+      read y 
+      echo $y >fc.input.$$
+   fi
+   if [ "$x" = "OUTPUT" ]
+   then
+      read y
+      echo $y >fc.output.$$
+   fi
+   if [ "$x" = "PARAMS" ]
+   then
+      read PARAMS
+   fi
+   if [ "$x" = "TEST" ]
+   then
+      read TESTNAME
+      echo RUNNING TEST: $TESTNAME
+   fi
+   if [ "$x" = "DOIT" ]
+   then
+      echo TEST $TESTNAME >>fc.test.out.$$
+      $FLITE -voice $VOICE $PARAMS -f fc.input.$$ none >fc.output.real.$$
+      cat fc.input.$$ >>fc.test.out.$$
+      cat fc.output.$$ >>fc.test.out.$$
+      if diff -b fc.output.$$ fc.output.real.$$ >&2 >>fc.test.out.$$
+      then
+          echo TEST OKAY >>fc.test.out.$$
+      else
+          diff -b fc.output.$$ fc.output.real.$$
+          echo TEST NOT OKAY >>fc.test.out.$$
+      fi
+   fi
+done
+
+#
+#  Print out summary of tests
+#
+cat fc.test.out.$$ |
+awk 'BEGIN { correct=0; total=0; wrong=0; }
+     {if ($1 == "TEST")
+      {
+         if ($NF == "OKAY")
+         {
+            if ($2 == "NOT")
+            {
+               wrong = wrong+1;
+               printf("FAILED: %s\n",testdescription);
+            }
+            else if ($2 == "OKAY")
+            {
+               correct = correct+1;
+            }
+         }
+         else
+         {
+            total=total+1;
+            testdescription = $0;
+         }
+       }}
+     END {if (correct == total)
+             printf("100%% correct ( %d / %d )\n",correct,total);
+          else
+          {
+             printf("%0.2f%% wrong ( %d / %d )\n",(wrong*100.0)/total,wrong,total);
+             printf("%0.2f%% correct ( %d / %d )\n",(correct*100.0)/total,correct,total);
+          }}'
+
+rm -f fc.input.$$ fc.output.$$ fc.test.out.$$ fc.output.real.$$

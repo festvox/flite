@@ -1,0 +1,142 @@
+PARAMS
+-ps
+TEST
+Tamil voiceless word initial
+INPUT
+கால டைம்  தண்ணி பிள்ளை.
+OUTPUT
+pau k A: l A tr aI m tB A nr nr i p i lr lr aI pau
+DOIT
+TEST
+Tamil c to s word initial
+INPUT
+சொல்ல செய்ய சமையல் சரி.
+OUTPUT
+pau s o l l A s e j j A s A m aI j A l s A 9r i pau
+DOIT
+TEST
+Tamil voiceless geminate
+INPUT
+இருக்கிறார் நிச்சயமா விட்ட மூத்த அப்பா.
+OUTPUT
+pau i 9r u k k i rr A: 9r n i c c A j A m A: v i tr tr A m u: tB tB A A p p A: pau
+DOIT
+TEST
+Tamil voiced post nasal
+INPUT
+உங்களை கொஞ்ச வேண்டாம் இந்தியா ரொம்ப.
+OUTPUT
+pau u N g a lr aI k o n~ J A v e: nr dr A: m i nB dB i j A: 9r o m b A pau
+DOIT
+TEST
+Tamil lenition V_V
+INPUT
+தமிழகம் பேச அவரிடம் மாதிரி அனுபவம்.
+OUTPUT
+pau tB A m i zr A G A m p e: s A A v A 9r i rrh A m m A: dh i 9r i A n u B A v A m pau
+DOIT
+TEST
+Tamil lenition A_V
+INPUT
+டெய்சி ஜோர்டான் இயல்பா உள்துறை வாழ்க டிரைவ்கள்.
+OUTPUT
+pau tr e j s i J o: 9r rrh A: n i j A l B A: u lr dh u rr aI v A: zr G A tr i 9r aI v G A lr pau
+DOIT
+TEST
+Tamil misc unvoiced
+INPUT
+கட்சி அதற்க தற்போ முயற்சி.
+OUTPUT
+pau k A tr c i A dh A rr k A tB A rr p o: m u j A rr c i pau
+DOIT
+TEST
+Tamil n rr
+INPUT
+என்ற நன்றி அன்ற.
+OUTPUT
+pau e nr dr rr A nB A nr dr i A nr dr A pau 
+DOIT
+TEST
+Tamil rr rr
+INPUT
+மற்றும் ஏற்று மற்றொர.
+OUTPUT
+pau m A tr tr rr u m e: tr tr rr A m A tr tr rr o 9r A pau 
+DOIT
+TEST
+Tamil word final u reduction
+INPUT
+குறிப்பு எழுத்து.
+OUTPUT
+pau k u rr i p p uy e zr u tB tB uy pau
+DOIT
+TEST
+Tamil 02
+INPUT
+அஃது
+OUTPUT
+pau A h tB uy pau
+DOIT
+TEST
+Tamil 03
+INPUT
+ஃஜிரொக்ஸ்
+OUTPUT
+pau z i 9r o k s pau 
+DOIT
+TEST
+Tamil 04
+INPUT
+ஃபீசு 
+OUTPUT
+pau f i: s uy pau
+DOIT
+TEST
+Tamil six
+INPUT
+௬
+OUTPUT
+pau A: 9r uy pau
+DOIT
+TEST 
+Tamil six thousand
+INPUT
+௬௦௦௦
+OUTPUT
+pau A: 9r uy A: j i 9r A m pau 
+DOIT
+TEST
+Tamil six lakh
+INPUT
+௬௦௦௦௦௦
+OUTPUT
+pau A: 9r uy l A tr c A m pau 
+DOIT
+TEST
+Tamil six crore
+INPUT
+௬௦௦௦௦௦௦௦
+OUTPUT
+pau A: 9r uy k e: A: dr i pau 
+DOIT
+TEST
+Tamil six many zeroes
+INPUT
+௬௦௦௦௦௦௦௦௦௦
+OUTPUT
+pau A: 9r uy p u: J J i j A m p u: J J i j A m p u: J J i j A m p u: J J i j A m p u: J J i j A m p u: J J i j A m p u: J J i j A m p u: J J i j A m p u: J J i j A m pau
+DOIT
+TEST
+Tamil vendum
+INPUT
+வேண்டும்
+OUTPUT
+pau v e: nr dr u m pau
+DOIT
+TEST
+Tamil o/o
+INPUT
+ಒಕ್ಕು ഒക്കു ஒக்கு ఒక్కు
+OUTPUT
+pau o k k u o k k o k k u o k k u pau
+DOIT

@@ -1,0 +1,19 @@
+<ssml>
+
+This is <break /> a pen.
+
+<audio src="arctic_a0001.wav">
+Author of the danger trail, Phillip Steels, etc.
+</audio>
+
+<voice name="rms">
+<prosody rate="1.5">
+This is a pen too </prosody>.
+</voice>
+
+This <break /> is <break /> a pen.
+
+You say <phoneme ph="t ax m ey1 t ow">tomato </phoneme> while I
+say <phoneme ph="t ax m ae1 t ow">tomato</phoneme>.
+
+</ssml>

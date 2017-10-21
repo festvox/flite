@@ -1,0 +1,208 @@
+
+Flite is free software.
+
+We have kept the core code to BSD-like copyright, thus the system is
+free to use in commercial products, with commercial extensions.  GPL
+code is only included as part of the build process and does not
+taint any of the run-time code.  
+
+As a collection it is distributed under the following license.  Note
+a few files in this distribution have a different but equally free
+non-conflicting licence, see below.
+
+                  Language Technologies Institute                      
+                     Carnegie Mellon University                        
+                      Copyright (c) 1999-2017                          
+                        All Rights Reserved.                           
+                                                                       
+  Permission is hereby granted, free of charge, to use and distribute  
+  this software and its documentation without restriction, including   
+  without limitation the rights to use, copy, modify, merge, publish,  
+  distribute, sublicense, and/or sell copies of this work, and to      
+  permit persons to whom this work is furnished to do so, subject to   
+  the following conditions:                                            
+   1. The code must retain the above copyright notice, this list of    
+      conditions and the following disclaimer.                         
+   2. Any modifications must be clearly marked as such.                
+   3. Original authors' names are not deleted.                         
+   4. The authors' names are not used to endorse or promote products   
+      derived from this software without specific prior written        
+      permission.                                                      
+                                                                       
+  CARNEGIE MELLON UNIVERSITY AND THE CONTRIBUTORS TO THIS WORK         
+  DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING      
+  ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT   
+  SHALL CARNEGIE MELLON UNIVERSITY NOR THE CONTRIBUTORS BE LIABLE      
+  FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   
+  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          
+  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       
+  THIS SOFTWARE.                                                       
+                                                                       
+All files within this distribution have the above license except
+the following
+
+src/cg/cst_mlpg.h
+src/cg/cst_mlpg.c
+src/cg/cst_mlsa.h
+src/cg/cst_mlsa.c
+src/cg/cst_vc.h
+src/cg/cst_vc.c
+/*********************************************************************/
+/*                                                                   */
+/*            Nagoya Institute of Technology, Aichi, Japan,          */
+/*       Nara Institute of Science and Technology, Nara, Japan       */
+/*                                and                                */
+/*             Carnegie Mellon University, Pittsburgh, PA            */
+/*                      Copyright (c) 2003-2004                      */
+/*                        All Rights Reserved.                       */
+/*                                                                   */
+/*  Permission is hereby granted, free of charge, to use and         */
+/*  distribute this software and its documentation without           */
+/*  restriction, including without limitation the rights to use,     */
+/*  copy, modify, merge, publish, distribute, sublicense, and/or     */
+/*  sell copies of this work, and to permit persons to whom this     */
+/*  work is furnished to do so, subject to the following conditions: */
+/*                                                                   */
+/*    1. The code must retain the above copyright notice, this list  */
+/*       of conditions and the following disclaimer.                 */
+/*    2. Any modifications must be clearly marked as such.           */
+/*    3. Original authors' names are not deleted.                    */
+/*                                                                   */    
+/*  NAGOYA INSTITUTE OF TECHNOLOGY, NARA INSTITUTE OF SCIENCE AND    */
+/*  TECHNOLOGY, CARNEGIE MELLON UNIVERSITY, AND THE CONTRIBUTORS TO  */
+/*  THIS WORK DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,  */
+/*  INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, */
+/*  IN NO EVENT SHALL NAGOYA INSTITUTE OF TECHNOLOGY, NARA           */
+/*  INSTITUTE OF SCIENCE AND TECHNOLOGY, CARNEGIE MELLON UNIVERSITY, */
+/*  NOR THE CONTRIBUTORS BE LIABLE FOR ANY SPECIAL, INDIRECT OR      */
+/*  CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM   */
+/*  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,  */
+/*  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN        */
+/*  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.         */
+/*                                                                   */
+/*********************************************************************/
+
+These functions are derived from the versions in festvox/src/vc/ as
+modified by Tomoki Toda which in turn contain code derived from
+NITECH's HTS system.  Their copyright has the same freedoms as 
+as Flite's but under NAIST, NITECH and/or CMU.
+
+src/audio/au_wince.c
+src/utils/cst_file_stdio.c
+src/utils/cst_mmap_posix.c
+src/utils/cst_mmap_win32.c
+src/utils/cst_mmap_none.c
+src/utils/cst_file_wince.c
+sapi/ (non-CG)
+      are copyright Cepstral, LLC rather than CMU but fall under the same
+      free licence as the above, except for the owner.
+sapi/ CG support
+      are copyright Cobalt, LLC rather than CMU but fall under the same
+      free licence as the above, except for the owner.
+
+doc/alice
+   Is the first two chapters of Alice in Wonderland as distributed by the
+   Gutenburg project and is now in the public domain
+
+src/regex/regexp.c
+src/regex/regsub.c
+
+ *      Copyright (c) 1986 by University of Toronto.
+ *      Written by Henry Spencer.  Not derived from licensed software.
+ *
+ *      Permission is granted to anyone to use this software for any
+ *      purpose on any computer system, and to redistribute it freely,
+ *      subject to the following restrictions:
+ *
+ *      1. The author is not responsible for the consequences of use of
+ *              this software, no matter how awful, even if they arise
+ *              from defects in it.
+ *
+ *      2. The origin of this software must not be misrepresented, either
+ *              by explicit claim or by omission.
+ *
+ *      3. Altered versions must be plainly marked as such, and must not
+ *              be misrepresented as being the original software.
+
+src/speech/rateconv.c
+
+ *	Copyright (c) 1992, 1995 by Markus Mummert
+ *
+ *	Redistribution and use of this software, modifcation and inclusion
+ *	into other forms of software are permitted provided that the following
+ *	conditions are met:
+ *
+ *	1. Redistributions of this software must retain the above copyright
+ *	   notice, this list of conditions and the following disclaimer.
+ *	2. If this software is redistributed in a modified condition
+ *	   it must reveal clearly that it has been modified.
+
+lang/usenglish/us_durz_cart.c
+lang/usenglish/us_durz_cart.h
+lang/usenglish/us_int_accent_cart.c
+lang/usenglish/us_int_accent_cart.h
+lang/usenglish/us_int_tone_cart.c
+lang/usenglish/us_int_tone_cart.h
+lang/usenglish/us_phoneset.c
+lang/usenglish/us_f0lr.c
+   These are directly (or indirectly) compiled/derived from files that are
+   part of the Festival Speech Synthesis System (1.4.1).  Hence they have
+   a joint copyright CMU/Edinburgh but with the same free licence
+
+configure
+   # Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
+   #
+   # This configure script is free software; the Free Software Foundation
+   # gives unlimited permission to copy, distribute and modify it.
+
+configure.sub
+config.guess
+missing
+install-sh
+mkinstalldirs
+   Copyright FSF, and under the GPL, these files are only used for
+   convenient configuration and are not part of the generated binary,
+   and therefore do not impose any GPL restrctions on the rest of the
+   system.  But as they are standard methods for configuration they 
+   are included.
+
+src/speech/g72x.h
+src/speech/g721.c
+src/speech/g72x.c
+src/speech/g723_24.c
+src/speech/g723_40.c
+
+/*
+ * This source code is a product of Sun Microsystems, Inc. and is provided
+ * for unrestricted use.  Users may copy or modify this source code without
+ * charge.
+ *
+ * SUN SOURCE CODE IS PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND INCLUDING
+ * THE WARRANTIES OF DESIGN, MERCHANTIBILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE, OR ARISING FROM A COURSE OF DEALING, USAGE OR TRADE PRACTICE.
+ *
+ * Sun source code is provided with no support and without any obligation on
+ * the part of Sun Microsystems, Inc. to assist in its use, correction,
+ * modification or enhancement.
+ *
+ * SUN MICROSYSTEMS, INC. SHALL HAVE NO LIABILITY WITH RESPECT TO THE
+ * INFRINGEMENT OF COPYRIGHTS, TRADE SECRETS OR ANY PATENTS BY THIS SOFTWARE
+ * OR ANY PART THEREOF.
+ *
+ * In no event will Sun Microsystems, Inc. be liable for any lost revenue
+ * or profits or other special, indirect and consequential damages, even if
+ * Sun has been advised of the possibility of such damages.
+ *
+ * Sun Microsystems, Inc.
+ * 2550 Garcia Avenue
+ * Mountain View, California  94043
+ */
+
+lang/cmu_grapheme_lex/grapheme_unitran_tables.c
+/* Copyright 2008-2012, University of Illinois at Urbana-Champaign          */
+/* distributed under the Apache License, Version (2.0)                      */
+/* http://www.apache.org/licenses/LICENSE-2.0                               */
+/* Original table developed by Richard Sproat and Kyoung-young Kim          */
+/* Ported for Festvox by Gopala Anumachipalli gopalakr@cs.cmu.edu Sep 2012  */
+/* Then converted to C for CMU Flite (cmuflite.org)                         */

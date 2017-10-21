@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|x64">
+      <Configuration>Template</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <ProjectGuid>{C8A762DF-2981-43E7-967D-1CD89CCA7F14}</ProjectGuid>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;NO_UNION_INITIALIZATION;CST_AUDIO_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\flite.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\flite.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\flite.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;NO_UNION_INITIALIZATION;CST_AUDIO_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\flite.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\flite.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\flite.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;NO_UNION_INITIALIZATION;CST_AUDIO_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\flite.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\flite.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(Outdir)\flite.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;NO_UNION_INITIALIZATION;CST_AUDIO_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\flite.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\flite.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(Outdir)\flite.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\audio\audio.c" />
+    <ClCompile Include="..\..\src\audio\au_command.c" />
+    <ClCompile Include="..\..\src\audio\au_none.c" />
+    <ClCompile Include="..\..\src\audio\au_streaming.c" />
+    <ClCompile Include="..\..\src\cg\cst_cg.c" />
+    <ClCompile Include="..\..\src\cg\cst_cg_dump_voice.c" />
+    <ClCompile Include="..\..\src\cg\cst_cg_load_voice.c" />
+    <ClCompile Include="..\..\src\cg\cst_cg_map.c" />
+    <ClCompile Include="..\..\src\cg\cst_mlpg.c" />
+    <ClCompile Include="..\..\src\cg\cst_mlsa.c" />
+    <ClCompile Include="..\..\src\cg\cst_spamf0.c" />
+    <ClCompile Include="..\..\src\cg\cst_vc.c" />
+    <ClCompile Include="..\..\src\hrg\cst_ffeature.c" />
+    <ClCompile Include="..\..\src\hrg\cst_item.c" />
+    <ClCompile Include="..\..\src\hrg\cst_relation.c" />
+    <ClCompile Include="..\..\src\hrg\cst_rel_io.c" />
+    <ClCompile Include="..\..\src\hrg\cst_utterance.c" />
+    <ClCompile Include="..\..\src\lexicon\cst_lexicon.c" />
+    <ClCompile Include="..\..\src\lexicon\cst_lts.c" />
+    <ClCompile Include="..\..\src\regex\cst_regex.c" />
+    <ClCompile Include="..\..\src\regex\regexp.c" />
+    <ClCompile Include="..\..\src\regex\regsub.c" />
+    <ClCompile Include="..\..\src\speech\cst_lpcres.c" />
+    <ClCompile Include="..\..\src\speech\cst_track.c" />
+    <ClCompile Include="..\..\src\speech\cst_track_io.c" />
+    <ClCompile Include="..\..\src\speech\cst_wave.c" />
+    <ClCompile Include="..\..\src\speech\cst_wave_io.c" />
+    <ClCompile Include="..\..\src\speech\cst_wave_utils.c" />
+    <ClCompile Include="..\..\src\speech\g721.c" />
+    <ClCompile Include="..\..\src\speech\g723_24.c" />
+    <ClCompile Include="..\..\src\speech\g723_40.c" />
+    <ClCompile Include="..\..\src\speech\g72x.c" />
+    <ClCompile Include="..\..\src\speech\rateconv.c" />
+    <ClCompile Include="..\..\src\stats\cst_cart.c" />
+    <ClCompile Include="..\..\src\stats\cst_viterbi.c" />
+    <ClCompile Include="..\..\src\synth\cst_ffeatures.c" />
+    <ClCompile Include="..\..\src\synth\cst_phoneset.c" />
+    <ClCompile Include="..\..\src\synth\cst_ssml.c" />
+    <ClCompile Include="..\..\src\synth\cst_synth.c" />
+    <ClCompile Include="..\..\src\synth\cst_utt_utils.c" />
+    <ClCompile Include="..\..\src\synth\cst_voice.c" />
+    <ClCompile Include="..\..\src\synth\flite.c" />
+    <ClCompile Include="..\..\src\utils\cst_alloc.c" />
+    <ClCompile Include="..\..\src\utils\cst_args.c" />
+    <ClCompile Include="..\..\src\utils\cst_endian.c" />
+    <ClCompile Include="..\..\src\utils\cst_error.c" />
+    <ClCompile Include="..\..\src\utils\cst_features.c" />
+    <ClCompile Include="..\..\src\utils\cst_file_stdio.c" />
+    <ClCompile Include="..\..\src\utils\cst_mmap_none.c" />
+    <ClCompile Include="..\..\src\utils\cst_mmap_win32.c" />
+    <ClCompile Include="..\..\src\utils\cst_socket.c" />
+    <ClCompile Include="..\..\src\utils\cst_string.c" />
+    <ClCompile Include="..\..\src\utils\cst_tokenstream.c" />
+    <ClCompile Include="..\..\src\utils\cst_url.c" />
+    <ClCompile Include="..\..\src\utils\cst_val.c" />
+    <ClCompile Include="..\..\src\utils\cst_val_const.c" />
+    <ClCompile Include="..\..\src\utils\cst_val_user.c" />
+    <ClCompile Include="..\..\src\utils\cst_wchar.c" />
+    <ClCompile Include="..\..\src\wavesynth\cst_clunits.c" />
+    <ClCompile Include="..\..\src\wavesynth\cst_diphone.c" />
+    <ClCompile Include="..\..\src\wavesynth\cst_reflpc.c" />
+    <ClCompile Include="..\..\src\wavesynth\cst_sigpr.c" />
+    <ClCompile Include="..\..\src\wavesynth\cst_sts.c" />
+    <ClCompile Include="..\..\src\wavesynth\cst_units.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\cst_alloc.h" />
+    <ClInclude Include="..\..\include\cst_args.h" />
+    <ClInclude Include="..\..\include\cst_audio.h" />
+    <ClInclude Include="..\..\include\cst_cart.h" />
+    <ClInclude Include="..\..\include\cst_clunits.h" />
+    <ClInclude Include="..\..\include\cst_diphone.h" />
+    <ClInclude Include="..\..\include\cst_endian.h" />
+    <ClInclude Include="..\..\include\cst_error.h" />
+    <ClInclude Include="..\..\include\cst_features.h" />
+    <ClInclude Include="..\..\include\cst_file.h" />
+    <ClInclude Include="..\..\include\cst_hrg.h" />
+    <ClInclude Include="..\..\include\cst_item.h" />
+    <ClInclude Include="..\..\include\cst_lexicon.h" />
+    <ClInclude Include="..\..\include\cst_lts.h" />
+    <ClInclude Include="..\..\include\cst_phoneset.h" />
+    <ClInclude Include="..\..\include\cst_regex.h" />
+    <ClInclude Include="..\..\include\cst_relation.h" />
+    <ClInclude Include="..\..\include\cst_sigpr.h" />
+    <ClInclude Include="..\..\include\cst_socket.h" />
+    <ClInclude Include="..\..\include\cst_string.h" />
+    <ClInclude Include="..\..\include\cst_sts.h" />
+    <ClInclude Include="..\..\include\cst_synth.h" />
+    <ClInclude Include="..\..\include\cst_tokenstream.h" />
+    <ClInclude Include="..\..\include\cst_track.h" />
+    <ClInclude Include="..\..\include\cst_units.h" />
+    <ClInclude Include="..\..\include\cst_utterance.h" />
+    <ClInclude Include="..\..\include\cst_utt_utils.h" />
+    <ClInclude Include="..\..\include\cst_val.h" />
+    <ClInclude Include="..\..\include\cst_val_const.h" />
+    <ClInclude Include="..\..\include\cst_val_defs.h" />
+    <ClInclude Include="..\..\include\cst_viterbi.h" />
+    <ClInclude Include="..\..\include\cst_voice.h" />
+    <ClInclude Include="..\..\include\cst_wave.h" />
+    <ClInclude Include="..\..\include\flite.h" />
+    <ClInclude Include="..\..\include\flite_version.h" />
+    <ClInclude Include="..\..\src\audio\native_audio.h" />
+    <ClInclude Include="..\..\src\cg\cst_cg_map.h" />
+    <ClInclude Include="..\..\src\cg\cst_mlpg.h" />
+    <ClInclude Include="..\..\src\cg\cst_mlsa.h" />
+    <ClInclude Include="..\..\src\cg\cst_spamf0.h" />
+    <ClInclude Include="..\..\src\cg\cst_vc.h" />
+    <ClInclude Include="..\..\src\speech\g72x.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,104 @@
+PARAMS
+-pw
+TEST
+english roman numerals
+INPUT
+Henry V, Part II, Scene IV, I believe, is V I Lenin not Charles I.
+OUTPUT
+henry the fifth part two scene four i believe is v i lenin not charles the first
+DOIT
+TEST
+english st/dr
+INPUT
+It's 14 St. Andrews St, where Dr. Jekyll has his office.
+OUTPUT
+it 's fourteen saint andrews street where doctor jekyll has his office
+DOIT
+TEST
+english numbers 01
+INPUT
+I remember in 1976 there were 86 people attending the conference with a probability of 0.23.
+OUTPUT
+i remember in nineteen seventy six there were eighty six people attending the conference with a probability of zero point two three
+DOIT
+TEST
+english numbers 02
+INPUT
+I think that 12,345 events have a 12.3% increase of 5.6 million.
+OUTPUT
+i think that twelve thousand three hundred forty five events have a twelve point three per cent increase of five point six million
+DOIT
+TEST
+english money 01
+INPUT
+The $2.7 million in the budget will be spent at $1.27 a minute.
+OUTPUT
+the two point seven million dollars in the budget will be spent at one dollar twenty seven cents a minute
+DOIT
+TEST
+english aswd abbrevs lseq 01
+INPUT
+I used to work at I.B.M. but moved to the U.S. later in life, a move of over 1,023km.
+OUTPUT
+i used to work at i b m but moved to the u s later in life a move of over one thousand twenty three kilometers
+DOIT
+TEST
+english aswd abbrevs lseq 02
+INPUT
+I used to work at CASA but when I moved to QRN later in life, my suitcase weighed 102lb.
+OUTPUT
+i used to work at casa but when i moved to q r n later in life my suitcase weighed one hundred two pounds
+DOIT
+TEST
+english telephone numbers 01
+INPUT
+It's 412-268-6299 but you can also just call 268-6299, but internally 8-6299 works too.
+OUTPUT
+it 's four one two two six eight six two nine nine but you can also just call two six eight six two nine nine but internally eight six two nine nine works too
+DOIT
+TEST
+english telephone numbers 02
+INPUT
+It's (412) 268 6299 but you can also just call 268 6299, but internally 8 6299 works too, but my Berlin number is +49 21 89 76 66 03.
+OUTPUT
+ it 's four one two two six eight six two nine nine but you can also just call two six eight six two nine nine but internally eight six two nine nine works too but my berlin number is + forty nine two one eight nine seven six six six zero three
+DOIT
+TEST
+english ranges
+INPUT
+We met 22-23 Sept 2005-2015 with scores of 2-3 in GHC 4-4706.
+OUTPUT
+we met twenty second to twenty third sept two thousand five to twenty fifteen with scores of two to three in g h c four four seven zero six
+DOIT
+TEST
+english time 01
+INPUT
+We started at 04:20:34
+OUTPUT
+we started at zero four : twenty thirty four
+DOIT
+TEST
+english time 02
+INPUT
+I am awake from 6 am every morning until 7:30pm at night.
+OUTPUT
+i am awake from six _a m every morning until seven thirty p m at night
+DOIT
+TEST
+english time 03
+INPUT
+I am awake from 6am every morning until 7:30 pm at night.
+OUTPUT
+i am awake from six _a m every morning until seven thirty pm at night
+DOIT
+TEST
+english decades
+INPUT
+During the 60s, 70's and 00s (or is it the 00's) we were based at the 90s Cafe.
+OUTPUT
+during the sixty 's seventy 's and zero zero 's or is it the zero zero 's we were based at the ninety 's cafe
+DOIT
+
+
+
+

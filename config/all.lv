@@ -1,0 +1,9 @@
+#
+#  all languages, lexicons and voices
+LEXES = cmulex cmu_dari_lex cmu_pashto_lex cmu_iq_lex cmu_indic_lex
+LANGS = usenglish cmu_dari_lang cmu_pashto_lang cmu_iq_lang cmu_indic_lang
+VOXES = cmu_us_kal cmu_time_awb cmu_us_kal16 \
+        cmu_us_awb cmu_us_rms cmu_us_slt
+EXTRABINS = $(BINDIR)/flite_time$(EXEEXT)
+
+

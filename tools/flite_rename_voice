@@ -1,0 +1,92 @@
+#!/bin/sh
+###########################################################################
+##                                                                       ##
+##                  Language Technologies Institute                      ##
+##                     Carnegie Mellon University                        ##
+##                        Copyright (c) 2010                             ##
+##                        All Rights Reserved.                           ##
+##                                                                       ##
+##  Permission is hereby granted, free of charge, to use and distribute  ##
+##  this software and its documentation without restriction, including   ##
+##  without limitation the rights to use, copy, modify, merge, publish,  ##
+##  distribute, sublicense, and/or sell copies of this work, and to      ##
+##  permit persons to whom this work is furnished to do so, subject to   ##
+##  the following conditions:                                            ##
+##   1. The code must retain the above copyright notice, this list of    ##
+##      conditions and the following disclaimer.                         ##
+##   2. Any modifications must be clearly marked as such.                ##
+##   3. Original authors' names are not deleted.                         ##
+##   4. The authors' names are not used to endorse or promote products   ##
+##      derived from this software without specific prior written        ##
+##      permission.                                                      ##
+##                                                                       ##
+##  CARNEGIE MELLON UNIVERSITY AND THE CONTRIBUTORS TO THIS WORK         ##
+##  DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING      ##
+##  ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT   ##
+##  SHALL CARNEGIE MELLON UNIVERSITY NOR THE CONTRIBUTORS BE LIABLE      ##
+##  FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    ##
+##  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##
+##  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##
+##  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##
+##  THIS SOFTWARE.                                                       ##
+##                                                                       ##
+###########################################################################
+#
+#  Renames a clunits/voxdata flite voice build by build_flite
+#
+#  flite_rename_voice FROMDIR NEWNAME TODIR
+#
+#  You have to recompile it afterwards
+#
+FROMDIR=$1
+NEWNAME=$2
+TODIR=$3
+
+OLDNAME=`cat $FROMDIR/voxdefs.h | awk '{ if ($2 == "VOXNAME") printf("%s",$3)}'`
+
+mkdir -p $TODIR
+
+if [ ! -f $FROMDIR/$OLDNAME.c ]
+then
+   echo Current directory does not contain $FROMDIR/$OLDNAME.c
+   echo no renaming possible
+   exit -1
+fi
+
+for i in $FROMDIR/*.c $FROMDIR/*.h $FROMDIR/Makefile
+do
+   fname=`basename $i`
+   cat $i |
+   sed 's/'$OLDNAME'/'$NEWNAME'/g' |
+   cat >$TODIR/`echo $fname | sed 's/'$OLDNAME'/'$NEWNAME'/g'`
+done
+
+for i in $FROMDIR/*.raw
+do
+   fname=`basename $i`
+   cp -p $i $TODIR/`echo $fname | sed 's/'$OLDNAME'/'$NEWNAME'/g'`
+
+done
+
+for i in $FROMDIR/*.voxdata
+do
+   fname=`basename $i`
+   echo $OLDNAME $NEWNAME |
+   awk '{if (length($1) < length($2))
+         {
+            fo = sprintf("%%%ds",length($2));
+            o = sprintf(fo,$1);
+            n = $2;
+         }
+         else
+         {
+            fn = sprintf("%%%ds",length($1));
+            n = sprintf(fn,$2);
+            o = $1;
+         }
+         printf("#>%s<<%s<\n",n,o);
+         printf("sed '"'"'s%%%s%%%s%%'"'"'\n",o,n)}' >$TODIR/sed.command
+   sh $TODIR/sed.command <$i >$TODIR/`echo $fname | sed 's/'$OLDNAME'/'$NEWNAME'/g'`
+   rm -f $TODIR/sed.command
+done
+

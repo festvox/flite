@@ -1,0 +1,104 @@
+#!/bin/sh
+###########################################################################
+##                                                                       ##
+##                  Language Technologies Institute                      ##
+##                     Carnegie Mellon University                        ##
+##                      Copyright (c) 2002-2010                          ##
+##                        All Rights Reserved.                           ##
+##                                                                       ##
+##  Permission is hereby granted, free of charge, to use and distribute  ##
+##  this software and its documentation without restriction, including   ##
+##  without limitation the rights to use, copy, modify, merge, publish,  ##
+##  distribute, sublicense, and/or sell copies of this work, and to      ##
+##  permit persons to whom this work is furnished to do so, subject to   ##
+##  the following conditions:                                            ##
+##   1. The code must retain the above copyright notice, this list of    ##
+##      conditions and the following disclaimer.                         ##
+##   2. Any modifications must be clearly marked as such.                ##
+##   3. Original authors' names are not deleted.                         ##
+##   4. The authors' names are not used to endorse or promote products   ##
+##      derived from this software without specific prior written        ##
+##      permission.                                                      ##
+##                                                                       ##
+##  CARNEGIE MELLON UNIVERSITY AND THE CONTRIBUTORS TO THIS WORK         ##
+##  DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING      ##
+##  ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT   ##
+##  SHALL CARNEGIE MELLON UNIVERSITY NOR THE CONTRIBUTORS BE LIABLE      ##
+##  FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    ##
+##  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##
+##  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##
+##  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##
+##  THIS SOFTWARE.                                                       ##
+##                                                                       ##
+###########################################################################
+##                                                                       ##
+##  Prune the clunits catalogue basic on usage                           ##
+##                                                                       ##
+###########################################################################
+
+# Assume units_used.out contains the units used in by example text
+# Mark all these units (and all previous units to them) used
+
+UNIT_CATALOGUE=$1
+UNIT_TREES=$2
+UNITS_USED=$3
+
+# Prune the catalogue
+cat $UNIT_CATALOGUE |
+awk '{ if (past_header != 1)
+       {
+          print $0;
+          if ($1 == "EST_Header_End")
+             past_header = 1;
+       }}' >${UNIT_CATALOGUE}.pruned
+( cat $UNITS_USED ; echo end_used ;   
+  sed '1,/EST_Header_End/d' $UNIT_CATALOGUE ) |
+awk '{ if ($1 == "end_used" )
+       {
+          end_used = 1;
+       }
+       else if (end_used != 1)
+          used[$1] = 1;
+       else 
+       {
+          if (last_entry == "")
+               true;
+          else if (used[$1] == 1)
+          {
+             print last_entry;
+          }
+          else if (used[last_unit] != 1)
+          {
+             printf("0_0 %s %s %s %s\n",last_2,last_3,last_4,last_5);
+          }
+          else
+          {
+             print last_entry;
+          }
+          last_entry = $0;
+          last_unit = $1;
+          last_2 = $2;
+          last_3 = $3;
+          last_4 = $4;
+          last_5 = $5;
+       }
+     }' >>${UNIT_CATALOGUE}.pruned
+
+# Prune the trees
+cat $UNITS_USED |
+sed 's/_[0-9][0-9]*$/_&/;s/__/ /' |
+sort |
+awk '{if (l != $1)
+      {
+         if (NR > 1)
+            printf(")\n");
+         printf("( \"%s\" ",$1);
+      }
+      printf("%s ",$2);
+      l = $1;
+     }
+     END {printf(")\n");}' >${UNITS_USED}.sorted
+
+$ESTDIR/../festival/bin/festival --heap 10000000 -b $FLITEDIR/tools/make_clunits.scm \
+    '(clunits_prune "'$UNIT_TREES'" "'${UNITS_USED}.sorted'" "'${UNIT_TREES}.pruned'")'
+

@@ -1,0 +1,6 @@
+#define FLITE_PROJECT_NAME "Festival Lite"
+#define FLITE_PROJECT_PREFIX "flite"
+#define FLITE_PROJECT_VERSION "2.0.7"
+#define FLITE_PROJECT_DATE "Jul 2017"
+#define FLITE_PROJECT_STATE "current"
+#define FLITE_PROJECT_SHLIB_VERSION "1"

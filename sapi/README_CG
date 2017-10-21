@@ -1,0 +1,42 @@
+Microsoft Speech API 5.1 support for CLUSTERGEN Voices
+------------------------------------------------------
+
+Copyright (2015) Cobalt Speech and Language Inc
+
+Alok Parlikar <alok@cobaltspeech.com>
+December 2015
+
+------------------------------------------------------
+
+To use CLUSTERGEN voices under SAPI,
+1. Open the "flite_sapi.sln" solution with Visual Studio.
+2. Go to Build -> Batch Build
+3. Choose to build FliteCMUGenericCG in Release mode for x86 and Win32.
+
+This will create the following files:
+  flite/sapi/Win32/Release/FliteCMUGenericCG_Win32.dll
+  flite/sapi/x64/Release/FliteCMUGenericCG_x64.dll
+
+In order to use these libraries, you will need to register these libraries
+and use them with a flitevox file.
+
+ASSUMPTION: Your voice file is in C:\xyz.flitevox
+
+1. Register (regsvr32) the appropriate DLL file based on your Windows version.
+
+2. Create registry entries for each flitevox file you would like to use.
+
+Here is an example of registry data you need to create:
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001"; ValueType: string; ValueName: "CLSID"; ValueData: "{{435A0515-F568-4A0A-B5A3-42844348602F}"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001"; ValueType: string; ValueData: "Flite Voice 01"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001"; ValueType: string; ValueName: "409"; ValueData: "Flite Voice 01"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001"; ValueType: string; ValueName: "voxdir"; ValueData: "C:\xyz.flitevox"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001\Attributes"; ValueType: string; ValueName: "Gender"; ValueData: "Male"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001\Attributes"; ValueType: string; ValueName: "Name"; ValueData: "Flite Voice 01"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001\Attributes"; ValueType: string; ValueName: "Language"; ValueData: "409;9"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001\Attributes"; ValueType: string; ValueName: "Age"; ValueData: "Adult"
+"SOFTWARE\Microsoft\Speech\Voices\Tokens\Flite001\Attributes"; ValueType: string; ValueName: "Vendor"; ValueData: "Flite"
+
+################################################################################
+
+
