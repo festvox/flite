@@ -85,41 +85,42 @@ flite synthesizes 9.79 time faster than real time.
 Requirements:
 -------------
 
-o A good C compiler, some of these files are quite large and some C
-  compilers might choke on these, gcc is fine.  Sun CC 3.01 has been
-  tested too.  Visual C++ 6.0 is known to fail on the large diphone
-  database files.  We recommend you use GCC Windows Subsystem for Linux
-  Cygwin or mingw32 instead.
+    o A good C compiler, some of these files are quite large and some C
+      compilers might choke on these, gcc is fine.  Sun CC 3.01 has been
+      tested too.  Visual C++ 6.0 is known to fail on the large diphone
+      database files.  We recommend you use GCC Windows Subsystem for Linux
+      Cygwin or mingw32 instead.
   
-o GNU Make
+    o GNU Make
 
-o An audio device isn't required as flite can write its output to 
-  a waveform file. 
+    o An audio device isn't required as flite can write its output to 
+      a waveform file. 
 
 Supported platforms:
+--------------------
 
 We have successfully compiled and run on 
 
-o Various Intel Linux systems (and iPaq Linux), under various versions
-  of GCC (2.7.2 to 6.x)
+    o Various Intel Linux systems (and iPaq Linux), under various versions
+      of GCC (2.7.2 to 6.x)
   
-o Mac OS X
+    o Mac OS X
 
-o Various Android devices
+    o Various Android devices
 
-o Various openwrt devices
+    o Various openwrt devices
 
-o FreeBSD 3.x and 4.x
+    o FreeBSD 3.x and 4.x
 
-o Solaris 5.7, and Solaris 9
+    o Solaris 5.7, and Solaris 9
 
-o Windows 2000/XP and later under Cygwin 1.3.5 and later
+    o Windows 2000/XP and later under Cygwin 1.3.5 and later
 
-o Windows 10 with bash on ubuntu on Windows
+    o Windows 10 with Windows Subsystem for Linux
 
-o Successfully compiles and runs under 64Bit Linux architectures
+    o Successfully compiles and runs under 64Bit Linux architectures
 
-o OSF1 V4.0 (gives an unimportant warning about sizes when compiled cst_val.c)
+    o OSF1 V4.0 (gives an unimportant warning about sizes when compiled cst_val.c)
 
 Previously we supported PalmOS and Windows CE but these seem to be rare
 nowadays so they are no longer actively supported.
@@ -329,41 +330,50 @@ available for standard users.  But these are useful for
 debugging.  Some typical examples are
 
 Use simple concatenation of diphones without prosodic modification
+
     ./bin/flite --sets join_type=simple_join doc/intro
 
-     
 Print sentences as they are said
+
     ./bin/flite -pw doc/alice
 
 Make it speak slower
+
     ./bin/flite --setf duration_stretch=1.5 doc/alice
 
 Make it speak higher pitch
+
     ./bin/flite --setf int_f0_target_mean=145 doc/alice
 
 The talking clock is an example talking clode as discussed on
 http://festvox.org/ldom it requires a single argument HH:MM
 under Unix you can call it
+
     ./bin/flite_time `date +%H:%M`
 
-
 List the voices linked in directly in this build
+
     ./bin/flite -lv
 
 Speak with the US male rms voice (builtin version)
+
     ./bin/flite -voice rms -f doc/alice
 
 Speak with the "Scottish" male awb voice (builtin version)
+
    ./bin/flite -voice awb -f doc/alice
 
 Speak with the US female slt voice
+
     ./bin/flite -voice slt -f doc/alice
 
 Speak with AEW voice, download on the fly from festvox.org
-   ./bin/flite -voice http://festvox.org/flite/voices/US/cmu_us_aew.flitevox -f doc/alice
+
+    ./bin/flite -voice http://festvox.org/flite/voices/US/cmu_us_aew.flitevox -f doc/alice
 
 Speak with AHW voice loaded from the local file.
-   ./bin/flite -voice voices/cmu_us_ahw.flitevox -f doc/alice
+
+    ./bin/flite -voice voices/cmu_us_ahw.flitevox -f doc/alice
 
 Voice names are identified as loadable files if the name includes a
 "/" (slash) otherwise they are treated as internal names.  So if you
@@ -393,7 +403,7 @@ process.
 We expect that often voices will be loaded from external files, and we
 have now set up a voice repository on
 
-   http://festvox.org/flite/voices/LANG/*.flitevox
+    http://festvox.org/flite/voices/LANG/*.flitevox
    
 If you visit there with a browser you can hear the examples.  You can
 also download the .flitevox files to you machine so you don't need a
