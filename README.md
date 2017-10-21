@@ -68,15 +68,10 @@ cmulex) and a set of models for US English.  Here are comparisons
 with Festival using basically the same 8KHz diphone voice
 
                 Flite    Festival
-                
    core code    60K      2.6M
-   
    USEnglish    100K     ??
-   
    lexicon      600K     5M
-   
    diphone      1.8M     2.1M
-   
    runtime      <1M      16-20M
    
 
@@ -87,7 +82,8 @@ On a 500Mhz PIII, a timing test of the first two chapters of
 (13.4 times faster than real time).  On the ipaq (with the 16KHz diphones)
 flite synthesizes 9.79 time faster than real time.
 
-Requirements:  
+Requirements:
+-------------
 
 o A good C compiler, some of these files are quite large and some C
   compilers might choke on these, gcc is fine.  Sun CC 3.01 has been
@@ -190,7 +186,6 @@ New in 2.0.0 (Dec 2014)
        https://github.com/festvox/bard
 
 New in 1.4.1 (March 2010)
-
     o better ssml support (actually does something)
     
     o better clunit support (smaller)
@@ -221,7 +216,6 @@ New in 1.4 (December 2009)
     o Speed-ups (and fixes) for converting clunits festvox voices
 
 New in 1.3-release (October 2005)
-
     o fixes to lpc residual extraction to give better quality output
     
     o An updated lexicon (festlex_CMU from festival-2.0.95) and better
@@ -235,7 +229,6 @@ New in 1.3-release (October 2005)
     o runs under ix86_64 linux
 
 New in 1.2-release  (February 2003)
-
     o A build process for diphone and clunits/ldom voices
       FestVox voices can be converted (sometimes) automatically
       
