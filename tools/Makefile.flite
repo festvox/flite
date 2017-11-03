@@ -120,7 +120,7 @@ voicedump : flite_$(VOICENAME)
 
 # Add and voice specific feats
 add_feats :
-	$(FLITEDIR)/bin/add_flite_feats $(VOICENAME).flitevox ../etc/flite_feats
+	$(FLITEDIR)/bin/add_flite_feats $(VOICENAME).flitevox ../etc/voice.feats
 
 # Run front end tests
 flitecheck:

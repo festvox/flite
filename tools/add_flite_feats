@@ -35,9 +35,9 @@
 ##  After a voice is built and dumped as a .flitevox file for            ##
 ##  distribution, add the feats to the file from ../etc/flite_feats      ##
 ##                                                                       ##
-##  $FLITEDIR/tools/add_flite_feats X.flitevox ../etc/flite_feats        ##
+##  $FLITEDIR/tools/add_flite_feats X.flitevox ../etc/voice.feats        ##
 ##                                                                       ##
-##  ../etc/flite_feats should look something like                        ##
+##  ../etc/voice.feats should look something like                        ##
 ##                                                                       ##
 ##  age 42                                                               ##
 ##  gender male                                                          ##
