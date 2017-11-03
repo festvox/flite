@@ -292,6 +292,12 @@ int cst_cg_dump_voice(const cst_voice *v,const cst_string *filename)
                           get_param_string(v->features,"build_date","unknown"));
     cst_cg_write_voice_feature(fd, "description", 
                           get_param_string(v->features,"description","unknown"));
+    if (get_param_string(v->features,"prompt_dur",NULL))
+        cst_cg_write_voice_feature(fd, "prompt_dur", 
+                          get_param_string(v->features,"prompt_dur","unknown"));
+    if (get_param_string(v->features,"english_data",NULL))
+        cst_cg_write_voice_feature(fd, "english_data", 
+                                   get_param_string(v->features,"english_data","unknown"));
     // Sai Krishna 07 July 2017 
     // Flag to use shared vs mapped  phoneset. Storing as string
     cst_cg_write_voice_feature(fd, "eng_shared", 
