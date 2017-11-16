@@ -117,6 +117,8 @@ flite_lang_list.c:
 # Dump cg voice as single file
 voicedump : flite_$(VOICENAME)
 	./flite_$(VOICENAME) -voicedump $(VOICENAME).flitevox
+# Add build date to the flitevox file
+	$(FLITEDIR)/bin/flitevox_info -set build_date -val "`date`" -voice $(VOICENAME).flitevox
 
 # Add and voice specific feats
 add_feats :
