@@ -120,10 +120,6 @@ voicedump : flite_$(VOICENAME)
 # Add build date to the flitevox file
 	$(FLITEDIR)/bin/flitevox_info -set build_date -val "`date`" -voice $(VOICENAME).flitevox
 
-# Add and voice specific feats
-add_feats :
-	$(FLITEDIR)/bin/add_flite_feats $(VOICENAME).flitevox ../etc/voice.feats
-
 # Run front end tests
 flitecheck:
 	$(FLITEDIR)/bin/run_flitecheck $(VOICENAME).flitevox

@@ -94,8 +94,8 @@ int main(int argc, char **argv)
         /* set the feature */
         feat_set_string(v->features,feat,feat_string(args,"-val"));
 
-        printf("awb_debug: setting %s %s\n",feat,
-               feat_string(v->features,feat));
+        /*        printf("awb_debug: setting %s %s\n",feat,
+                  feat_string(v->features,feat)); */
         /* save the voice back out again */
         flite_voice_dump(v,voice_name);
     }
