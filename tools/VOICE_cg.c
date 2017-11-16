@@ -65,6 +65,9 @@ cst_voice *register___VOICENAME__(const char *voxdir)
     /* Things that weren't filled in already. */
     flite_feat_set_string(vox->features,"name","__VOICENAME__");
 
+    /* Voice specific features from ../etc/voice.feats */
+#include "__VOICENAME___voice_feats.c"
+
     /* Lexicon */
     lex = __FLITELEX___init();
     flite_feat_set(vox->features,"lexicon",lexicon_val(lex));

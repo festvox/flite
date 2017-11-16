@@ -382,6 +382,12 @@ then
                    "."
                    "flite/")'
 
+   touch flite/${FV_VOICENAME}_voice_feats.c
+   if [ -f etc/voice.feats ]
+   then
+      ${FLITEDIR}/tools/make_flite_feats etc/voice.feats >flite/${FV_VOICENAME}_voice_feats.c
+   fi
+   
    if [ "$FV_LANG_TYPE" = "grapheme" ]
    then
       echo cg_convert: converting phoneset table
