@@ -298,10 +298,11 @@ int cst_cg_dump_voice(const cst_voice *v,const cst_string *filename)
     if (get_param_string(v->features,"english_data",NULL))
         cst_cg_write_voice_feature(fd, "english_data", 
                                    get_param_string(v->features,"english_data","unknown"));
-    // Sai Krishna 07 July 2017 
-    // Flag to use shared vs mapped  phoneset. Storing as string
-    cst_cg_write_voice_feature(fd, "eng_shared", 
-                          get_param_string(v->features,"eng_shared","0"));
+    /* Sai Krishna 07 July 2017  */
+    /* Flag to use shared vs mapped eng phoneset, for bilingual voices */
+    if (get_param_string(v->features,"eng_shared",NULL))
+        cst_cg_write_voice_feature(fd, "eng_shared", 
+                         get_param_string(v->features,"eng_shared","0"));
 
     /* These three must be saved as string features
        (though are interpreted as floats) */
