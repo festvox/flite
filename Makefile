@@ -73,6 +73,10 @@ config/config: config/config.in config.status
 configure: configure.in
 	autoconf
 
+get_voices:
+	./bin/get_voices us_voices
+#	 ./bin/get_voices indic_voices
+
 backup: time-stamp
 	@ $(RM) -f $(TOP)/FileList
 	@ $(MAKE) file-list

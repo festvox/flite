@@ -1,8 +1,9 @@
+#!/bin/sh
 ###########################################################################
 ##                                                                       ##
 ##                  Language Technologies Institute                      ##
 ##                     Carnegie Mellon University                        ##
-##                        Copyright (c) 2000-2008                        ##
+##                         Copyright (c) 2017                            ##
 ##                        All Rights Reserved.                           ##
 ##                                                                       ##
 ##  Permission is hereby granted, free of charge, to use and distribute  ##
@@ -30,49 +31,73 @@
 ##  THIS SOFTWARE.                                                       ##
 ##                                                                       ##
 ###########################################################################
+##             Author:  Alan W Black (awb@cs.cmu.edu)                    ##
+##               Date:  November 2017                                    ##
+###########################################################################
 ##                                                                       ##
-##  Tools for converting Festvox structures to Flite code                ##
+##  Download some .flitevox voices                                       ##
 ##                                                                       ##
 ###########################################################################
-TOP=..
-DIRNAME=tools
-BUILD_DIRS = 
-ALL_DIRS=
-SRCS = find_sts_main.c flite_sort_main.c
-OBJS = $(SRCS:.c=.o)
-TMPLTS = VOICE_ldom.c VOICE_clunits.c VOICE_diphone.c \
-         VOICE_cg.c Makefile.flite \
-         Makefile.lex LANGNAME_lex.c LANGNAME_lex.h \
-         Makefile.lang LANGNAME_lang.c LANGNAME_lang.h
-SCRIPTS = build_flite setup_flite huff_table flite_test \
-          flite_test_fv \
-          make_voice_list wfst2c build_lex clunit_prune \
-          a2byte.pl a2short.pl a2int.pl flite_rename_voice \
-          make_lang_list make_new_lang_lex flitechecks \
-          add_flite_feats make_flite_feats run_flitecheck quantize_params \
-          get_voices
-SCM=make_lex.scm make_lts.scm make_cart.scm play_sync.scm \
-    make_phoneset.scm make_vallist.scm make_clunits.scm \
-    make_didb.scm make_didb2.scm make_f0lr.scm make_lts_wfst.scm \
-    make_lts_rewrite.scm \
-    make_cg.scm make_ug.scm
 
-FILES = Makefile $(SCM) $(SRCS) $(SCRIPTS) $(TMPLTS) \
-        find_cmimax example.lex example.ssml
-LOCAL_INCLUDES = 
+if [ ! -f include/flite.h ]
+then
+    echo "Not in the right directory."
+    echo "You should be in the flite main src directory to run this script"
+    echo "where ls -l include/flite.h is found"
+    exit -1
+fi
 
-ifeq ($(HOST_PLATFORM),$(TARGET_PLATFORM))
-ALL = $(BINDIR)/find_sts $(BINDIR)/flite_sort makescripts
-endif	
+if [ ! -d voices ]
+then
+    mkdir voices
+fi
 
-include $(TOP)/config/common_make_rules
+if [ $# = 0 ]
+then
+    $0 us_voices
+    exit 0
+fi
 
-LOCAL_CLEAN = $(BINDIR)/find_sts $(BINDIR)/flite_sort $(TOP)/bin
+#FLITEVOICEDIR=http://tts.speech.cs.cmu.edu/awb/flite-2.1/voices/
+#FLITEVOICEDIR=http://festvox.org/flite/packed/flite-2.1/voices/
+FLITEVOICEDIR=http://cmuflite.org/packed/flite-2.1/voices/
 
-$(BINDIR)/find_sts: find_sts_main.o $(FLITELIBS) 
-	$(CC) $(CFLAGS) -o $@ find_sts_main.o $(FLITELIBFLAGS) $(LDFLAGS)
-$(BINDIR)/flite_sort: flite_sort_main.o $(FLITELIBS)
-	$(CC) $(CFLAGS) -o $@ flite_sort_main.o $(FLITELIBFLAGS) $(LDFLAGS)
-makescripts:
-	@ cp -p $(SCRIPTS) $(TOP)/bin
+if [ "$1" = "us_voices" ]
+then
+     cd voices
+     wget $FLITEVOICEDIR/us_voices
+     for i in `grep ".flitevox$" us_voices`
+     do
+         vname=`basename $i`
+         rm -f $vname
+         wget $FLITEVOICEDIR/$vname
+     done
+     rm -f us_voices
+     exit 0
+fi    
+
+if [ "$1" = "indic_voices" ]
+then
+     cd voices
+     wget $FLITEVOICEDIR/indic_voices
+     for i in `grep ".flitevox$" indic_voices`
+     do
+         vname=`basename $i`
+         rm -f $vname
+         wget $FLITEVOICEDIR/$vname
+     done
+     rm -f indic_voices
+     exit 0
+fi    
+
+if [ "$1" = "all_voices" ]
+then
+     $0 us_voices
+     $0 indic_voices
+     exit 0
+fi    
+
+exit
+
+
 

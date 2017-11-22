@@ -252,6 +252,7 @@ In general
     cd flite-2.1-current
     ./configure 
     make
+    make get_voices
 
 Where tar is gnu tar (gtar), and make is gnu make (gmake).
 
@@ -261,6 +262,7 @@ Or
     cd flite
     ./configure
     make
+    make get_voices
 
 Configuration should be automatic, but maybe doesn't work in all cases
 especially if you have some new compiler.  You can explicitly set the
@@ -361,7 +363,7 @@ Speak with the US male rms voice (builtin version)
 
 Speak with the "Scottish" male awb voice (builtin version)
 
-   ./bin/flite -voice awb -f doc/alice
+    ./bin/flite -voice awb -f doc/alice
 
 Speak with the US female slt voice
 
@@ -369,16 +371,19 @@ Speak with the US female slt voice
 
 Speak with AEW voice, download on the fly from festvox.org
 
-    ./bin/flite -voice http://festvox.org/flite/voices/US/cmu_us_aew.flitevox -f doc/alice
+    ./bin/flite -voice http://festvox.org/flite/packed/flite-2.1/voices/cmu_us_aew.flitevox -f doc/alice
 
 Speak with AHW voice loaded from the local file.
 
     ./bin/flite -voice voices/cmu_us_ahw.flitevox -f doc/alice
 
-Voice names are identified as loadable files if the name includes a
-"/" (slash) otherwise they are treated as internal names.  So if you
-want to load voices from the current directory you need to prefix the
-with "./".
+You can download the available voices into voices/
+
+    ./bin/get_voices us_voices
+
+and/or
+
+    ./bin/get_voices indic_voices
 
 Voice quality
 -------------
@@ -401,9 +406,9 @@ included voice is just a sample voice that was used in the testing
 process.  
 
 We expect that often voices will be loaded from external files, and we
-have now set up a voice repository on
+have now set up a voice repository in
 
-    http://festvox.org/flite/voices/LANG/*.flitevox
+    http://festvox.org/flite/flite-2.1/voices/*.flitevox
    
 If you visit there with a browser you can hear the examples.  You can
 also download the .flitevox files to you machine so you don't need a
