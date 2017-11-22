@@ -68,11 +68,11 @@ cmulex) and a set of models for US English.  Here are comparisons
 with Festival using basically the same 8KHz diphone voice
 
                 Flite    Festival
-   core code    60K      2.6M
-   USEnglish    100K     ??
-   lexicon      600K     5M
-   diphone      1.8M     2.1M
-   runtime      <1M      16-20M
+    core code    60K      2.6M
+    USEnglish    100K     ??
+    lexicon      600K     5M
+    diphone      1.8M     2.1M
+    runtime      <1M      16-20M
    
 
 On a 500Mhz PIII, a timing test of the first two chapters of
