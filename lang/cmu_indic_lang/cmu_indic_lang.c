@@ -538,6 +538,10 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
         num_table = &kan_num_table;
     else if (cst_streq(variant,"mar"))
         num_table = &mar_num_table;
+    else if (cst_streq(variant,"nep"))
+        num_table = &hin_num_table;
+    else if (cst_streq(variant,"san"))
+        num_table = &hin_num_table;
     else if (cst_streq(variant,"tel"))
         num_table = &tel_num_table;
     else if (cst_streq(variant,"tam"))
