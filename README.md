@@ -1,9 +1,11 @@
 
          Flite: a small run-time speech synthesis engine
-                      version 2.1-current
+                      version 2.1-release
           Copyright Carnegie Mellon University 1999-2017
                       All rights reserved
                       http://cmuflite.org
+              https://github.com/festvox/flite
+
 
 Flite is an open source small fast run-time text to speech engine.  It
 is the latest addition to the suite of free software synthesis tools
