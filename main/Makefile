@@ -54,7 +54,8 @@ ALL = shared_libs \
 VOICES=$(VOXES)
 VOICELIBS=$(VOICES:%=flite_%)
 
-flite_LIBS = $(VOICELIBS) $(LANGS:%=flite_%) $(LEXES:%=flite_%) flite
+flite_MODS = $(VOICELIBS) $(LANGS:%=flite_%) $(LEXES:%=flite_%) 
+flite_LIBS = flite $(flite_MODS)
 
 flite_LIBS_flags = -L$(LIBDIR) $(flite_LIBS:%=-l%)
 flite_LIBS_deps = $(flite_LIBS:%=$(LIBDIR)/lib%.a)
@@ -65,6 +66,10 @@ include $(TOP)/config/common_make_rules
 # so make clean can remove them
 SHAREDARLIBS= $(flite_LIBS:%=$(LIBDIR)/lib%.shared.a)
 SHAREDLIBS = $(SHAREDARLIBS:%.shared.a=%.so)
+SHAREDMODS = $(flite_MODS:%=$(LIBDIR)/lib%.so)
+SHAREDusenMODS = $(LIBDIR)/libflite_cmu_time_awb.so $(LIBDIR)/libflite_cmu_us_awb.so $(LIBDIR)/libflite_cmu_us_kal16.so $(LIBDIR)/libflite_cmu_us_kal.so $(LIBDIR)/libflite_cmu_us_rms.so $(LIBDIR)/libflite_cmu_us_slt.so $(LIBDIR)/libflite_cmu_indic_lang.so
+SHAREDcmulexMODS = $(LIBDIR)/libflite_cmu_time_awb.so $(LIBDIR)/libflite_cmu_us_awb.so $(LIBDIR)/libflite_cmu_us_kal16.so $(LIBDIR)/libflite_cmu_us_kal.so $(LIBDIR)/libflite_cmu_us_rms.so $(LIBDIR)/libflite_cmu_us_slt.so  $(LIBDIR)/libflite_cmu_indic_lex.so
+SHAREDindicMODS = $(LIBDIR)/libflite_cmu_indic_lex.so
 VERSIONSHAREDLIBS = $(SHAREDLIBS:%=%.${PROJECT_VERSION}) \
                     $(SHAREDLIBS:%=%.${PROJECT_SHLIB_VERSION})
 
@@ -79,7 +84,14 @@ LOCAL_CLEAN = $(BINDIR)/flite$(EXEEXT) $(BINDIR)/flite_time$(EXEEXT) \
               flite_voice_list.c
 
 ifdef SHFLAGS
-flite_LIBS_flags += -Wl,-rpath $(LIBDIR) 
+$(SHAREDMODS): $(LIBDIR)/libflite.so
+$(SHAREDMODS): LDFLAGS+=-L../$(LIBDIR) -lflite
+$(SHAREDusenMODS): $(LIBDIR)/libflite_usenglish.so
+$(SHAREDusenMODS): LDFLAGS+=-L../$(LIBDIR) -lflite_usenglish
+$(SHAREDcmulexMODS): $(LIBDIR)/libflite_cmulex.so
+$(SHAREDcmulexMODS): LDFLAGS+=-L../$(LIBDIR) -lflite_cmulex
+$(SHAREDindicMODS): $(LIBDIR)/libflite_cmu_indic_lang.so
+$(SHAREDindicMODS): LDFLAGS+=-L../$(LIBDIR) -lflite_cmu_indic_lang
 shared_libs: $(SHAREDLIBS)
 else
 shared_libs: nothing
