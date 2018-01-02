@@ -50,7 +50,7 @@ doc: flite.html flite.pdf
 flite.html: flite.texi
 	@ if [ ! -d html ] ; \
           then mkdir -p html ; fi
-	(cd html; texi2html -number -split_chapter ../flite.texi)
+	(cd html; texi2any --set-customization-variable TEXI2HTML=1  --split=chapter ../flite.texi)
 	@ if [ -d html/flite ] ; \
 	  then mv html/flite/*.html html ; \
                rmdir html/flite; fi
