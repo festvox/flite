@@ -814,7 +814,7 @@ Here is a simple C program that uses the flite library
 @example
 #include "flite.h"
 
-register_cmu_us_kal();
+cst_voice * register_cmu_us_kal(const char *voxdir);
 
 int main(int argc, char **argv)
 @{
