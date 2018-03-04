@@ -54,7 +54,7 @@ typedef struct au_wince_pdata_struct {
   int fqmaxlen;
 } au_wince_pdata;
 
-void add_to_free_queue(cst_audiodev *ad, void *datum)
+static void add_to_free_queue(cst_audiodev *ad, void *datum)
 {
     au_wince_pdata *pd = ad->platform_data;
 
@@ -83,7 +83,7 @@ static void finish_header(HWAVEOUT drvr, WAVEHDR *hdr)
     cst_free(hdr);
 }
 
-void CALLBACK sndbuf_done(HWAVEOUT drvr, UINT msg,
+static void CALLBACK sndbuf_done(HWAVEOUT drvr, UINT msg,
 			  DWORD udata, DWORD param1, DWORD param2)
 {
     WAVEHDR *hdr = (WAVEHDR *)param1;

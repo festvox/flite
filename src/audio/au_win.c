@@ -58,7 +58,7 @@ typedef struct au_win_pdata_struct {
   int fqmaxlen;
 } au_win_pdata;
 
-void add_to_free_queue(cst_audiodev *ad, void *datum)
+static void add_to_free_queue(cst_audiodev *ad, void *datum)
 {
     au_win_pdata *pd = ad->platform_data;
 
@@ -87,8 +87,8 @@ static void finish_header(HWAVEOUT drvr, WAVEHDR *hdr)
     cst_free(hdr);
 }
 
-void CALLBACK sndbuf_done(HWAVEOUT drvr, UINT msg,
-			  DWORD udata, DWORD param1, DWORD param2)
+static void CALLBACK sndbuf_done(HWAVEOUT drvr, UINT msg,
+			  DWORD_PTR udata, DWORD_PTR param1, DWORD_PTR param2)
 {
     WAVEHDR *hdr = (WAVEHDR *)param1;
     cst_audiodev *ad = (cst_audiodev *)udata;
@@ -141,7 +141,7 @@ cst_audiodev *audio_open_win(int sps, int channels, int fmt)
     wfx.nBlockAlign = wfx.nChannels*wfx.wBitsPerSample/8;
     wfx.nAvgBytesPerSec = wfx.nSamplesPerSec*wfx.nBlockAlign;
     err = waveOutOpen(&wo,WAVE_MAPPER,&wfx,
-                      (DWORD)sndbuf_done,(DWORD)ad,
+                      (DWORD_PTR)sndbuf_done,(DWORD_PTR)ad,
                       CALLBACK_FUNCTION);
     if (err != MMSYSERR_NOERROR)
     {
