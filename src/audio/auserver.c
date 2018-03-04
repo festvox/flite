@@ -67,9 +67,11 @@ static int play_wave_from_socket(snd_header *header,int audiostream)
     int q,i,n,r;
     unsigned char bytes[CST_AUDIOBUFFSIZE];
     short shorts[CST_AUDIOBUFFSIZE];
+#ifdef DEBUG
     cst_file fff;
 
     fff = cst_fopen("/tmp/awb.wav",CST_OPEN_WRITE|CST_OPEN_BINARY);
+#endif
 
     if ((audio_device = audio_open(header->sample_rate,1,
 				   (header->encoding == CST_SND_SHORT) ?
@@ -116,7 +118,9 @@ static int play_wave_from_socket(snd_header *header,int audiostream)
 	for (q=r; q > 0; q-=n)
 	{
 	    n = audio_write(audio_device,shorts,q);
+#ifdef DEBUG
 	    cst_fwrite(fff,shorts,2,q);
+#endif
 	    if (n <= 0)
 	    {
 		audio_close(audio_device);
@@ -125,7 +129,9 @@ static int play_wave_from_socket(snd_header *header,int audiostream)
 	}
     }
     audio_close(audio_device);
+#ifdef DEBUG
     cst_fclose(fff);
+#endif
 
     return CST_OK_FORMAT;
 
