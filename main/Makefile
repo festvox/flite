@@ -55,7 +55,7 @@ VOICES=$(VOXES)
 VOICELIBS=$(VOICES:%=flite_%)
 
 flite_MODS = $(VOICELIBS) $(LANGS:%=flite_%) $(LEXES:%=flite_%) 
-flite_LIBS = flite $(flite_MODS)
+flite_LIBS = $(flite_MODS) flite
 
 flite_LIBS_flags = -L$(LIBDIR) $(flite_LIBS:%=-l%)
 flite_LIBS_deps = $(flite_LIBS:%=$(LIBDIR)/lib%.a)
