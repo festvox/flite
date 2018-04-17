@@ -283,34 +283,6 @@ static int cmu_indic_get_char_type(const cst_val *indic_char)
     return cmu_indic_offset_char[c].type;
 }
 
-static int indic_text_splitable(const char *s,int i,int len1)
-{
-    /* Returns true only if this and next chars are not both digits */
-    /* or both non-digits */
-
-    char *ccc, *ddd;    /* Store this character and the next character */
-    int len2;           /* Length of next character */
-
-    int flag;
-
-    ccc = cst_strdup(&s[i]);
-    ddd = cst_strdup(&s[i+len1]);
-
-    len2 = utf8_sequence_length(ddd[0]);
-
-    ccc[len1] = '\0';
-    ddd[len2] = '\0';
-
-    /* Makeshift NOR */
-    flag = (indic_digit_to_offset(ccc) == -1)? !(indic_digit_to_offset(ddd) == -1):
-	       (indic_digit_to_offset(ddd) == -1);
-
-    cst_free(ccc);
-    cst_free(ddd);
-
-    return flag;
-}
-
 static const char *cmu_indic_get_char_phoneme(const cst_val *indic_char) 
 {
     int c;
@@ -625,13 +597,18 @@ static cst_val *cmu_indic_lex_kannada_spelling_postfixes(cst_val *in_phones)
     return in_phones;
 }
 
-cst_val *cmu_indic_lex_nasal_postfixes(cst_val *in_phones) 
+cst_val *cmu_indic_lex_nasal_postfixes(cst_val *in_phones,
+                                                const cst_features *feats) 
 {
     /* Given a phone sequence containing a special character nX        */
     /* (contextual nasal), replace it with the appropriate nasal phone */
     /* based on its context                                            */
     char *tmpstr;
     const cst_val *p;
+   
+    const char *indic_variant = 0;
+   
+    indic_variant = get_param_string(feats, "variant", "none");
 
     /* printf("awb_debug: pre "); val_print(stdout,in_phones); printf("\n"); */
     for( p=in_phones; p && val_cdr(p); p=val_cdr(p)) 
@@ -642,7 +619,9 @@ cst_val *cmu_indic_lex_nasal_postfixes(cst_val *in_phones)
             ((!val_cdr(val_cdr(p))) || 
              (!val_car(val_cdr(val_cdr(p)))))) 
         {
-            if (cst_streq("A", val_string(val_car(p)))) 
+            if (cst_streq(indic_variant,"kan") || 
+                cst_streq(indic_variant,"tel") ||
+                cst_streq("A", val_string(val_car(p)))) 
             {   /* If it's a schwa, it's not nasalized. nX becomes m */
                 replace_car(val_cdr(p),string_val("m"));
             } else {
@@ -960,109 +939,46 @@ cst_val *cmu_indic_lex_tamil_voicing_postfixes(cst_val *phones)
 
     return phones;
 }
-
-/* For English derived pronunciation (latin scripted tokens) we map them */
-/* to (hindi) phones -- this has to modified for other indic languages */
-static const char * const eng_to_indic_orig[99][3] =
+/* 
+static cst_val *cmu_indic_lex_sanskrit_visarga_postfixes(cst_val *rphones)
+{
+    const cst_val *p;
+    const cst_val *q;
+    cst_val *tbd;
+    
+    p=rphones;
+    
+    if (p && (cst_streq(val_string(val_car(p)),"h")) && val_cdr(p) && val_cdr(val_cdr(p)))
     {
-        {"aa", "A:", NULL },
-        {"ae", "A", NULL },  /* changed this to A rather than e */
-        {"ah", "A", NULL },
-        {"ao", "o", NULL },
-        {"aw", "aU", NULL },
-        {"ax", "A", NULL },
-        {"axr", "A", NULL },
-        {"ay", "aI", NULL },
-        {"b", "b", NULL },
-        {"ch", "c", NULL },
-        {"d", "dB", NULL },
-        {"dh", "dB", NULL },
-        {"eh", "e", NULL },
-        {"er", "9r", NULL },
-        {"ey", "ay", NULL },
-        {"f", "ph", NULL },
-        {"g", "g", NULL },
-        {"hh", "hv", NULL },
-        {"ih", "i", NULL },
-        {"iy", "i:", NULL },
-        {"jh", "J", NULL },
-        {"k", "k", NULL },
-        {"l", "l", NULL },
-        {"m", "m", NULL },
-        {"n", "nB", NULL },
-        {"nx", "nB", NULL },
-        {"ng", "nB", NULL },
-        {"ow", "o", NULL },
-        {"oy", "o", "j" },
-        {"p", "p", NULL },
-        {"r", "9r", NULL },
-        {"s", "s", NULL },
-        {"sh", "c}", NULL },
-        {"t", "tr", NULL },
-        {"th", "tBh", NULL },
-        {"uh", "u", NULL },
-        {"uw", "u:", NULL },
-        {"v", "v", NULL },
-        {"w", "v", NULL },
-        {"y", "j", NULL },
-        {"z", "s", NULL },
-        {"zh", "c}", NULL },
-        {NULL, NULL, NULL }
-    };
+        q = rphones;
+        while (q && val_cdr(q))
+        {
+            if (cmu_indic_is_vowel(val_string(val_car(q))))
+            {
+                const char *last_vowel;
+                const char *repl_ph;
+                last_vowel = val_string(val_car(q));
+                if ((!last_vowel[1]) || (last_vowel[1] == ':'))
+                {
+                    switch (next_c[0]) {
+                    case 'v': repl_ph = "N"; break;
+                    case 'p': repl_ph = "n~"; break;
+                    case 'a': repl_ph = "nr"; break;
+                    case 'd': repl_ph = "nB"; break;
+                    case 'l': repl_ph = "m"; break;
+                    default: repl_ph = "nB";
+                    };
+                    replace_car(p,string_val(repl_ph));
+                }
+            }
+        }
+        replace_car(p,string_val("s"));
+        p = val_cdr(p);
+    }
 
-
-/* For English derived pronunciation (latin scripted tokens) we map them */
-/* to (hindi) phones -- this has to modified for other indic languages */
-/* Sai Krishna */
-/* 07 July 2017 */
-/* Making this v1 as Shyam's mapping looks a bit different */
-
-static const char * const eng_to_indic_v1[99][3] =
-    {
-        {"aa", "aa", NULL },
-        {"ae", "ae", NULL },  /* changed this to A rather than e */
-        {"ah", "ah", NULL },
-        {"ao", "ao", NULL },
-        {"aw", "aw", NULL },
-        {"ax", "ax", NULL },
-        {"axr", "axr", NULL },
-        {"ay", "ay", NULL },
-        {"b", "b", NULL },
-        {"ch", "ch", NULL },
-        {"d", "d", NULL },
-        {"dh", "dh", NULL },
-        {"eh", "eh", NULL },
-        {"er", "er", NULL },
-        {"ey", "ey", NULL },
-        {"f", "f", NULL },
-        {"g", "g", NULL },
-        {"hh", "hh", NULL },
-        {"ih", "ih", NULL },
-        {"iy", "iy", NULL },
-        {"jh", "jh", NULL },
-        {"k", "k", NULL },
-        {"l", "l", NULL },
-        {"m", "m", NULL },
-        {"n", "n", NULL },
-        {"nx", "n", NULL },
-        {"ng", "n", NULL },
-        {"ow", "ow", NULL },
-        {"oy", "oy", "j" },
-        {"p", "p", NULL },
-        {"r", "r", NULL },
-        {"s", "s", NULL },
-        {"sh", "sh", NULL },
-        {"t", "t", NULL },
-        {"th", "th", NULL },
-        {"uh", "uh", NULL },
-        {"uw", "uw", NULL },
-        {"v", "v", NULL },
-        {"w", "w", NULL },
-        {"y", "y", NULL },
-        {"z", "z", NULL },
-        {"zh", "zh", NULL },
-        {NULL, NULL, NULL }
-    };
+    return rphones;
+}
+*/
 
 
 static const char * const eng_to_indic[99][3] =
@@ -1112,6 +1028,136 @@ static const char * const eng_to_indic[99][3] =
         {NULL, NULL, NULL }
     };
     
+/* Mapping for Tamil taking stress into consideration */
+/* Shyam Krishna, 2018/03/06 */
+static const char * const eng_to_tam_stress[99][3] =
+    {
+        {"aa0", "A", NULL },
+        {"aa1", "A:", NULL },
+        {"ae0", "A", NULL }, 
+        {"ae1", "e", NULL },
+        {"ah1", "A", NULL },
+        {"ao0", "A", NULL },
+        {"ao1", "o:", NULL }, /*TODO: resolve horse-hoarse merger */
+        {"aw0", "aU", NULL },
+        {"aw1", "aU", NULL },
+        {"ax", "A", NULL },
+        {"ax0", "A", NULL },
+        {"ay0", "aI", NULL },
+        {"ay1", "aI", NULL },
+        {"b", "b", NULL },
+        {"ch", "c", NULL },
+        {"d", "dr", NULL },
+        {"dh", "dB", NULL },
+        {"eh0", "e", NULL },
+        {"eh1", "e", NULL },
+        {"er", "A", "9r" },
+        {"er0", "A", "9r" },
+        {"er1", "A", "9r" },
+        {"ey0", "e", NULL },
+        {"ey1", "e:", NULL },
+        {"f", "p", NULL },
+        {"g", "g", NULL },
+        {"hh", "hv", NULL },
+        {"ih", "i", NULL },
+        {"ih0", "i", NULL },
+        {"ih1", "i", NULL },
+        {"iy0", "i", NULL },
+        {"iy1", "i:", NULL },
+        {"jh", "J", NULL },
+        {"k", "k", NULL },
+        {"l", "l", NULL },
+        {"m", "m", NULL },
+        {"n", "nB", NULL },
+        {"nx", "nB", NULL },
+        {"ng", "N", NULL },
+        {"ow0", "o", NULL },
+        {"ow1", "o:", NULL },
+        {"oy0", "o", "j" },
+        {"oy1", "o:", "j" },
+        {"p", "p", NULL },
+        {"r", "9r", NULL },
+        {"s", "s", NULL },
+        {"sh", "sr", NULL },
+        {"t", "tr", NULL },
+        {"th", "tB", NULL },
+        {"uh0", "u", NULL },
+        {"uh1", "u", NULL },
+        {"uw0", "u", NULL },
+        {"uw1", "u:", NULL },
+        {"v", "v", NULL },
+        {"w", "v", NULL },
+        {"y", "j", NULL },
+        {"z", "s", NULL },
+        {"zh", "sr", NULL },
+        {NULL, NULL, NULL }
+    };
+
+/* Mapping for Kannada taking stress into consideration */
+/* Shyam Krishna, 2018/04/06 */
+static const char * const eng_to_kan_stress[99][3] =
+    {
+        {"aa0", "A", NULL },
+        {"aa1", "A:", NULL },
+        {"ae0", "A", NULL }, 
+        {"ae1", "e", NULL },
+        {"ah1", "A", NULL },
+        {"ao0", "A", NULL },
+        {"ao1", "o:", NULL }, /*TODO: resolve horse-hoarse merger */
+        {"aw0", "aU", NULL },
+        {"aw1", "aU", NULL },
+        {"ax", "A", NULL },
+        {"ax0", "A", NULL },
+        {"ay0", "aI", NULL },
+        {"ay1", "aI", NULL },
+        {"b", "b", NULL },
+        {"ch", "c", NULL },
+        {"d", "dr", NULL },
+        {"dh", "dB", NULL },
+        {"eh0", "e", NULL },
+        {"eh1", "e", NULL },
+        {"er", "A", "9r" },
+        {"er0", "A", "9r" },
+        {"er1", "A", "9r" },
+        {"ey0", "e", NULL },
+        {"ey1", "e:", NULL },
+        {"f", "ph", NULL },
+        {"g", "g", NULL },
+        {"hh", "hv", NULL },
+        {"ih", "i", NULL },
+        {"ih0", "i", NULL },
+        {"ih1", "i", NULL },
+        {"iy0", "i", NULL },
+        {"iy1", "i:", NULL },
+        {"jh", "J", NULL },
+        {"k", "k", NULL },
+        {"l", "l", NULL },
+        {"m", "m", NULL },
+        {"n", "nB", NULL },
+        {"nx", "nB", NULL },
+        {"ng", "N", NULL },
+        {"ow0", "o", NULL },
+        {"ow1", "o:", NULL },
+        {"oy0", "o", "j" },
+        {"oy1", "o:", "j" },
+        {"p", "p", NULL },
+        {"r", "9r", NULL },
+        {"s", "s", NULL },
+        {"sh", "c}", NULL },
+        {"t", "tr", NULL },
+        {"th", "tB", NULL },
+        {"uh0", "u", NULL },
+        {"uh1", "u", NULL },
+        {"uw0", "u", NULL },
+        {"uw1", "u:", NULL },
+        {"v", "v", NULL },
+        {"w", "v", NULL },
+        {"y", "j", NULL },
+        {"z", "s", NULL },
+        {"zh", "c}", NULL },
+        {NULL, NULL, NULL }
+    };
+
 
 cst_val *map_english_to_indic_phones(const char *indic_variant,
                                      const cst_val *english_phones)
@@ -1125,11 +1171,39 @@ cst_val *map_english_to_indic_phones(const char *indic_variant,
     for (v=english_phones; v; v=val_cdr(v))
     {
         english_phone = cst_strdup(val_string(val_car(v)));
+        /* *** mapping table should be indic variant specific */
+        if(cst_streq(indic_variant, "tam"))
+        {
+        for (i=0; eng_to_tam_stress[i][0]; i++)
+        {
+            if (cst_streq(english_phone,eng_to_tam_stress[i][0]))
+            {
+                ip = cons_val(string_val(eng_to_tam_stress[i][1]),ip);
+                if (eng_to_tam_stress[i][2])
+                    ip = cons_val(string_val(eng_to_tam_stress[i][2]),ip);
+            }
+            /* if there is no mapping, we drop the phone */
+        }
+        }
+        else if(cst_streq(indic_variant, "kan"))
+        {
+        for (i=0; eng_to_kan_stress[i][0]; i++)
+        {
+            if (cst_streq(english_phone,eng_to_kan_stress[i][0]))
+            {
+                ip = cons_val(string_val(eng_to_kan_stress[i][1]),ip);
+                if (eng_to_kan_stress[i][2])
+                    ip = cons_val(string_val(eng_to_kan_stress[i][2]),ip);
+            }
+            /* if there is no mapping, we drop the phone */
+        }
+        }
+        else
+        {
         if ((english_phone[cst_strlen(english_phone)-1] == '0') ||
             (english_phone[cst_strlen(english_phone)-1] == '1'))
             /* It has a stress value on it */
             english_phone[cst_strlen(english_phone)-1] = '\0';
-        /* *** mapping table should be indic variant specific */
         for (i=0; eng_to_indic[i][0]; i++)
         {
             if (cst_streq(english_phone,eng_to_indic[i][0]))
@@ -1139,6 +1213,7 @@ cst_val *map_english_to_indic_phones(const char *indic_variant,
                     ip = cons_val(string_val(eng_to_indic[i][2]),ip);
             }
             /* if there is no mapping, we drop the phone */
+        }
         }
         cst_free(english_phone);
     }
@@ -1182,6 +1257,8 @@ static cst_val *delete_medial_schwa(cst_val *rphones)
     return rphones;
 }
 
+
+/* TODO */
 static cst_val *cmu_indic_hindi_schwa_fixes(cst_val *phones)
 {
     cst_val *dd;
@@ -1240,7 +1317,7 @@ cst_val *cmu_indic_lex_lts_function(const struct lexicon_struct *l,
       cmu_indic_variant_deletes_word_final_schwa = 0;
     } else {
       cmu_indic_variant_deletes_word_final_schwa = 0;
-      printf("Unknown indic variant: %s\n", indic_variant);
+      printf("Unknown indic variant: %s!\n", indic_variant);
     }
 
     if (cst_regex_match(cst_rx_not_indic,word))
@@ -1249,19 +1326,12 @@ cst_val *cmu_indic_lex_lts_function(const struct lexicon_struct *l,
         /* printf("awb_debug cmu_indic_lex: English >%s<\n",word); */
         english_phones = lex_lookup(&cmu_lex,word,pos,feats);
         
-        eng_bilingual_flag = get_param_string(feats, "eng_shared", "0");
+        eng_bilingual_flag = get_param_string(feats, "eng_shared", "none");
         
-        if (cst_streq(eng_bilingual_flag, "1"))
-        {
-            base_phones = english_phones;
-        }
-        else
-        {
-            base_phones =
-                map_english_to_indic_phones(indic_variant,english_phones);
-            delete_val(english_phones);
-        }
-
+        if (cst_streq(eng_bilingual_flag, "1")) { base_phones = english_phones; }
+        else base_phones = map_english_to_indic_phones(indic_variant,english_phones);
+        // base_phones = english_phones;
+        // delete_val(english_phones);
         return base_phones;
     }
     else
@@ -1289,7 +1359,7 @@ cst_val *cmu_indic_lex_lts_function(const struct lexicon_struct *l,
        printf("Tamil doesnt have anuswara");
     } 
     else
-    cmu_indic_lex_nasal_postfixes(base_phones);
+    cmu_indic_lex_nasal_postfixes(base_phones, feats);
     base_phones = cmu_indic_lex_jnyan_replacement(base_phones,feats);
 
     /* Postfix Indic Nasals, Voicing, Medial Schwa deletion */
@@ -1314,7 +1384,10 @@ cst_val *cmu_indic_lex_lts_function(const struct lexicon_struct *l,
     }
 
     if (cst_streq(indic_variant,"kan"))
-      cmu_indic_lex_kannada_spelling_postfixes(base_phones); 
+      cmu_indic_lex_kannada_spelling_postfixes(base_phones);
+
+    //if (cst_streq(indic_variant,"san"))
+    //    base_phones=val_reverse(delete_medial_schwa(val_reverse(base_phones)));
     
  
     if ((cst_streq(indic_variant,"hin")) || (cst_streq(indic_variant,"mar")) ||
