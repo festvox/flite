@@ -620,7 +620,7 @@ cst_val *cmu_indic_lex_nasal_postfixes(cst_val *in_phones,
              (!val_car(val_cdr(val_cdr(p)))))) 
         {
             if (cst_streq(indic_variant,"kan") || 
-                cst_streq(indic_variant,"tel") ||
+                cst_streq(indic_variant,"tel") || /* Dravidian languages don't nasalize */
                 cst_streq("A", val_string(val_car(p)))) 
             {   /* If it's a schwa, it's not nasalized. nX becomes m */
                 replace_car(val_cdr(p),string_val("m"));
