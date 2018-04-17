@@ -939,47 +939,6 @@ cst_val *cmu_indic_lex_tamil_voicing_postfixes(cst_val *phones)
 
     return phones;
 }
-/* 
-static cst_val *cmu_indic_lex_sanskrit_visarga_postfixes(cst_val *rphones)
-{
-    const cst_val *p;
-    const cst_val *q;
-    cst_val *tbd;
-    
-    p=rphones;
-    
-    if (p && (cst_streq(val_string(val_car(p)),"h")) && val_cdr(p) && val_cdr(val_cdr(p)))
-    {
-        q = rphones;
-        while (q && val_cdr(q))
-        {
-            if (cmu_indic_is_vowel(val_string(val_car(q))))
-            {
-                const char *last_vowel;
-                const char *repl_ph;
-                last_vowel = val_string(val_car(q));
-                if ((!last_vowel[1]) || (last_vowel[1] == ':'))
-                {
-                    switch (next_c[0]) {
-                    case 'v': repl_ph = "N"; break;
-                    case 'p': repl_ph = "n~"; break;
-                    case 'a': repl_ph = "nr"; break;
-                    case 'd': repl_ph = "nB"; break;
-                    case 'l': repl_ph = "m"; break;
-                    default: repl_ph = "nB";
-                    };
-                    replace_car(p,string_val(repl_ph));
-                }
-            }
-        }
-        replace_car(p,string_val("s"));
-        p = val_cdr(p);
-    }
-
-    return rphones;
-}
-*/
-
 
 static const char * const eng_to_indic[99][3] =
     {
