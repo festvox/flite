@@ -117,25 +117,23 @@ cst_val *cmu_indic_tokentowords(cst_item *token) {
 #include "indic_pan_num_table.h"
 
 
-#ifdef _WIN32
-__inline int ts_utf8_sequence_length(char c0)
-#else
-int ts_utf8_sequence_length(char c0)
-#endif
-{
-	/* Get the expected length of UTF8 sequence given its most */
-	/* significant byte */
-	return ((0xE5000000 >> ((c0 >> 3) & 0x1E)) & 3) + 1;
-}
-
-
-// int ts_utf8_sequence_length(char c0);
+int ts_utf8_sequence_length(char c0);
 // inline int utf8_sequence_length(char c0)
 // {
     // Get the expected length of UTF8 sequence given its most
     // significant byte
 //    return (( 0xE5000000 >> (( c0 >> 3 ) & 0x1E )) & 3 ) + 1;
 // }
+
+
+int ts_utf8_sequence_length(char c0);
+// inline int utf8_sequence_length(char c0)
+// {
+    // Get the expected length of UTF8 sequence given its most
+    // significant byte
+//    return (( 0xE5000000 >> (( c0 >> 3 ) & 0x1E )) & 3 ) + 1;
+// }
+
 
 int indic_digit_to_offset(const char *ind_digit) 
 {
@@ -387,6 +385,7 @@ cst_val *indic_number_indiv(const cst_val *number,
     return r;
 }
 
+#if 0
 static int indic_nump_old(const char *number)
 {
     /* True if all (unicode) characters are in num_table's digit table */
@@ -420,6 +419,7 @@ static int indic_nump_old(const char *number)
     return flag;
 
 }
+#endif
 
 
 static int indic_nump(const char *number)
@@ -529,6 +529,7 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
     cst_utterance *utt;
 
     /* printf("awb_debug token_name %s name %s\n",item_name(token),name); */
+    r = NULL;
 
     if (item_feat_present(token,"phones"))
 	return cons_val(string_val(name),NULL);
@@ -550,14 +551,16 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
         num_table = &kan_num_table;
     else if (cst_streq(variant,"mar"))
         num_table = &mar_num_table;
-    else if (cst_streq(variant,"tel"))
-        num_table = &tel_num_table;
-    else if (cst_streq(variant,"tam"))
-        num_table = &tam_num_table;    
+    else if (cst_streq(variant,"nep"))
+        num_table = &hin_num_table;
     else if (cst_streq(variant, "pan"))
         num_table = &pan_num_table;
     else if (cst_streq(variant, "san"))
         num_table = &san_num_table;
+    else if (cst_streq(variant,"tam"))
+        num_table = &tam_num_table;
+    else if (cst_streq(variant,"tel"))
+        num_table = &tel_num_table;
     else
         num_table = &eng_num_table;
 
@@ -667,6 +670,18 @@ int indic_utt_break(cst_tokenstream *ts,
     return FALSE;
 }
 
+DEF_STATIC_CONST_VAL_STRING(val_string_zero,"0");
+DEF_STATIC_CONST_VAL_STRING(val_string_one,"1");
+
+const cst_val *is_english(const cst_item *p)
+{
+    if (p && cst_regex_match(cst_rx_not_indic,
+                             flite_ffeature_string(p,"name")))
+        return (cst_val *)&val_string_one;
+    else
+        return (cst_val *)&val_string_zero;
+}
+
 void cmu_indic_lang_init(cst_voice *v)
 {
     /* Set indic language stuff */
@@ -706,6 +721,9 @@ void cmu_indic_lang_init(cst_voice *v)
 
     /* Default ffunctions (required) */
     basic_ff_register(v->ffunctions);
+
+    /* Indic specific features */
+    ff_register(v->ffunctions, "lisp_is_english", is_english);
 
     return;
 }
