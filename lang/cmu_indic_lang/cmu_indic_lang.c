@@ -111,21 +111,25 @@ cst_val *cmu_indic_tokentowords(cst_item *token) {
 #include "indic_guj_num_table.h"
 #include "indic_kan_num_table.h"
 #include "indic_mar_num_table.h"
+#include "indic_san_num_table.h"
 #include "indic_tel_num_table.h"
 #include "indic_tam_num_table.h"
 #include "indic_pan_num_table.h"
 
 
-int ts_utf8_sequence_length(char c0);
-// inline int utf8_sequence_length(char c0)
-// {
-    // Get the expected length of UTF8 sequence given its most
-    // significant byte
-//    return (( 0xE5000000 >> (( c0 >> 3 ) & 0x1E )) & 3 ) + 1;
-// }
+#ifdef _WIN32
+__inline int ts_utf8_sequence_length(char c0)
+#else
+int ts_utf8_sequence_length(char c0)
+#endif
+{
+	/* Get the expected length of UTF8 sequence given its most */
+	/* significant byte */
+	return ((0xE5000000 >> ((c0 >> 3) & 0x1E)) & 3) + 1;
+}
 
 
-int ts_utf8_sequence_length(char c0);
+// int ts_utf8_sequence_length(char c0);
 // inline int utf8_sequence_length(char c0)
 // {
     // Get the expected length of UTF8 sequence given its most
@@ -237,6 +241,10 @@ static cst_val *indic_number_two_digit(const char *digit1,
     return r;
 }
 
+static cst_val *indic_number_lang(const indic_num_table *num_table)
+{
+    return string_val(num_table->lang);
+}
 static cst_val *indic_number_hundred(const indic_num_table *num_table)
 {
     return string_val(num_table->hundred);
@@ -301,9 +309,15 @@ cst_val *indic_number(const cst_val *number,
     }
     else if (val_length(number) == 3)
     {
-        r = val_append(indic_number_digit(val_string(val_car(number)),num_table),
-                 cons_val(indic_number_hundred(num_table),
-                          indic_number(val_cdr(number),num_table)));
+        if ((!cst_streq(val_string(indic_number_lang(num_table)),"mar")) ||
+            indic_digit_to_offset(val_string(val_car(val_cdr(number)))) ||
+            indic_digit_to_offset(val_string(val_car(val_cdr(val_cdr(number))))))
+            r = val_append(indic_number_digit(val_string(val_car(number)),num_table),
+                    cons_val(indic_number_hundred(num_table),
+                            indic_number(val_cdr(number),num_table)));
+        else
+            r = val_append(indic_number_digit(val_string(val_car(number)),num_table),
+                    cons_val(string_val("शंभर"), indic_number(val_cdr(number),num_table)));
     }
     else if (val_length(number) == 4)
     {
@@ -373,7 +387,6 @@ cst_val *indic_number_indiv(const cst_val *number,
     return r;
 }
 
-#if 0
 static int indic_nump_old(const char *number)
 {
     /* True if all (unicode) characters are in num_table's digit table */
@@ -407,7 +420,7 @@ static int indic_nump_old(const char *number)
     return flag;
 
 }
-#endif
+
 
 static int indic_nump(const char *number)
 {
@@ -516,7 +529,6 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
     cst_utterance *utt;
 
     /* printf("awb_debug token_name %s name %s\n",item_name(token),name); */
-    r = NULL;
 
     if (item_feat_present(token,"phones"))
 	return cons_val(string_val(name),NULL);
@@ -538,16 +550,14 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
         num_table = &kan_num_table;
     else if (cst_streq(variant,"mar"))
         num_table = &mar_num_table;
-    else if (cst_streq(variant,"nep"))
-        num_table = &hin_num_table;
-    else if (cst_streq(variant,"san"))
-        num_table = &hin_num_table;
     else if (cst_streq(variant,"tel"))
         num_table = &tel_num_table;
     else if (cst_streq(variant,"tam"))
         num_table = &tam_num_table;    
     else if (cst_streq(variant, "pan"))
         num_table = &pan_num_table;
+    else if (cst_streq(variant, "san"))
+        num_table = &san_num_table;
     else
         num_table = &eng_num_table;
 
@@ -560,7 +570,7 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
         p = indic_num_normalize(name,num_table);
         if (val_length(p) <= 9)
             /* Long strings of digits are read as strings of digits */
-            r = indic_number(p,num_table);
+            r = indic_number(p, num_table);
 	else
             r = indic_number_indiv(p,num_table);
         delete_val(p);
@@ -568,58 +578,58 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
     else if (indic_nump(name))
             
     {   /* Its script specific digits (commas/dots) */
-        if (indic_nump(name) == 2)
-        {   /* All characters are digits */ 
-            // printf("nump is 2\n");
-            p = indic_num_normalize(name,num_table);
-            if (val_length(p) <= 9)
-                r = indic_number(p,num_table);
-            else
-                r = indic_number_indiv(p,num_table);
-            delete_val(p);
-        }
-        else if (indic_nump(name) == 1)
-        {   /* Some characters are digits */
-            int len = 1;
-            int i = 0;
-            char c0;
-            char *aaa;
-            char *bbb;
-            while(name[i] != '\0')
-            {
-                /* Iterate over UTF-8 string */
-                c0 = name[i];
-                len = ts_utf8_sequence_length(c0);
-                /* Check if char after this is comma */
-                if (name[i+len] == ',')
-                {   
-                    /* Skip commas */
-                    i += len;
-                    c0 = name[i];
-                    len = ts_utf8_sequence_length(c0);
-                    i += len;
-                    continue;
-                }
-                /* Find where character type switches to or from digits */
-                if(indic_text_splitable(name, i, len))
-                    break;
-                i +=len;
-            }
-            aaa = cst_strdup(name);
-            aaa[i+len] = '\0';
-            bbb = cst_strdup(&name[i+len]);
-            r = val_append(cmu_indic_tokentowords_one(token, aaa),
-                           cmu_indic_tokentowords_one(token, bbb));
-            cst_free(aaa);
-            cst_free(bbb);
-        }
+	    if (indic_nump(name) == 2)
+	    {   /* All characters are digits */ 
+           // printf("nump is 2\n");
+	        p = indic_num_normalize(name,num_table);
+	        if (val_length(p) <= 9)
+		    r = indic_number(p, num_table);
+	        else
+		    r = indic_number_indiv(p,num_table);
+	        delete_val(p);
+	    }
+	    else if (indic_nump(name) == 1)
+	    {   /* Some characters are digits */
+	        int len = 1;
+	        int i = 0;
+	        char c0;
+                char *aaa;
+                char *bbb;
+	        while(name[i] != '\0')
+	        {
+		        /* Iterate over UTF-8 string */
+		        c0 = name[i];
+		        len = ts_utf8_sequence_length(c0);
+                        /* Check if char after this is comma */
+                        if (name[i+len] == ',')
+                        {   
+                          /* Skip commas */
+                        i += len;
+                        c0 = name[i];
+                        len = ts_utf8_sequence_length(c0);
+                        i += len;
+                        continue;
+                        }
+		        /* Find where character type switches to or from digits */
+		        if(indic_text_splitable(name, i, len))
+		            break;
+		        i +=len;
+	        }
+	        aaa = cst_strdup(name);
+	        aaa[i+len] = '\0';
+	        bbb = cst_strdup(&name[i+len]);
+	        r = val_append(cmu_indic_tokentowords_one(token, aaa),
+			        cmu_indic_tokentowords_one(token, bbb));
+	        cst_free(aaa);
+	        cst_free(bbb);
+	    }
     }
     else if (indic_hyphenated(name))
     {	/* For numbers seeparated by - / , */
-        char *aaa;
-        aaa = cst_strdup(&name[1]);
-        r = cmu_indic_tokentowords_one(token, aaa);
-        cst_free(aaa);
+            char *aaa;
+	    aaa = cst_strdup(&name[1]);
+	    r = cmu_indic_tokentowords_one(token, aaa);
+	    cst_free(aaa);
     }
 
     else if (cst_regex_match(cst_rx_not_indic,name))
@@ -655,18 +665,6 @@ int indic_utt_break(cst_tokenstream *ts,
     return TRUE;
   else
     return FALSE;
-}
-
-DEF_STATIC_CONST_VAL_STRING(val_string_zero,"0");
-DEF_STATIC_CONST_VAL_STRING(val_string_one,"1");
-
-const cst_val *is_english(const cst_item *p)
-{
-    if (p && cst_regex_match(cst_rx_not_indic,
-                             flite_ffeature_string(p,"name")))
-        return (cst_val *)&val_string_one;
-    else
-        return (cst_val *)&val_string_zero;
 }
 
 void cmu_indic_lang_init(cst_voice *v)
@@ -708,9 +706,6 @@ void cmu_indic_lang_init(cst_voice *v)
 
     /* Default ffunctions (required) */
     basic_ff_register(v->ffunctions);
-
-    /* Indic specific features */
-    ff_register(v->ffunctions, "lisp_is_english", is_english);
 
     return;
 }
