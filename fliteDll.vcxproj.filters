@@ -11,87 +11,87 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="flite_sapi_usenglish.c">
+    <ClCompile Include="lang\cmu_grapheme_lang\cmu_grapheme_lang.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FliteTTSEngineObj.cpp">
+    <ClCompile Include="lang\cmu_grapheme_lang\cmu_grapheme_phoneset.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_lang.c">
+    <ClCompile Include="lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_phoneset.c">
+    <ClCompile Include="lang\cmu_grapheme_lex\cmu_grapheme_lex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.c">
+    <ClCompile Include="lang\cmu_grapheme_lex\grapheme_unitran_tables.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_grapheme_lex\cmu_grapheme_lex.c">
+    <ClCompile Include="lang\cmu_indic_lang\cmu_indic_lang.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_grapheme_lex\grapheme_unitran_tables.c">
+    <ClCompile Include="lang\cmu_indic_lang\cmu_indic_phoneset.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_indic_lang\cmu_indic_lang.c">
+    <ClCompile Include="lang\cmu_indic_lang\cmu_indic_phrasing_cart.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_indic_lang\cmu_indic_phoneset.c">
+    <ClCompile Include="lang\cmu_indic_lex\cmu_indic_lex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_indic_lang\cmu_indic_phrasing_cart.c">
+    <ClCompile Include="sapi\FliteTTSEngineObj\FliteTTSEngineObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\cmu_indic_lex\cmu_indic_lex.c">
+    <ClCompile Include="sapi\FliteTTSEngineObj\flite_sapi_usenglish.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="flite_sapi_usenglish.h">
+    <ClInclude Include="lang\cmu_grapheme_lang\cmu_grapheme_lang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FliteTTSEngineObj.h">
+    <ClInclude Include="lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_lang.h">
+    <ClInclude Include="lang\cmu_grapheme_lex\cmu_grapheme_lex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.h">
+    <ClInclude Include="lang\cmu_indic_lang\cmu_indic_lang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_grapheme_lex\cmu_grapheme_lex.h">
+    <ClInclude Include="lang\cmu_indic_lang\cmu_indic_phrasing_cart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\cmu_indic_lang.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_eng_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\cmu_indic_phrasing_cart.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_guj_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_guj_num_table.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_hin_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_hin_num_table.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_kan_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_kan_num_table.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_mar_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_mar_num_table.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_num_table.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_tam_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_tam_num_table.h">
+    <ClInclude Include="lang\cmu_indic_lang\indic_tel_num_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_tel_num_table.h">
+    <ClInclude Include="lang\cmu_indic_lex\cmu_indic_lex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_eng_num_table.h">
+    <ClInclude Include="sapi\FliteTTSEngineObj\FliteTTSEngineObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\cmu_indic_lex\cmu_indic_lex.h">
+    <ClInclude Include="sapi\FliteTTSEngineObj\flite_sapi_usenglish.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

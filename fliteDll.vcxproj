@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -55,7 +55,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -95,6 +95,7 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\flite\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -115,7 +116,7 @@
     <ClCompile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
@@ -241,41 +242,35 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_lang.c" />
-    <ClCompile Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_phoneset.c" />
-    <ClCompile Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.c" />
-    <ClCompile Include="..\..\lang\cmu_grapheme_lex\cmu_grapheme_lex.c" />
-    <ClCompile Include="..\..\lang\cmu_grapheme_lex\grapheme_unitran_tables.c" />
-    <ClCompile Include="..\..\lang\cmu_indic_lang\cmu_indic_lang.c" />
-    <ClCompile Include="..\..\lang\cmu_indic_lang\cmu_indic_phoneset.c" />
-    <ClCompile Include="..\..\lang\cmu_indic_lang\cmu_indic_phrasing_cart.c" />
-    <ClCompile Include="..\..\lang\cmu_indic_lex\cmu_indic_lex.c" />
-    <ClCompile Include="FliteTTSEngineObj.cpp" />
-    <ClCompile Include="flite_sapi_usenglish.c" />
+    <ClCompile Include="lang\cmu_grapheme_lang\cmu_grapheme_lang.c" />
+    <ClCompile Include="lang\cmu_grapheme_lang\cmu_grapheme_phoneset.c" />
+    <ClCompile Include="lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.c" />
+    <ClCompile Include="lang\cmu_grapheme_lex\cmu_grapheme_lex.c" />
+    <ClCompile Include="lang\cmu_grapheme_lex\grapheme_unitran_tables.c" />
+    <ClCompile Include="lang\cmu_indic_lang\cmu_indic_lang.c" />
+    <ClCompile Include="lang\cmu_indic_lang\cmu_indic_phoneset.c" />
+    <ClCompile Include="lang\cmu_indic_lang\cmu_indic_phrasing_cart.c" />
+    <ClCompile Include="lang\cmu_indic_lex\cmu_indic_lex.c" />
+    <ClCompile Include="sapi\FliteTTSEngineObj\FliteTTSEngineObj.cpp" />
+    <ClCompile Include="sapi\FliteTTSEngineObj\flite_sapi_usenglish.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_lang.h" />
-    <ClInclude Include="..\..\lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.h" />
-    <ClInclude Include="..\..\lang\cmu_grapheme_lex\cmu_grapheme_lex.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\cmu_indic_lang.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\cmu_indic_phrasing_cart.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_eng_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_guj_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_hin_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_kan_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_mar_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_tam_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lang\indic_tel_num_table.h" />
-    <ClInclude Include="..\..\lang\cmu_indic_lex\cmu_indic_lex.h" />
-    <ClInclude Include="FliteTTSEngineObj.h" />
-    <ClInclude Include="flite_sapi_usenglish.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\flite\flite.vcxproj">
-      <Project>{c8a762df-2981-43e7-967d-1cd89cca7f14}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+    <ClInclude Include="lang\cmu_grapheme_lang\cmu_grapheme_lang.h" />
+    <ClInclude Include="lang\cmu_grapheme_lang\cmu_grapheme_phrasing_cart.h" />
+    <ClInclude Include="lang\cmu_grapheme_lex\cmu_grapheme_lex.h" />
+    <ClInclude Include="lang\cmu_indic_lang\cmu_indic_lang.h" />
+    <ClInclude Include="lang\cmu_indic_lang\cmu_indic_phrasing_cart.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_eng_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_guj_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_hin_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_kan_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_mar_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_tam_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lang\indic_tel_num_table.h" />
+    <ClInclude Include="lang\cmu_indic_lex\cmu_indic_lex.h" />
+    <ClInclude Include="sapi\FliteTTSEngineObj\FliteTTSEngineObj.h" />
+    <ClInclude Include="sapi\FliteTTSEngineObj\flite_sapi_usenglish.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
