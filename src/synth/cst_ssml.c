@@ -93,13 +93,21 @@ static cst_features *ssml_get_attributes(cst_tokenstream *ts)
     while (!cst_streq(">",name))
     {
         /* I want names and values to be const */
-        if (i == 0)
+        fnn = "_name0";
+        vnn = "_val0";
+        // Tags with more than one attribute need to have additional
+        // attributes defined here.
+        if (cst_streq("volume", name))
         {
-            fnn="_name0"; vnn="_val0";
+            fnn = "_name1"; vnn = "_val1";
         }
-        else
+        else if (cst_streq("pitch", name))
         {
-            fnn="_name1"; vnn="_val1";
+            fnn = "_name2"; vnn = "_val2";
+        }
+        else if (cst_streq("range", name))
+        {
+            fnn = "_name3"; vnn = "_val3";
         }
 	if (cst_streq(name,"/"))
 	    feat_set_string(a,"_type","startend");
@@ -200,20 +208,29 @@ static cst_utterance *ssml_apply_tag(const char *tag,
             if (cst_streq("rate",get_param_string(attributes,"_name0","")))
                 feat_set_float(word_feats,"local_duration_stretch",
                                1.0/feat_float(attributes,"_val0"));
-            if (cst_streq("rate",get_param_string(attributes,"_name1","")))
-                feat_set_float(word_feats,"local_duration_stretch",
-                               1.0/feat_float(attributes,"_val1"));
-            if (cst_streq("volume",get_param_string(attributes,"_name0","")))
-                feat_set_float(word_feats,"local_gain",
-                               feat_float(attributes,"_val0")/100.0);
+            // volume is stored in _name1
             if (cst_streq("volume",get_param_string(attributes,"_name1","")))
                 feat_set_float(word_feats,"local_gain",
                                feat_float(attributes,"_val1")/100.0);
+            // pitch is stored in _name2
+            if (cst_streq("pitch", get_param_string(attributes, "_name2", "")))
+            {
+                feat_set_float(word_feats, "local_f0_mean", feat_float(attributes, "_val2"));
+            }
+            // range is stored in _name3
+            if (cst_streq("range", get_param_string(attributes, "_name3", "")))
+            {
+                feat_set_float(word_feats, "local_f0_range",
+                               // shift by + 1.0 to allow 0.0 to be passed.
+                               feat_float(attributes, "_val3") + 1.0);
+            }
         }
         else if (cst_streq("end",feat_string(attributes,"_type")))
         {
             feat_remove(word_feats,"local_duration_stretch");
             feat_remove(word_feats,"local_gain");
+            feat_remove(word_feats, "local_f0_mean");
+            feat_remove(word_feats, "local_f0_range");
         }
 
     }
