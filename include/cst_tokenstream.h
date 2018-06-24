@@ -130,7 +130,7 @@ cst_tokenstream *ts_open_generic(const char *filename,
                                  int (*getc)(cst_tokenstream *ts));
 void ts_close(cst_tokenstream *ts);
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__GNUC__)
 __inline int ts_utf8_sequence_length(char c0);
 #else
 int ts_utf8_sequence_length(char c0);

@@ -101,7 +101,13 @@ int cst_sprintf(char *s, const char *fmt, ...);
 #ifdef _WIN32
 #define snprintf c99_snprintf
 
-__inline int c99_vsnprintf(char* str, size_t size, const char* format,
+#ifdef __GNUC__
+#define INLINE static inline
+#else
+#define INLINE __inline
+#endif
+
+INLINE int c99_vsnprintf(char* str, size_t size, const char* format,
 va_list ap)  {
        int count = -1;
        if (size != 0)
@@ -110,7 +116,7 @@ va_list ap)  {
            count = _vscprintf(format, ap);
        return count;
    }
-__inline int c99_snprintf(char* str, size_t size, const char* format, ...)
+INLINE int c99_snprintf(char* str, size_t size, const char* format, ...)
 {
        int count;
        va_list ap;
