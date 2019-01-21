@@ -51,9 +51,10 @@
 #include "cst_wave.h"
 #include "cst_audio.h"
 #include "cst_synth.h" /* for dur_stat */
+#include "cst_phoneset.h" 
 
 /* The parameters in the spectral model(s) may be encoded in various ways */
-/* mostly to preserve space.  The decoded can be dependent on the shape type */
+/* mostly to preserve space.  The decoder can be dependent on the shape type */
 /* This needs to be coordinated with the model creation in make_cg.scm */
 /* This is currently very BIG_HAMMER-like and hard coded */
 
@@ -142,6 +143,11 @@ typedef struct cst_cg_db_struct {
 
     int spamf0;
     float gain;
+
+    /* If its a "grapheme" voice there will be a phoneset and a char_map */
+    const cst_phoneset *phoneset;
+    const char * const *char_sym_map; /* Unicode char to symbol map */
+    const char * const *sym_phone_map; /* symbol to phone map */
 
     int freeable;  /* doesn't get dumped, but 1 when this a freeable struct */
 

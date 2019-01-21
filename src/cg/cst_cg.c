@@ -367,6 +367,8 @@ static void cg_F0_interpolate_spline(cst_utterance *utt,
         start_index = ffeature_int(syl,"R:SylStructure.daughter1.R:segstate.daughter1.R:mcep_link.daughter1.frame_number");
         end_index = ffeature_int(syl,"R:SylStructure.daughtern.R:segstate.daughtern.R:mcep_link.daughtern.frame_number");
         mid_index = (int)((start_index + end_index)/2.0);
+        if (end_index <= start_index)
+            continue;
         
         start_f0 = param_track->frames[start_index][0];
         if (end_f0 > 0.0)

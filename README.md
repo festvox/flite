@@ -1,7 +1,7 @@
 
          Flite: a small run-time speech synthesis engine
                       version 2.1-release
-          Copyright Carnegie Mellon University 1999-2017
+          Copyright Carnegie Mellon University 1999-2018
                       All rights reserved
                       http://cmuflite.org
               https://github.com/festvox/flite
@@ -137,6 +137,9 @@ a new archiecture.
 News
 ----
 
+New in 2.2 (Oct 2018)
+    o Better qrapheme support (Wilderness Languages) hundreds of new languages
+    
 New in 2.1 (Oct 2017)
 
     o Improved Indic front end support (thanks to Suresh Bazaj @ Hear2Read)

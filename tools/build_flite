@@ -387,12 +387,15 @@ then
    then
       ${FLITEDIR}/tools/make_flite_feats etc/voice.feats >flite/${FV_VOICENAME}_voice_feats.c
    fi
-   
-   if [ "$FV_LANG_TYPE" = "grapheme" ]
+
+   # If Grapheme-based it has its own phoneset
+   if [ -f festvox/${FV_VOICENAME}_char_phone_map.scm ]
    then
-      echo cg_convert: converting phoneset table
+       echo "flite_feat_set_int(vox->features,\"grapheme\",1);" >>flite/${FV_VOICENAME}_voice_feats.c
+       echo cg_convert: converting phoneset table
+       echo "CG_GRAPHEME=true" >>flite/paramfiles.mak
       $FESTIVAL -b $FLITEDIR/tools/make_phoneset.scm \
-      '(phonesettoC "'${FV_INST}_${FV_LANG}'" (car (load "festvox/'${FV_VOICENAME}'_phoneset.scm" t)) "pau" "flite")'
+      '(phonesettoC "'${FV_VOICENAME}'" (car (load "festvox/'${FV_VOICENAME}'_phoneset.scm" t)) "pau" "flite")'
    fi
 
    echo "flite_build cg complete.  You can compile the generated voice by"

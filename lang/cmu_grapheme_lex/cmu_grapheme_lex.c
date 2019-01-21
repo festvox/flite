@@ -89,6 +89,7 @@ cst_val *cmu_grapheme_lex_lts_function(const struct lexicon_struct *l,
         /* afterwards */
         cst_utf8_as_hex(val_string(val_car(v)),ord);
         phindex = cst_find_u2sampa(ord);
+        printf("awb_debug lookup sampa %s %s\n",val_string(val_car(v)),ord);
 #if 0        
         if (phindex < 0)
             printf("awb_debug no sampa %s %s\n",val_string(val_car(v)),ord);

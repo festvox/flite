@@ -48,6 +48,8 @@
 extern cst_cg_db __VOICENAME___cg_db;
 cst_voice *__VOICENAME___cg = NULL;
 
+extern const cst_phoneset __VOICENAME___phoneset;
+
 cst_voice *register___VOICENAME__(const char *voxdir)
 {
     cst_voice *vox;
@@ -72,6 +74,12 @@ cst_voice *register___VOICENAME__(const char *voxdir)
     lex = __FLITELEX___init();
     flite_feat_set(vox->features,"lexicon",lexicon_val(lex));
     flite_feat_set(vox->features,"postlex_func",uttfunc_val(lex->postlex));
+
+    /* If grapheme link in grapheme specific info */
+    if (feat_present(vox->features,"grapheme"))
+    {
+        flite_feat_set(vox->features,"phoneset",phoneset_val(&__VOICENAME___phoneset));
+    }
 
     /* No standard segment durations are needed as its done at the */
     /* HMM state level */

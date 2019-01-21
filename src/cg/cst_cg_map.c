@@ -176,6 +176,8 @@ cst_cg_db *cst_cg_load_db(cst_voice *vox,cst_file fd, int bs /* byteswapped */)
     db->spamf0 = cst_read_int(fd,bs); /* yes, twice, its above too */
     db->gain = cst_read_float(fd,bs);
 
+    /* If this is "grapheme" voice, we will have phoneset and char_map */
+
     return db;
   
 }

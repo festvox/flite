@@ -75,6 +75,8 @@ Convert a festvox clunits (processed) voice into a C file."
    (format ofd "#include \"cst_cg.h\"\n")
    (format ofd "#include \"cst_cart.h\"\n")
 
+   (format ofd "extern const cst_phoneset %s_phoneset;\n\n" name)
+
    (format t "cg_convert: converting F0 trees\n")
    ;; F0 trees
    (if (and cg:rfs_models (probe_file "rf_models/mlistf0"))
@@ -169,6 +171,20 @@ Convert a festvox clunits (processed) voice into a C file."
                 (format nil "festival/trees/%s_min_range.scm" name)
                 name "01" odir ofd))
          (format ofd "extern const unsigned short * const %s_01_model_vectors[];\n" name )
+         ))
+
+   (if (probe_file (format nil "festvox/%s_char_phone_map.scm" name))
+       (begin
+         (setq cpm (load (format nil "festvox/%s_char_phone_map.scm" name) t))
+         (format ofd "\nstatic char * const %s_char_phone_map[%s][2] =\n"
+                 name (+ 1 (length cpm)))
+         (format ofd "{\n")
+         (mapcar
+          (lambda (x)
+            (format ofd " { %l, \"%s\" },\n" (car x) (cadr x)))
+          cpm)
+         (format ofd "   { NULL, NULL }\n")
+         (format ofd "};\n\n")
          ))
 
    (format ofd "#define %s_num_f0_models %d\n" name (length f0ms))
@@ -399,9 +415,18 @@ Convert a festvox clunits (processed) voice into a C file."
          (format ofd "  0,0, /* cg:mixed_excitation */\n")
          (format ofd "  NULL, \n")))
    (if cg:spamf0
-	(format ofd "  1, // cg:spamf0\n")
-	(format ofd "  0, // cg:spamf0\n"))
+	(format ofd "  1, /* cg:spamf0 */\n")
+	(format ofd "  0, /* cg:spamf0 */\n"))
    (format ofd "  1.5 /* gain */\n")
+
+   ;; If a grapheme language, add phoneset and char_phone_map
+   (if (probe_file (format nil "festvox/%s_char_phone_map.scm" name))
+       (begin
+         (format ofd "   ,\n")
+         (format ofd "   &%s_phoneset,\n" name)
+         (format ofd "   &%s_char_phone_map\n" name)
+         ))
+   
    (format ofd "};\n")
 
    (fclose ofd)
@@ -802,6 +827,30 @@ Output cg selection carts into odir/name_carts.c"
       (string-before x "}")
       "rb"
       (string-after x "}"))))
+   ((string-matches x ".*].*")
+    (intern
+     (string-append
+      (string-before x "]")
+      "rbk"
+      (string-after x "]"))))
+   ((string-matches x ".*-.*")
+    (intern
+     (string-append
+      (string-before x "-")
+      "hyp"
+      (string-after x "-"))))
+   ((string-matches x ".*\\*.*")
+    (intern
+     (string-append
+      (string-before x "*")
+      "star"
+      (string-after x "*"))))
+   ((string-matches x ".*\\^.*")
+    (intern
+     (string-append
+      (string-before x "^")
+      "caret"
+      (string-after x "^"))))
    ((string-matches x ".*~.*")
     (intern
      (string-append

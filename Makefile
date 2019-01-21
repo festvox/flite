@@ -37,8 +37,8 @@
 ##       Authors:  Alan W Black (awb@cs.cmu.edu)                         ##
 ##                 Kevin A. Lenzo (lenzo@cs.cmu.edu)                     ##
 ##                 and others see ACKNOWLEDGEMENTS                       ##
-##          Date:  Dec 2017                                              ##
-##       Version:  2.1 release                                           ##
+##          Date:  Sep 2018                                              ##
+##       Version:  2.2 current                                           ##
 ##                                                                       ## 
 ###########################################################################
 TOP=.
