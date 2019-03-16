@@ -161,6 +161,6 @@ install:
 #       The libraries: static and shared (if built)
 	cp $(CP_FLAGS) $(flite_LIBS_deps) $(DESTDIR)$(INSTALLLIBDIR)
 ifdef SHFLAGS
-	cp -pd $(SHAREDLIBS) $(VERSIONSHAREDLIBS) $(DESTDIR)$(INSTALLLIBDIR)
+	cp $(CP_FLAGS) $(SHAREDLIBS) $(VERSIONSHAREDLIBS) $(DESTDIR)$(INSTALLLIBDIR)
 endif
 
