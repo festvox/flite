@@ -124,6 +124,8 @@ We have successfully compiled and run on
 
     o OSF1 V4.0 (gives an unimportant warning about sizes when compiled cst_val.c)
 
+    o WASI has experimental support (see below for details)
+
 Previously we supported PalmOS and Windows CE but these seem to be rare
 nowadays so they are no longer actively supported.
 
@@ -133,6 +135,47 @@ architectures may not work directly as there is some careful
 byte order constraints in some structures.  These are portable but may
 require reordering of some fields, contact us if you are moving to
 a new archiecture.
+
+### Cross-compiling to WASI (experimental)
+In order to successfully cross-compile to WASI, firstly head over to
+[CraneStation/wasi-sdk](https://github.com/CraneStation/wasi-sdk)
+and install the WASI toolchain.
+
+Afterwards, you can cross-compile to WASI as follows:
+
+```
+./configure --host=wasm32-wasi \
+CC=/path/to/wasi-sdk/bin/clang \
+AR=/path/to/wasi-sdk/bin/llvm-ar \
+RANLIB=/path/to/wasi-sdk/bin/llvm-ranlib
+```
+
+It is important to correctly specify `ar` and `ranlib` that is bundled
+with the WASI `clang`. Otherwise, you will most likely experience missing
+symbols during linking, plus you may experience weird `llvm` errors such as
+
+```
+LLVM ERROR: malformed uleb128, extends past end
+```
+
+When cross-compiling from macOS, you might have to manually specify the sysroot.
+You can do this by tweaking the `CC` variable as follows:
+
+```
+CC="/path/to/wasi-sdk/bin/clang --sysroot=/path/to/wasi-sdk/share/sysroot"
+```
+
+After the configure step is successful, simply run as usual:
+```
+make
+```
+
+The generated WASI binary can then be found in `bin/` directory:
+
+```
+file bin/flite
+> bin/flite: WebAssembly (wasm) binary module version 0x1 (MVP)
+```
 
 News
 ----

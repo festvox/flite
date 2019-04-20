@@ -47,7 +47,12 @@
 #include "flite_version.h"
 
 cst_val *flite_set_voice_list(const char *voxdir);
+
+#ifdef WASM32_WASI
+void flite_set_lang_list(void);
+#else
 void *flite_set_lang_list(void);
+#endif
 
 void cst_alloc_debug_summary();
 

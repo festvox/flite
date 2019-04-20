@@ -127,6 +127,10 @@ case $maybe_os in
     os=-linux-android
     basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`-unknown
     ;;
+  wasm32-wasi)
+    echo "wasm32-wasi"
+    exit
+    ;;
   *)
     basic_machine=`echo $1 | sed 's/-[^-]*$//'`
     if [ $basic_machine != $1 ]
