@@ -69,6 +69,7 @@ CSRCS += $(VOICENAME)_spamf0_phrase.c $(VOICENAME)_spamf0_accent.c $(VOICENAME)_
 endif
 ifeq ($(CG_GRAPHEME),true)
 CSRCS += $(VOICENAME)_phoneset.c 
+EXTRA_CC_FLAGS += -DCG_GRAPHEME=1
 endif
 MCEPOBJS =
 LPCOBJS =
