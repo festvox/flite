@@ -383,7 +383,10 @@ AC_CHECK_HEADER(sys/audioio.h,
 AC_CHECK_HEADER(alsa/asoundlib.h,
               [AUDIODRIVER="alsa"
 	       AUDIODEFS=-DCST_AUDIO_ALSA
-               AUDIOLIBS=-lasound])
+               AUDIOLIBS=`pkg-config --libs alsa`
+               if test "$shared" = false; then
+                   AUDIOLIBS=`pkg-config --libs --static alsa`
+               fi])
 AC_CHECK_HEADER(mmsystem.h,
 	      [AUDIODRIVER="wince"
 	       AUDIODEFS=-DCST_AUDIO_WINCE
