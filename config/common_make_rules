@@ -108,12 +108,12 @@ $(OBJDIR)/%.os : %.c
 	$(CC) $(SHFLAGS) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/.build_lib: $(FULLOBJS)
-	@ (cd $(OBJDIR) && $(AR) cruv ../../../$(LIBDIR)/lib$(LIBNAME).a $(OBJS))
+	@ (cd $(OBJDIR) && $(AR) crv ../../../$(LIBDIR)/lib$(LIBNAME).a $(OBJS))
 	@ $(RANLIB) $(LIBDIR)/lib$(LIBNAME).a
 	@ touch $(OBJDIR)/.build_lib
 
 $(OBJDIR)/.build_so: $(FULLSHOBJS)
-	@ (cd $(OBJDIR) && $(AR) cruv ../../../$(LIBDIR)/lib$(LIBNAME).shared.a $(SOOBJS))
+	@ (cd $(OBJDIR) && $(AR) crv ../../../$(LIBDIR)/lib$(LIBNAME).shared.a $(SOOBJS))
 	@ $(RANLIB) $(LIBDIR)/lib$(LIBNAME).shared.a
 	@ touch $(OBJDIR)/.build_so
 

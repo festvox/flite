@@ -48,10 +48,10 @@ SRCS = token_test_main.c hrg_test_main.c \
        lpc_test2_main.c combine_waves_main.c \
        bin2ascii_main.c record_in_noise_main.c \
        compare_wave_main.c rfc_main.c lpc_resynth_main.c \
-       by_word_main.c multi_thread_main.c flite_test_main.c \
+       by_word_main.c flite_test_main.c \
        dcoffset_wave_main.c tris1_main.c
 FC = us.flitecheck indic_hin.flitecheck indic_tam.flitecheck
-OTHERS = kal_test_main.c
+OTHERS = kal_test_main.c multi_thread_main.c 
 
 FILES = Makefile $(SRCS) $(DATAFILES) $(OTHERS) $(FC)
 
@@ -68,7 +68,7 @@ by_word_LIBS = -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex
 #kal_test_LIBS = -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex \
 #	          /home/awb/src/malloc/gmalloc.o
 
-ALL = $(MAIN_EXECS)
+ALL = $(MAIN_EXECS) multi_thread
 LOCAL_CLEAN = $(MAIN_EXECS)
 
 include $(TOP)/config/common_make_rules
@@ -76,7 +76,7 @@ include $(TOP)/config/common_make_rules
 MAIN_O = $(SRCS:%=%_main.o)
 $(MAIN_O) : %_main.o : %_main.c
 	$(CC) $(CFLAGS) -o $@ $< 
-$(ALL) : %$(EXEEXT) : %_main.o $(FLITELIBS)
+$(MAIN_EXECS) : %$(EXEEXT) : %_main.o $(FLITELIBS)
 	$(CC) $(CFLAGS) -o $@ $@_main.o $($(@:=_LIBS)) $(FLITELIBFLAGS) $(LDFLAGS)
 
 multi_thread: multi_thread_main.c
