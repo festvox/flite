@@ -316,7 +316,8 @@ void* cst_read_array(cst_file fd,int bs)
 
 float *cst_read_float_array(cst_file fd,int bs)
 {
-    int bytecount, i;
+    unsigned int i;
+    int bytecount;
     float* ret;
 
     ret = (float *)cst_read_padded(fd,&bytecount,bs);
@@ -328,7 +329,8 @@ float *cst_read_float_array(cst_file fd,int bs)
 
 unsigned short *cst_read_ushort_array(cst_file fd,int bs)
 {
-    int bytecount, i;
+    unsigned int i;
+    int bytecount;
     unsigned short* ret;
 
     ret = (unsigned short *)cst_read_padded(fd,&bytecount,bs);
@@ -340,7 +342,8 @@ unsigned short *cst_read_ushort_array(cst_file fd,int bs)
 
 double *cst_read_double_array(cst_file fd,int bs)
 {
-    int bytecount, i;
+    unsigned int i;
+    int bytecount;
     double* ret;
 
     ret = (double *)cst_read_padded(fd,&bytecount,bs);

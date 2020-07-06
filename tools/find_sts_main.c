@@ -51,7 +51,7 @@
 
 float lpc_min;
 float lpc_range;
-char *residual_codec = "ulaw";
+const char *residual_codec = "ulaw";
 cst_track *vuv;
 
 void inv_lpc_filterd(short *sig, float *a, int order, double *res, int size)
