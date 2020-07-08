@@ -55,8 +55,8 @@
 (defvar new_min_range nil)
 
 (define (cg_convert name festvoxdir odir)
-  "(cg_convert name clcatfn clcatfnordered cltreesfn festvoxdir odir)
-Convert a festvox clunits (processed) voice into a C file."
+  "(cg_convert name festvoxdir odir)
+Convert a festvox cg voice into a C file."
 
    (load (format nil "%s/festvox/%s_cg.scm" festvoxdir name))
    (eval (list (intern (format nil "voice_%s_cg" name))))
