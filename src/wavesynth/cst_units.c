@@ -302,12 +302,15 @@ cst_utterance *concat_units(cst_utterance *utt)
 	    target_lpcres->sizes[pm_i] =
 		target_lpcres->times[pm_i] -
 		(pm_i > 0 ? target_lpcres->times[pm_i-1] : 0);
+#if 0            
 	    if (cst_streq(residual_type,"pulse"))
 		add_residual_pulse(target_lpcres->sizes[pm_i],
 				   &target_lpcres->residual[rpos],
 				   get_frame_size(sts_list, nearest_u_pm),
 				   get_sts_residual(sts_list, nearest_u_pm));
-	    else if (cst_streq(residual_type,"g721"))
+	    else
+#endif
+            if (cst_streq(residual_type,"g721"))
 		add_residual_g721(target_lpcres->sizes[pm_i],
 				   &target_lpcres->residual[rpos],
 				   get_frame_size(sts_list, nearest_u_pm),
@@ -582,6 +585,7 @@ void add_residual_vuv(int targ_size, unsigned char *targ_residual,
         cst_free(unit_residual_unpacked);
 }
 
+#if 0
 void add_residual_pulse(int targ_size, unsigned char *targ_residual,
 			int unit_size, const unsigned char *unit_residual)
 {
@@ -626,4 +630,5 @@ void add_residual_pulse(int targ_size, unsigned char *targ_residual,
 	    = cst_short_to_ulaw((short)(int)unit_residual);
 #endif
 }
+#endif
 
