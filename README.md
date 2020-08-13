@@ -55,7 +55,7 @@ o Although the synthesized output is not exactly the same as the same
   
 o For standard diphone voices, maximum run time memory
   requirements are approximately less than twice the memory requirement 
-  for the waveform generated.  For 32bit archtectures
+  for the waveform generated.  For 32bit architectures
   this effectively means under 1M.
   
 o The flite program supports, synthesis of individual strings or files
@@ -132,7 +132,7 @@ on a Linux machine for StrongARM.  However note that new byte order
 architectures may not work directly as there is some careful
 byte order constraints in some structures.  These are portable but may
 require reordering of some fields, contact us if you are moving to
-a new archiecture.
+a new architecture.
 
 News
 ----
