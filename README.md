@@ -138,7 +138,7 @@ News
 ----
 
 New in 2.2 (Oct 2018)
-    o Better qrapheme support (Wilderness Languages) hundreds of new languages
+    o Better grapheme support (Wilderness Languages) hundreds of new languages
     
 New in 2.1 (Oct 2017)
 
