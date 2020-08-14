@@ -445,15 +445,15 @@ static void cg_smooth_F0(cst_utterance *utt,
     /* Smooth F0 and mark unvoice frames as 0.0 */
     cst_item *mcep;
     int i;
-    float mean, stddev;
+    float base_mean, base_stddev;
 
     /* cg_smooth_F0_naive(param_track); */
     
     cg_F0_interpolate_spline(utt,param_track);
 
-    mean = get_param_float(utt->features,"int_f0_target_mean", cg_db->f0_mean);
-    mean *= get_param_float(utt->features,"f0_shift", 1.0);
-    stddev = 
+    base_mean = get_param_float(utt->features,"int_f0_target_mean", cg_db->f0_mean);
+    base_mean *= get_param_float(utt->features,"f0_shift", 1.0);
+    base_stddev =
         get_param_float(utt->features,"int_f0_target_stddev", cg_db->f0_stddev);
 #if 0
     FILE *ftt; int ii;
@@ -469,6 +469,25 @@ static void cg_smooth_F0(cst_utterance *utt,
     {
         if (voiced_frame(mcep))
         {
+            float mean = base_mean;
+            float stddev = base_stddev;
+            float local_f0_mean =
+            ffeature_float(mcep,
+                "R:mcep_link.parent.R:segstate.parent.R:SylStructure.parent.parent.R:Token.parent.local_f0_mean"
+            );
+            if (local_f0_mean != 0.0)
+            {
+                mean = local_f0_mean;
+            }
+            float local_f0_range =
+            ffeature_float(mcep,
+                "R:mcep_link.parent.R:segstate.parent.R:SylStructure.parent.parent.R:Token.parent.local_f0_range"
+            );
+            if (local_f0_range > 0.0)
+            {
+                /* feature_float returns 0 by default, shifted to allow 0 to be passed. */
+                stddev = local_f0_range - 1.0;
+            }
             /* scale the F0 -- which normally wont change it at all */
             param_track->frames[i][0] = 
                 (((param_track->frames[i][0]-cg_db->f0_mean)/cg_db->f0_stddev) 
