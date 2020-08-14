@@ -4080,11 +4080,17 @@ case "$target_os" in
                 # For the Windows under mingw32 environment
                 # http://www.mingw.org
 		shared=false
-     	        CFLAGS="$CFLAGS -DCST_NO_SOCKETS -DUNDER_WINDOWS -DWIN32 -shared"
-                MINGWPREF="i386-mingw32-"
-                CC="${MINGWPREF}gcc"
-                RANLIB="${MINGWPREF}ranlib"
-                AR="${MINGWPREF}ar"
+     	        CFLAGS="$CFLAGS -DCST_NO_SOCKETS -DUNDER_WINDOWS -DWIN32"
+                PREFLEN=`expr match "$CC" ".*-gcc"`
+                if expr $PREFLEN != 0 > /dev/null; then
+                    # When $CC includes "-gcc", use the preceding
+                    # charactors + '-' as MINGPREF.
+                    # for example:
+                    #   CC=x86_64-w64-mingw32-gcc.exe
+                    #   --> MINGWPREF=x86_64-w64-mingw32-
+                    PREFLEN=`expr $PREFLEN - 3`
+                    MINGPREF=`expr substr $CC 1 $PREFLEN`
+                fi
                 WINDRES="${MINGWPREF}windres"
                 DLLTOOL="${MINGWPREF}dlltool"
                 DLLWRAP="${MINGWPREF}dllwrap"
@@ -4355,7 +4361,8 @@ if test "x$ac_cv_header_alsa_asoundlib_h" = xyes; then :
 fi
 
 
-ac_fn_c_check_header_mongrel "$LINENO" "mmsystem.h" "ac_cv_header_mmsystem_h" "$ac_includes_default"
+ac_fn_c_check_header_compile "$LINENO" "mmsystem.h" "ac_cv_header_mmsystem_h" "#include <windows.h>
+"
 if test "x$ac_cv_header_mmsystem_h" = xyes; then :
   AUDIODRIVER="wince"
 	       AUDIODEFS=-DCST_AUDIO_WINCE
@@ -4368,11 +4375,6 @@ case "$target_os" in
      wince*)
         AUDIODRIVER="wince"
         AUDIODEFS=-DCST_AUDIO_WINCE
-        AUDIOLIBS=
-     ;;
-     mingw*)
-        AUDIODRIVER="none"
-        AUDIODEFS=-DCST_AUDIO_NONE
         AUDIOLIBS=
      ;;
      android*)

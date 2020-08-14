@@ -266,7 +266,7 @@ static void get_token_sub_part(cst_tokenstream *ts,
     (*buffer)[p] = '\0';
 }
 
- #ifdef _WIN32
+ #if defined _WIN32 && !defined(__GNUC__)
  __inline int ts_utf8_sequence_length(char c0)
  #else
  int ts_utf8_sequence_length(char c0)

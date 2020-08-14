@@ -40,7 +40,7 @@
 ##  Also an example command line program                                 ## 
 ##                                                                       ##
 ##  At top level                                                         ##
-##      ./configure --target=i386-mingw32                                ##
+##      ./configure                                                      ##
 ##      make                                                             ##
 ##                                                                       ##
 ###########################################################################
