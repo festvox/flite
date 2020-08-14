@@ -2245,21 +2245,28 @@ fi
 $as_echo "$ac_cv_host" >&6; }
 case $ac_cv_host in
 *-*-*) ;;
+wasm32-wasi) ;;
 *) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
 esac
 host=$ac_cv_host
-ac_save_IFS=$IFS; IFS='-'
-set x $ac_cv_host
-shift
-host_cpu=$1
-host_vendor=$2
-shift; shift
-# Remember, the first character of IFS is used to create $*,
-# except with old shells:
-host_os=$*
-IFS=$ac_save_IFS
-case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 
+if [ $host = "wasm32-wasi" ]; then
+  host_cpu="wasm32"
+  host_vendor=
+  host_os="wasi"
+else
+  ac_save_IFS=$IFS; IFS='-'
+  set x $ac_cv_host
+  shift
+  host_cpu=$1
+  host_vendor=$2
+  shift; shift
+  # Remember, the first character of IFS is used to create $*,
+  # except with old shells:
+  host_os=$*
+  IFS=$ac_save_IFS
+  case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking target system type" >&5
 $as_echo_n "checking target system type... " >&6; }
@@ -2278,21 +2285,28 @@ fi
 $as_echo "$ac_cv_target" >&6; }
 case $ac_cv_target in
 *-*-*) ;;
+wasm32-wasi) ;;
 *) as_fn_error $? "invalid value of canonical target" "$LINENO" 5;;
 esac
 target=$ac_cv_target
-ac_save_IFS=$IFS; IFS='-'
-set x $ac_cv_target
-shift
-target_cpu=$1
-target_vendor=$2
-shift; shift
-# Remember, the first character of IFS is used to create $*,
-# except with old shells:
-target_os=$*
-IFS=$ac_save_IFS
-case $target_os in *\ *) target_os=`echo "$target_os" | sed 's/ /-/g'`;; esac
 
+if [ $target = "wasm32-wasi" ]; then
+  target_cpu="wasm32"
+  target_vendor=
+  target_os="wasi"
+else
+  ac_save_IFS=$IFS; IFS='-'
+  set x $ac_cv_target
+  shift
+  target_cpu=$1
+  target_vendor=$2
+  shift; shift
+  # Remember, the first character of IFS is used to create $*,
+  # except with old shells:
+  target_os=$*
+  IFS=$ac_save_IFS
+  case $target_os in *\ *) target_os=`echo "$target_os" | sed 's/ /-/g'`;; esac
+fi
 
 # The aliases save the names the user supplied, while $host etc.
 # will get canonicalized.
@@ -4160,6 +4174,9 @@ case "$target_os" in
 	darwin*)
 		CFLAGS="$CFLAGS -no-cpp-precomp"
 	;;
+  wasi)
+    CFLAGS="$CFLAGS -DDIE_ON_ERROR -DCST_NO_SOCKETS -DWASM32_WASI"
+  ;;
 esac
 
 

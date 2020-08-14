@@ -216,6 +216,9 @@ dnl         ;;
 	darwin*)
 		CFLAGS="$CFLAGS -no-cpp-precomp"
 	;;
+        wasi*)
+		CFLAGS="$CFLAGS -DDIE_ON_ERROR -DCST_NO_SOCKETS -DWASM32_WASI"
+        ;;
 esac
 
 AC_SUBST(TARGET_OS)

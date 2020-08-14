@@ -46,7 +46,11 @@
 #include "cst_args.h"
 #include "flite.h"
 
+#ifdef WASM32_WASI
+void flite_set_lang_list(void);
+#else
 void *flite_set_lang_list(void);
+#endif
 
 int main(int argc, char **argv)
 {
