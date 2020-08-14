@@ -64,6 +64,8 @@ void *cst_alloc_cunks[NUM_CHUNKS];
 #endif
 #endif
 
+#ifndef CST_USER_MALLOC	/* Define to override cst_safe_alloc, cst_safe_calloc, cst_safe_realloc, cst_free */
+
 void *cst_safe_alloc(int size)
 {
     /* returns pointer to memory all set 0 */
@@ -185,6 +187,8 @@ void cst_free(void *p)
 #endif
     }
 }
+
+#endif
 
 #ifdef CST_DEBUG_MALLOC_TRACE
 
