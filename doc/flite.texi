@@ -812,7 +812,7 @@ distribution, the example diphone voice is @code{cmu_us_kal}.
 
 Here is a simple C program that uses the flite library
 @example
-#include "flite.h"
+#include <flite/flite.h>
 
 cst_voice * register_cmu_us_kal(const char *voxdir);
 
