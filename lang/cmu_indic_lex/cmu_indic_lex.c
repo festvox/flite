@@ -1315,7 +1315,7 @@ cst_val *cmu_indic_lex_lts_function(const struct lexicon_struct *l,
     }
 
     if (cst_streq(indic_variant,"tam")){
-       printf("Tamil doesnt have anuswara");
+       printf("Tamil doesn't have anuswara");
     } 
     else
     cmu_indic_lex_nasal_postfixes(base_phones, feats);
