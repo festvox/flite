@@ -315,7 +315,7 @@ Convert a festvox cg voice into a C file."
          (while (< n 5)
             (format ofd "const double %s_me_filter_%d[] = {\n" name n)
             (set! o 0)
-            (while (< o 46)
+            (while (< o 47)
                (format ofd "%f, " (track.get me_filter_track n o))
                (set! o (+ o 1)))
             (format ofd "%f\n};\n" (track.get me_filter_track n o))
