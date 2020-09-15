@@ -2,6 +2,10 @@
 @c %**start of header
 @setfilename flite.info
 @settitle Flite: a small, fast speech synthesis engine
+@dircategory sound
+@direntry
+flite: (flite). a small, fast speech synthesis engine
+@end direntry
 @finalout
 @setchapternewpage odd
 @c %**end of header
