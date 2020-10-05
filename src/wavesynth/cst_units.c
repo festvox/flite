@@ -590,7 +590,7 @@ void add_residual_pulse(int targ_size, unsigned char *targ_residual,
 			int unit_size, const unsigned char *unit_residual)
 {
     int i,m;
-#if (defined(__x86_64__) || defined(_M_X64))
+#if UINTPTR_MAX > 0xfffffffful
     long long p;
     /* Unit residual isn't a pointer its a number, the power for the 
        the sts, yes this is hackily casting the address to a number */
