@@ -51,6 +51,7 @@ typedef struct cst_indic_num_table_struct {
     const char *thousand;
     const char *lakh;
     const char *crore;
+    const char *point;
 } indic_num_table;
 
 #define num_table_digit(TABLE,I,J) ((*(TABLE->digit))[I][J])
