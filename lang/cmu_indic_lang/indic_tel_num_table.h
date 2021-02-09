@@ -159,6 +159,7 @@ const static indic_num_table tel_num_table = {
     "వెయ్యి", /* thousand */
     "లక్ష",  /* lakh */
     "కోటి", /* crore */
+    "point"  /* should be native word for "point" */
 };
 
 

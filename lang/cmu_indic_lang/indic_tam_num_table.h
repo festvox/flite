@@ -160,6 +160,7 @@ const static indic_num_table tam_num_table = {
     "ஆயிரம்", /* thousand */
     "லட்சம்",  /* lakh */
     "கோடி", /* crore */
+    "point"  /* should be native word for "point" */
 };
 
 

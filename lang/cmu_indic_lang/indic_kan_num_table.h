@@ -160,6 +160,7 @@ const static indic_num_table kan_num_table = {
     "ಸಾವಿರ", /* thousand */
     "ಲಕ್ಷ",  /* lakh */
     "ಕೋಟಿ", /* crore */
+    "point"  /* should be native word for "point" */
 };
 
 
