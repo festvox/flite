@@ -618,7 +618,6 @@ static cst_utterance *tokentosegs(cst_utterance *u)
     sssyl = sylitem = worditem = sylstructureitem = 0;
     for (t = relation_head(utt_relation(u, "Token")); t; t = item_next(t)) 
     {
-	cst_item *segitem = relation_append(seg, NULL);
 	char const *pname = item_feat_string(t, "name");
 	char *name = cst_strdup(pname);
 
@@ -656,6 +655,7 @@ static cst_utterance *tokentosegs(cst_utterance *u)
 	}
 	else
 	{
+	    cst_item *segitem = relation_append(seg, NULL);
 	    item_add_daughter(sssyl,segitem);
 	    item_set_string(segitem, "name", name);
 	}
