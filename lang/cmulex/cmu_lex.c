@@ -46,7 +46,7 @@ extern const int cmu_lex_entry[];
 extern const unsigned char cmu_lex_data[];
 extern const int cmu_lex_num_entries;
 extern const int cmu_lex_num_bytes;
-extern const char * const cmu_lex_phone_table[54];
+extern const char * const cmu_lex_phone_table[57];
 extern const char * const cmu_lex_phones_huff_table[];
 extern const char * const cmu_lex_entries_huff_table[];
 
