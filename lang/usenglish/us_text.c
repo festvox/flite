@@ -693,13 +693,14 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
     }
     else if ((p=(cst_strrchr(name,'\''))))
     {
-	static const char * const pc[] = { "'s", "'ll", "'ve", "'d", NULL };
+	//static const char * const pc[] = { "'s", "'ll", "'ve", "'d", NULL };
+    static const char * const pc[] = {NULL };
 
 	bbb = cst_downcase(p);
 	if (cst_member_string(bbb, pc))
 	{
 	    aaa = cst_strdup(name);
-	    aaa[cst_strlen(name)-cst_strlen(p)] = '\0';
+	    //aaa[cst_strlen(name)-cst_strlen(p)] = '\0';
 	    r = val_append(us_tokentowords_one(token,aaa),
 			   cons_val(string_val(bbb),0));
 	    cst_free(aaa);
@@ -714,10 +715,18 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	}
 	else
 	{
-	    aaa = cst_strdup(name);
+        //Original code
+	    /*aaa = cst_strdup(name);
 	    strcpy(&aaa[cst_strlen(name)-cst_strlen(p)],p+1);
+        //aaa[cst_strlen(name)-cst_strlen(p)] = '\'';
 	    r = us_tokentowords_one(token,aaa);
+	    cst_free(aaa);*/
+
+        //Riffit code (disable separation of words with apostrophe)
+        aaa = cst_downcase(name);
+	    r = cons_val(string_val(aaa),0);
 	    cst_free(aaa);
+
 	}
 	cst_free(bbb);
     }
