@@ -182,9 +182,12 @@ static float cg_state_duration(cst_item *s, cst_cg_db *cg_db)
     const char *n;
     int i, x, dm;
 
+    /* printf("awb_debug state_dur pre %s\n",item_feat_string(s,"name")); */
     for (dm=0,zdur=0.0; dm < cg_db->num_dur_models; dm++)
         zdur += val_float(cart_interpret(s,cg_db->dur_cart[dm]));
     zdur /= dm;  /* get average zdur prediction from all dur models */
+    /* printf("awb_debug state_dur post %s zdur %f\n",
+       item_feat_string(s,"name"),zdur); */
     n = item_feat_string(s,"name");
 
     /* Note we only use the dur stats from the first model, that is */
@@ -202,6 +205,11 @@ static float cg_state_duration(cst_item *s, cst_cg_db *cg_db)
         x = 0;
 
     dur = (zdur*cg_db->dur_stats[0][x]->stddev)+cg_db->dur_stats[0][x]->mean;
+    /*
+    printf("awb_debug %s i %d zdur %f mean %f stddev %f dur %f\n",
+           n,x,zdur,cg_db->dur_stats[0][x]->mean,
+           cg_db->dur_stats[0][x]->stddev,dur);
+    */
 
     /*    dur = 1.2 * (float)exp((float)dur); */
 
@@ -456,12 +464,17 @@ static void cg_smooth_F0(cst_utterance *utt,
     base_stddev =
         get_param_float(utt->features,"int_f0_target_stddev", cg_db->f0_stddev);
 #if 0
-    FILE *ftt; int ii;
+    FILE *ftt; int ii, awbi;
     ftt = cst_fopen("awb.f0",CST_OPEN_WRITE);
     printf("awb_debug saving F0\n");
     for (ii=0; ii<param_track->num_frames; ii++)
-        cst_fprintf(ftt,"%f %f\n",param_track->frames[ii][0],
-                    param_track->frames[ii][param_track->num_channels-2]);
+    {
+        for (awbi=0; awbi<param_track->num_channels; awbi++)
+            cst_fprintf(ftt,"%f ",param_track->frames[ii][awbi]);
+        cst_fprintf(ftt,"\n");
+        /* cst_fprintf(ftt,"%f %f\n",param_track->frames[ii][0],
+           param_track->frames[ii][param_track->num_channels-2]); */
+    }
     cst_fclose(ftt);
 #endif
 
@@ -648,10 +661,12 @@ static cst_utterance *cg_predict_params(cst_utterance *utt)
         for (pm=0; pm<cg_db->num_param_models; pm++)
         {
             mcep_tree = cg_db->param_trees[pm][p];
+            /* printf("awb_debug mcep_tree name %s i\n",mname); */
             f = val_int(cart_interpret(mcep,mcep_tree));
             /* If there is one model this will be fine, if there are */
             /* multiple models this will be the nth model */
             item_set_int(mcep,"clustergen_param_frame",f);
+            /* printf("awb_debug name %s i %d f %d\n",mname,i,f); */
 
             /* Unpack the model[pm][f] vector */
             unpack_model_vector(cg_db,pm,f,unpacked_vector);
@@ -725,12 +740,15 @@ static cst_utterance *cg_resynth(cst_utterance *utt)
 
     cg_db = val_cg_db(utt_feat_val(utt,"cg_db"));
     param_track = val_track(utt_feat_val(utt,"param_track"));
+    /* awb_debug */
+    /* cst_track_save_est(param_track, "flite_pre_mlpg.track"); */
     if (cg_db->mixed_excitation)
         str_track = val_track(utt_feat_val(utt,"str_track"));
 
     if (cg_db->do_mlpg)
     {
         smoothed_track = mlpg(param_track, cg_db);
+        /* cst_track_save_est(smoothed_track, "flite_post_mlpg.track"); */
         w = mlsa_resynthesis(smoothed_track,str_track,cg_db,
                              asi,mlsa_speed_param);
         delete_track(smoothed_track);

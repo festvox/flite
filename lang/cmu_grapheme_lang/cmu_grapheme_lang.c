@@ -41,6 +41,12 @@
 #include "cst_ffeatures.h"
 #include "cmu_grapheme_lang.h"
 
+/* This should really be based on the target language (even unsupervised) */
+/* But festival defaults to the English gpos, so we must do so here too */
+/* This means linking requires the us english lang libs too, which isn't */
+/* really necessary */
+extern const cst_val * const * const us_gpos[];
+
 static cst_val *cmu_grapheme_tokentowords(cst_item *token)
 {
     /* Return list of words that expand token/name */
@@ -59,6 +65,18 @@ static cst_val *cmu_grapheme_tokentowords(cst_item *token)
     utt = item_utt(token);
     lex = val_lexicon(feat_val(utt->features,"lexicon"));
 #endif
+    /*
+      explicitly in lexicon (but that is later in the process)
+      colonial word (i.e. English)
+      Not a word, so a letter/digit sequence
+      whole number
+      floating point
+      telephone number
+      money
+      date
+      other abbreviation with number
+      yarowsky rules
+     */
 
     if (cst_strlen(name) > 0)
         r = cons_val(string_val(name),0);
@@ -87,6 +105,28 @@ int grapheme_utt_break(cst_tokenstream *ts,
         return TRUE;
     else
         return FALSE;
+}
+
+DEF_STATIC_CONST_VAL_STRING(val_string_content,"content");
+static const cst_val *gr_gpos(const cst_item *word)
+{
+    /* Guess at part of speech (function/content) */
+    /* This should be set, but its not, the default Festival */
+    /* grapheme build falls back on English gpos, so we must */
+    /* to do the same, even though its mostly wrong */
+    const char *w;
+    int s,t;
+
+    w = item_feat_string(word,"name");
+
+    for (s=0; us_gpos[s]; s++)
+    {
+	for (t=1; us_gpos[s][t]; t++)
+	    if (cst_streq(w,val_string(us_gpos[s][t])))
+		return us_gpos[s][0];
+    }
+
+    return (cst_val *)&val_string_content;
 }
 
 void cmu_grapheme_lang_init(cst_voice *v)
@@ -123,6 +163,7 @@ void cmu_grapheme_lang_init(cst_voice *v)
 
     /* Default ffunctions (required) */
     basic_ff_register(v->ffunctions);
+    ff_register(v->ffunctions, "gpos",gr_gpos);
 
     return;
 }

@@ -186,10 +186,11 @@ const cst_val *cg_phone_rindex(const cst_item *p)
 
 const cst_val *cg_is_pau(const cst_item *p)
 {
+    /* Festival treats these as strings rather than an int */
     if (p && cst_streq("pau",item_feat_string(p,"name")))
-        return &val_int_1;
+        return VAL_STRING_1;
     else
-        return &val_int_0;
+        return VAL_STRING_0;
 }
 
 const cst_val *cg_find_phrase_number(const cst_item *p)

@@ -1,7 +1,7 @@
 
          Flite: a small run-time speech synthesis engine
                       version 2.1-release
-          Copyright Carnegie Mellon University 1999-2018
+          Copyright Carnegie Mellon University 1999-2022
                       All rights reserved
                       http://cmuflite.org
               https://github.com/festvox/flite
@@ -180,6 +180,9 @@ file bin/flite
 News
 ----
 
+New in 2.3 (Mar 2022)
+    o Fixed features grapheme voices are much close to Festival quality
+
 New in 2.2 (Oct 2018)
     o Better grapheme support (Wilderness Languages) hundreds of new languages
     
@@ -295,9 +298,9 @@ Compilation
 
 In general
 
-    tar zxvf flite-2.1-current.tar.gz
+    tar zxvf flite-2.3-current.tar.gz
     
-    cd flite-2.1-current
+    cd flite-2.3-current
     ./configure 
     make
     make get_voices
@@ -456,7 +459,7 @@ process.
 We expect that often voices will be loaded from external files, and we
 have now set up a voice repository in
 
-    http://festvox.org/flite/flite-2.1/voices/*.flitevox
+    http://festvox.org/flite/packed/flite-2.1/voices/*.flitevox
    
 If you visit there with a browser you can hear the examples.  You can
 also download the .flitevox files to you machine so you don't need a
