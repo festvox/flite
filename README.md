@@ -143,20 +143,24 @@ News
 
 New in 2.3 (Mar 2022)
 
-    o Fixed features, now grapheme voices are much close to Festival quality
+    o Fixed features, now grapheme voices are much closer to
+    Festival quality
 
 New in 2.2 (Oct 2018)
 
-    o Better grapheme support (Wilderness Languages) hundreds of new languages
+    o Better grapheme support (Wilderness Languages) hundreds of new
+    languages
     
 New in 2.1 (Oct 2017)
 
-    o Improved Indic front end support (thanks to Suresh Bazaj @ Hear2Read)
+    o Improved Indic front end support (thanks to Suresh Bazaj
+    @ Hear2Read)
     
     o 18 English Voices (various accents)
     
-    o 12 Indian Voices (Bengali, Gujarati, Hindi, Kannada, Marathi, Panjabi
-      Tamil and Telugu) usually with bilingual (with English) support
+    o 12 Indian Voices (Bengali, Gujarati, Hindi, Kannada, Marathi,
+    Panjabi, Tamil and Telugu) usually with bilingual (with English)
+    support
       
     o Can do byteswap architectures [again] (ar9331 yun arduino, zsun etc)
     
@@ -164,12 +168,13 @@ New in 2.1 (Oct 2017)
     
     o grapheme based festvox builds give working flitevox voices
     
-    o SAPI support for CG voices (thanks to Alok Parlikar @ Cobalt Speech and
-      Language INC)
+    o SAPI support for CG voices (thanks to Alok Parlikar @ Cobalt
+    Speech and Language INC)
       
-    o gcc 6.x support
+    o gcc 6.x-10.x support
     
-    o .flitevox files (and models) 40% of previous size, but same quality
+    o .flitevox files (and models) 40% of previous size, but
+    same quality
 
 New in 2.0.0 (Dec 2014)
 
