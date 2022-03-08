@@ -41,11 +41,9 @@
 #include "cst_ffeatures.h"
 #include "cmu_grapheme_lang.h"
 
-/* This should really be based on the target language (even unsupervised) */
-/* But festival defaults to the English gpos, so we must do so here too */
-/* This means linking requires the us english lang libs too, which isn't */
-/* really necessary */
-extern const cst_val * const * const us_gpos[];
+/* For back historical reasons, we need the *English* gpos table as */
+/* it maye back been used in the features in a grapheme voice */
+extern const cst_val * const * const gr_gpos[];
 
 static cst_val *cmu_grapheme_tokentowords(cst_item *token)
 {
@@ -108,7 +106,7 @@ int grapheme_utt_break(cst_tokenstream *ts,
 }
 
 DEF_STATIC_CONST_VAL_STRING(val_string_content,"content");
-static const cst_val *gr_gpos(const cst_item *word)
+static const cst_val *graph_gpos(const cst_item *word)
 {
     /* Guess at part of speech (function/content) */
     /* This should be set, but its not, the default Festival */
@@ -119,11 +117,11 @@ static const cst_val *gr_gpos(const cst_item *word)
 
     w = item_feat_string(word,"name");
 
-    for (s=0; us_gpos[s]; s++)
+    for (s=0; gr_gpos[s]; s++)
     {
-	for (t=1; us_gpos[s][t]; t++)
-	    if (cst_streq(w,val_string(us_gpos[s][t])))
-		return us_gpos[s][0];
+	for (t=1; gr_gpos[s][t]; t++)
+	    if (cst_streq(w,val_string(gr_gpos[s][t])))
+		return gr_gpos[s][0];
     }
 
     return (cst_val *)&val_string_content;
@@ -163,7 +161,7 @@ void cmu_grapheme_lang_init(cst_voice *v)
 
     /* Default ffunctions (required) */
     basic_ff_register(v->ffunctions);
-    ff_register(v->ffunctions, "gpos",gr_gpos);
+    ff_register(v->ffunctions, "gpos",graph_gpos);
 
     return;
 }

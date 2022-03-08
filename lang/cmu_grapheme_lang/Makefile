@@ -39,7 +39,8 @@ DIRNAME=lang/cmu_grapheme_lang
 BUILD_DIRS = 
 ALL_DIRS= 
 H = cmu_grapheme_lang.h cmu_grapheme_phrasing_cart.h
-SRCS = cmu_grapheme_lang.c cmu_grapheme_phoneset.c cmu_grapheme_phrasing_cart.c
+SRCS = cmu_grapheme_lang.c cmu_grapheme_phoneset.c \
+       cmu_grapheme_phrasing_cart.c graph_gpos.c
 SCRIPTS = make_grapheme_phoneset
 OBJS = $(SRCS:.c=.o)
 SCM=
