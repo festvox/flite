@@ -184,6 +184,7 @@ New in 2.3 (Mar 2022)
     o Fixed features grapheme voices are much close to Festival quality
 
 New in 2.2 (Oct 2018)
+
     o Better grapheme support (Wilderness Languages) hundreds of new languages
     
 New in 2.1 (Oct 2017)
@@ -337,7 +338,7 @@ Usage:
 
 The ./bin/flite binary contains all supported voices and you may
 choose between the voices with the -voice flag and list the supported
-voices with the -lw flag.  Note the kal (diphone) voice is a different
+voices with the -lv flag.  Note the kal (diphone) voice is a different
 technology from the others and is much less computationally expensive
 but more robotic.  For each voice additional binaries that contain
 only that voice are created in ./bin/flite_FULLVOICENAME,

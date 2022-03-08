@@ -160,6 +160,7 @@ const static indic_num_table pan_num_table = {
     "ਹਜਾਰ", /* thousand */
     "ਲੱਖ",  /* lakh */
     "ਕਰੋੜ", /* crore */
+    "point"  /* should be native word for "point" */
 };
 
 

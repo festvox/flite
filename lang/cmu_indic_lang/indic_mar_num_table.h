@@ -160,6 +160,7 @@ const static indic_num_table mar_num_table = {
     "हजार", /* thousand */
     "लाख",  /* lakh */
     "कोटी", /* crore */
+    "point"  /* should be native word for "point" */
 };
 
 

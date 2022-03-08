@@ -44,7 +44,7 @@ extern "C" {
 cst_lexicon *cmu_grapheme_lex_init(void);
 
 extern const int num_unicode_sampa_mapping;
-extern const char * const unicode_sampa_mapping[16663][5];
+extern const char * const unicode_sampa_mapping[16798][5];
 
 #ifdef __cplusplus
 } /* extern "C" */

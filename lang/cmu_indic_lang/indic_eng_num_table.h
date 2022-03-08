@@ -294,7 +294,8 @@ const static indic_num_table eng_num_table = {
     "hundred",
     "thousand",
     "lakh",
-    "crore"
+    "crore",
+    "point"
 };
 
 #endif

@@ -160,6 +160,7 @@ const static indic_num_table san_num_table = {
     "सहस्र", /* thousand */
     "लक्ष",  /* lakh */
     "कोटि", /* crore */
+    "point"  /* should be native word for "point" */
 };
 
 

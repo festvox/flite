@@ -259,6 +259,14 @@ static cst_val *indic_number_crore(const indic_num_table *num_table)
 {
     return string_val(num_table->crore);
 }
+static cst_val *indic_number_point(const indic_num_table *num_table)
+{
+    if (num_table->point)
+	return string_val(num_table->point);
+    else
+	/* If unspecified, used English word 'point' */
+	return string_val("point");
+}
 
 cst_val *indic_number(const cst_val *number,
                       const indic_num_table *num_table)
@@ -581,58 +589,64 @@ static cst_val *cmu_indic_tokentowords_one(cst_item *token, const char *name)
     else if (indic_nump(name))
             
     {   /* Its script specific digits (commas/dots) */
-	    if (indic_nump(name) == 2)
-	    {   /* All characters are digits */ 
-           // printf("nump is 2\n");
-	        p = indic_num_normalize(name,num_table);
-	        if (val_length(p) <= 9)
-		    r = indic_number(p, num_table);
-	        else
-		    r = indic_number_indiv(p,num_table);
-	        delete_val(p);
+	if (indic_nump(name) == 2)
+	{   /* All characters are digits */ 
+	    // printf("nump is 2\n");
+	    p = indic_num_normalize(name,num_table);
+	    if (val_length(p) <= 9)
+		r = indic_number(p, num_table);
+	    else
+		r = indic_number_indiv(p,num_table);
+	    delete_val(p);
+	}
+	else if (indic_nump(name) == 1)
+	{   /* Some characters are digits */
+	    int len = 1;
+	    int i = 0;
+	    char c0;
+	    char *aaa;
+	    char *bbb;
+	    while(name[i] != '\0')
+	    {
+		/* Iterate over UTF-8 string */
+		c0 = name[i];
+		len = ts_utf8_sequence_length(c0);
+		/* Check if char after this is comma */
+		if (name[i+len] == ',')
+		{   
+		    /* Skip commas */
+		    i += len;
+		    c0 = name[i];
+		    len = ts_utf8_sequence_length(c0);
+		    i += len;
+		    continue;
+		}
+		/* Find where character type switches to or from digits */
+		if(indic_text_splitable(name, i, len))
+		    break;
+		i +=len;
 	    }
-	    else if (indic_nump(name) == 1)
-	    {   /* Some characters are digits */
-	        int len = 1;
-	        int i = 0;
-	        char c0;
-                char *aaa;
-                char *bbb;
-	        while(name[i] != '\0')
-	        {
-		        /* Iterate over UTF-8 string */
-		        c0 = name[i];
-		        len = ts_utf8_sequence_length(c0);
-                        /* Check if char after this is comma */
-                        if (name[i+len] == ',')
-                        {   
-                          /* Skip commas */
-                        i += len;
-                        c0 = name[i];
-                        len = ts_utf8_sequence_length(c0);
-                        i += len;
-                        continue;
-                        }
-		        /* Find where character type switches to or from digits */
-		        if(indic_text_splitable(name, i, len))
-		            break;
-		        i +=len;
-	        }
-	        aaa = cst_strdup(name);
-	        aaa[i+len] = '\0';
-	        bbb = cst_strdup(&name[i+len]);
-	        r = val_append(cmu_indic_tokentowords_one(token, aaa),
-			        cmu_indic_tokentowords_one(token, bbb));
-	        cst_free(aaa);
-	        cst_free(bbb);
-	    }
+	    aaa = cst_strdup(name);
+	    aaa[i+len] = '\0';
+	    bbb = cst_strdup(&name[i+len]);
+	    r = val_append(cmu_indic_tokentowords_one(token, aaa),
+			   cmu_indic_tokentowords_one(token, bbb));
+	    cst_free(aaa);
+	    cst_free(bbb);
+	}
     }
     else if (indic_hyphenated(name))
-    {	/* For numbers seeparated by - / , */
-            char *aaa;
-	    aaa = cst_strdup(&name[1]);
+    {	/* For numbers separated by - / , */
+	char *aaa;
+	aaa = cst_strdup(&name[1]);
+	if (name[0] == '.') /* point */
+	{
+	    r = cons_val(indic_number_point(num_table),
+			 cmu_indic_tokentowords_one(token, aaa));
+	}
+	else
 	    r = cmu_indic_tokentowords_one(token, aaa);
-	    cst_free(aaa);
+	cst_free(aaa);
     }
 
     else if (cst_regex_match(cst_rx_not_indic,name))

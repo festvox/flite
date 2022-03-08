@@ -160,6 +160,7 @@ const static indic_num_table guj_num_table = {
     "હજાર", /* thousand */
     "લાખ",  /* lakh */
     "કરોડ઼", /* crore */
+    "point"  /* should be native word for "point" */
 };
 
 
