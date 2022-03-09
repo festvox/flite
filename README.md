@@ -132,11 +132,11 @@ Previously we supported PalmOS and Windows CE but these seem to be rare
 nowadays so they are no longer actively supported.
 
 Other similar platforms should just work, we have also cross compiled
-on a Linux machine for various ARM processors.  However note that new
-byte order architectures may not work directly as there is some
-careful byte order constraints in some structures.  These are portable
-but may require reordering of some fields, contact us if you are
-moving to a new architecture.
+on a Linux machine for various ARM and MIPS processors.  However note
+that new byte order architectures may not work directly as there is
+some careful byte order constraints in some structures.  These are
+portable but may require reordering of some fields, contact us if you
+are moving to a new architecture.
 
 News
 ----

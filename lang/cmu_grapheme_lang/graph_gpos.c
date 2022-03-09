@@ -37,17 +37,17 @@
 /*                                                                       */
 /*  But its not!                                                         */
 /*                                                                       */
-/*  The defaul Festival Grapheme build falls back on the English gpos    */
-/*  lookup mechanism for check for function/content words, thus the      */
+/*  The default Festival Grapheme build falls back on the English gpos   */
+/*  lookup mechanism to check for function/content words, thus the       */
 /*  flite grapheme front end *must* have the same fall back position     */
 /*  otherwise the gpos feature will be different.  After checking things */
-/*  it does get used, and not just for punc vers not punc so here is     */
+/*  it does get used, and not just for punc vs not punc so here is       */
 /*  an inappropriate list of words for non-English languages but sorry   */
 /*  has to be here.  We could use the actual us_gpos but that is in a    */
 /*  different library so we'd need to modify the link command so we just */
 /*  copy it in all its embarassing shame :-(                             */
 /*                                                                       */
-/*  The current bug fix for this is remove us_gpos from the Festival     */
+/*  The real bug fix for this is remove us_gpos from the Festival        */
 /*  grapheme build and rebuild all 700 wilderness voices                 */
 /*  Additionally you could learn a new unknown language gpos and us it   */
 /*  for phrase prediction, but the gpos table would need to in the       */
