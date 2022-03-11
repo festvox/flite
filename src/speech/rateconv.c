@@ -177,7 +177,7 @@
 static void
 fir_mono(int *inp, int *coep, int firlen, int *outp)
 {
-	register int akku = 0, *endp;
+	int akku = 0, *endp;
 	int n1 = (firlen / 8) * 8, n0 = firlen % 8;
 
 	endp = coep + n1;
@@ -203,7 +203,7 @@ static void
 fir_stereo(int *inp, int *coep,
 	   int firlen, int *out1p, int *out2p)
 {
-	register int akku1 = 0, akku2 = 0, *endp;
+	int akku1 = 0, akku2 = 0, *endp;
 	int n1 = (firlen / 8) * 8, n0 = firlen % 8;
 
 	endp = coep + n1;

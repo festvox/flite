@@ -407,7 +407,7 @@ static double mlsadf(double x, double *b, int m, double a, int pd, double *d, Vo
 static double mlsadf1(double x, double *b, int m, double a, int pd, double *d, VocoderSetup *vs)
 {
    double v, out = 0.0, *pt, aa;
-   register int i;
+   int i;
 
    aa = 1 - a*a;
    pt = &d[pd+1];
@@ -429,7 +429,7 @@ static double mlsadf1(double x, double *b, int m, double a, int pd, double *d, V
 static double mlsadf2 (double x, double *b, int m, double a, int pd, double *d, VocoderSetup *vs)
 {
   double v, out = 0.0, *pt;
-  register int i;
+  int i;
     
    pt = &d[pd * (m+2)];
 
@@ -452,7 +452,7 @@ static double mlsafir (double x, double *b, int m, double a, double *d)
 {  
    double y = 0.0;
    double aa;
-   register int i;
+   int i;
 
    aa = 1 - a*a;
 
@@ -561,7 +561,7 @@ static void b2mc (double *b, double *mc, int m, double a)
 /* freqt : frequency transformation */
 static void freqt (double *c1, int m1, double *c2, int m2, double a, VocoderSetup *vs)
 {
-   register int i, j;
+   int i, j;
    double b;
     
    if (vs->d==NULL) {
@@ -598,7 +598,7 @@ static void freqt (double *c1, int m1, double *c2, int m2, double a, VocoderSetu
 /* c2ir : The minimum phase impulse response is evaluated from the minimum phase cepstrum */
 static void c2ir (double *c, int nc, double *h, int leng)
 {
-   register int n, k, upl;
+   int n, k, upl;
    double  d;
 
    h[0] = exp(c[0]);

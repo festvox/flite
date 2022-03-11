@@ -319,7 +319,7 @@ static double *dcalloc(int x, int xoff)
 static double **ddcalloc(int x, int y, int xoff, int yoff)
 {
     double **ptr;
-    register int i;
+    int i;
 
     ptr = mlpg_alloc(x,double *);
     for (i = 0; i < x; i++) ptr[i] = dcalloc(y, yoff);
@@ -434,7 +434,7 @@ static void mlgparaChol(DMATRIX pdf, PStreamChol *pst, DMATRIX mlgp)
 /* generate parameter sequence from pdf sequence using Choleski decomposition */
 static void mlpgChol(PStreamChol *pst)
 {
-   register int m;
+   int m;
 
    /* generating parameter in each dimension */
    for (m = 0; m <= pst->order; m++) {
@@ -451,7 +451,7 @@ static void mlpgChol(PStreamChol *pst)
 /* calc_R_and_r: calculate R = W'U^{-1}W and r = W'U^{-1}M */
 static void calc_R_and_r(PStreamChol *pst, const int m)
 {
-    register int i, j, k, l, n;
+    int i, j, k, l, n;
     double   wu;
    
     for (i = 0; i < pst->T; i++) {
@@ -485,7 +485,7 @@ static void calc_R_and_r(PStreamChol *pst, const int m)
 /* Choleski: Choleski factorization of Matrix R */
 static void Choleski(PStreamChol *pst)
 {
-    register int t, j, k;
+    int t, j, k;
 
     pst->R[0][0] = sqrt(pst->R[0][0]);
 
@@ -514,7 +514,7 @@ static void Choleski(PStreamChol *pst)
 /* Choleski_forward: forward substitution to solve linear equations */
 static void Choleski_forward(PStreamChol *pst)
 {
-    register int t, j;
+    int t, j;
     double hold;
    
     pst->g[0] = pst->r[0] / pst->R[0][0];
@@ -533,7 +533,7 @@ static void Choleski_forward(PStreamChol *pst)
 /* Choleski_backward: backward substitution to solve linear equations */
 static void Choleski_backward(PStreamChol *pst, const int m)
 {
-    register int t, j;
+    int t, j;
     double hold;
    
     pst->c[pst->T - 1][m] = pst->g[pst->T - 1] / pst->R[pst->T - 1][0];
@@ -554,7 +554,7 @@ static void Choleski_backward(PStreamChol *pst, const int m)
 #if 0
 static void varconv(double **c, const int m, const int T, const double var)
 {
-    register int n;
+    int n;
     double sd, osd;
     double oav = 0.0, ovar = 0.0, odif = 0.0;
 
@@ -569,8 +569,8 @@ static void varconv(double **c, const int m, const int T, const double var)
 static void calc_varstats(double **c, const int m, const int T,
 		   double *av, double *var, double *dif)
 {
-    register int i;
-    register double d;
+    int i;
+    double d;
 
     *av = 0.0;
     *var = 0.0;
@@ -630,7 +630,7 @@ static void mlgparaGrad(DMATRIX pdf, PStreamChol *pst, DMATRIX mlgp, const int m
 static void mlpgGrad(PStreamChol *pst, const int max, double th, double e,
 	      double alpha, DVECTOR vm, DVECTOR vv, XBOOL nrmflag)
 {
-   register int m, i, t;
+   int m, i, t;
    double diff, n, dth;
 
    if (nrmflag == XTRUE)
@@ -660,7 +660,7 @@ static void mlpgGrad(PStreamChol *pst, const int max, double th, double e,
 /* calc_grad: calculate -RX + r = -W'U^{-1}W * X + W'U^{-1}M */
 void calc_grad(PStreamChol *pst, const int m)
 {
-    register int i, j;
+    int i, j;
 
     for (i = 0; i < pst->T; i++) {
 	pst->g[i] = pst->r[i] - pst->c[i][m] * pst->R[i][0];
@@ -676,7 +676,7 @@ void calc_grad(PStreamChol *pst, const int m)
 static void calc_vargrad(PStreamChol *pst, const int m, double alpha, double n,
 		  double vm, double vv)
 {
-    register int i;
+    int i;
     double vg, w1, w2;
     double av = 0.0, var = 0.0, dif = 0.0;
 
