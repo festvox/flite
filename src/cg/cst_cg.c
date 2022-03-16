@@ -202,16 +202,15 @@ static float cg_state_duration(cst_item *s, cst_cg_db *cg_db)
         }
     }
     if (!cg_db->dur_stats[0][i])  /* unknown type name */
-        x = 0;
+        x = 0; /* shouldn't get here, and would be 0 already anyway */
 
+    /* unz-score the zdur with the mean/stddev for the current phone */
     dur = (zdur*cg_db->dur_stats[0][x]->stddev)+cg_db->dur_stats[0][x]->mean;
     /*
     printf("awb_debug %s i %d zdur %f mean %f stddev %f dur %f\n",
            n,x,zdur,cg_db->dur_stats[0][x]->mean,
            cg_db->dur_stats[0][x]->stddev,dur);
     */
-
-    /*    dur = 1.2 * (float)exp((float)dur); */
 
     return dur;
 }
