@@ -58,9 +58,9 @@ then
     exit 0
 fi
 
-#FLITEVOICEDIR=http://tts.speech.cs.cmu.edu/awb/flite-2.1/voices/
 #FLITEVOICEDIR=http://festvox.org/flite/packed/flite-2.1/voices/
 FLITEVOICEDIR=http://cmuflite.org/packed/flite-2.1/voices/
+FLITEVOICEDIR=http://tts.speech.cs.cmu.edu/festvox.org/flite/packed/flite-2.1/voices/
 
 if [ "$1" = "us_voices" ]
 then
