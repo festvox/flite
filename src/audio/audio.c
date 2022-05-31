@@ -183,7 +183,6 @@ int audio_write(cst_audiodev *ad,void *buff,int num_bytes)
 	{
 	    cst_errmsg("audio_write: unknown format conversion (%d => %d) requested.\n",
 		       ad->fmt, ad->real_fmt);
-	    cst_free(nbuf);
 	    if (abuf != buff)
 		cst_free(abuf);
 	    cst_error();
