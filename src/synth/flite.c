@@ -44,11 +44,15 @@
 #include "cst_clunits.h"
 #include "cst_cg.h"
 
+#ifdef FLITE_STATIC
+#define GLOBALVARDEF
+#else
 #ifdef WIN32
 /* For Visual Studio 2012 global variable definitions */
 #define GLOBALVARDEF __declspec(dllexport)
 #else
 #define GLOBALVARDEF
+#endif
 #endif
 
 /* This is a global, which isn't ideal, this may change */
