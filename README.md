@@ -454,7 +454,7 @@ Voice quality
 
 So you've eagerly downloaded flite, compiled it and run it, now you
 are disappointed that it doesn't sound wonderful, sure its fast and
-small but what you really hoped for was the dulcit tones of a deep
+small but what you really hoped for was the dulcet tones of a deep
 baritone voice that would make you desperately hang on every phrase it
 mellifluously produces.  But instead you get an 8Khz diphone voice that
 sounds like it came from the last millenium.
