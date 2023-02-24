@@ -49,15 +49,17 @@ SRCS = token_test_main.c hrg_test_main.c \
        bin2ascii_main.c record_in_noise_main.c \
        compare_wave_main.c rfc_main.c lpc_resynth_main.c \
        by_word_main.c flite_test_main.c \
-       dcoffset_wave_main.c tris1_main.c
+       dcoffset_wave_main.c tris1_main.c \
+       multi_thread_main.c
 FC = us.flitecheck indic_hin.flitecheck indic_tam.flitecheck
-OTHERS = kal_test_main.c multi_thread_main.c 
+OTHERS = kal_test_main.c
 
 FILES = Makefile $(SRCS) $(DATAFILES) $(OTHERS) $(FC)
 
 LOCAL_INCLUDES = -I$(TOP)/lang/usenglish
 
 MAIN_EXECS = $(SRCS:_main.c=$(EXEEXT))
+AUTO_EXECS = hrg_test lex_test multi_thread nums_test regex_test token_test
 lex_test_LIBS = -lflite_cmulex
 nums_test_LIBS = -lflite_usenglish
 utt_test_LIBS = -lflite_cmulex
@@ -65,6 +67,7 @@ lex_lookup_LIBS = -lflite_cmulex
 ldom_time_LIBS = -L/home/awb/data/ldom/time_flite/flite/lib -lcmu_time_awb -lflite_usenglish -lflite_cmulex
 flite_test_LIBS = -lflite_usenglish -lflite_cmulex
 by_word_LIBS = -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex
+multi_thread_LIBS = -lflite_cmu_us_slt -lflite_cmulex -lflite_usenglish -lflite -lm -lasound -lgomp
 #kal_test_LIBS = -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex \
 #	          /home/awb/src/malloc/gmalloc.o
 
@@ -73,19 +76,18 @@ LOCAL_CLEAN = $(MAIN_EXECS)
 
 include $(TOP)/config/common_make_rules
 
+multi_thread : CFLAGS += -fopenmp
+
 MAIN_O = $(SRCS:%=%_main.o)
 $(MAIN_O) : %_main.o : %_main.c
 	$(CC) $(CFLAGS) -o $@ $< 
 $(MAIN_EXECS) : %$(EXEEXT) : %_main.o $(FLITELIBS)
 	$(CC) $(CFLAGS) -o $@ $@_main.o $($(@:=_LIBS)) $(FLITELIBFLAGS) $(LDFLAGS)
 
-multi_thread: multi_thread_main.c
-	gcc -fopenmp -o multi_thread multi_thread_main.c \
-		$(CFLAGS) -I$(TOP)/include $(FLITELIBFLAGS) $(LDFLAGS) \
-		-l flite_cmu_us_slt -lflite_cmulex -lflite_usenglish \
-		-lflite -lm -lasound -lgomp
-do_thread_test: multi_thread
-#	This shouldn't segfault
-	export OMP_NUM_THREADS=100 && ./multi_thread
+check test: $(patsubst %, run_%, $(AUTO_EXECS))
 
+run_%: %
+	LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(LIBDIR)" ./$<
 
+run_multi_thread: multi_thread
+	LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(LIBDIR)" OMP_NUM_THREADS=100 ./$<

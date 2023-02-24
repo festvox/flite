@@ -129,6 +129,6 @@ voices: ./bin/flite_cmu_us_awb ./bin/flite_cmu_us_rms ./bin/flite_cmu_us_rms
 	./bin/flite_cmu_us_rms -voicedump voices/cmu_us_rms.flitevox
 	./bin/flite_cmu_us_slt -voicedump voices/cmu_us_slt.flitevox
 
-test:
+check test:
 	@ $(MAKE) --no-print-directory -C testsuite test
 
