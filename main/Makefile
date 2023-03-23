@@ -106,21 +106,16 @@ endif
 
 .NOTPARALLEL: $(ALL)
 
-flite_lang_list: 
-	rm -f flite_lang_list.c
+flite_lang_list.c:
 	$(TOP)/tools/make_lang_list $(LANGS) $(LEXES)
-	$(MAKE) flite_lang_list.o
 
-$(BINDIR)/flite$(EXEEXT): flite_main.o flite_lang_list $(flite_LIBS_deps)
+flite_voice_list.c:
 	$(TOP)/tools/make_voice_list $(VOICES)
-	rm -f flite_voice_list.o
-	$(MAKE) flite_voice_list.o
+
+$(BINDIR)/flite$(EXEEXT): flite_main.o flite_voice_list.o flite_lang_list.o $(flite_LIBS_deps)
 	$(CC) $(CFLAGS) -o $@ flite_main.o flite_voice_list.o flite_lang_list.o $(flite_LIBS_flags) $(LDFLAGS)
 
-$(BINDIR)/flitevox_info$(EXEEXT): flitevox_info_main.o flite_lang_list $(flite_LIBS_deps)
-	$(TOP)/tools/make_voice_list $(VOICES)
-	rm -f flite_voice_list.o
-	$(MAKE) flite_voice_list.o
+$(BINDIR)/flitevox_info$(EXEEXT): flitevox_info_main.o flite_voice_list.o flite_lang_list.o $(flite_LIBS_deps)
 	$(CC) $(CFLAGS) -o $@ flitevox_info_main.o flite_voice_list.o flite_lang_list.o $(flite_LIBS_flags) $(LDFLAGS)
 
 $(BINDIR)/world$(EXEEXT): world_main.c
@@ -144,10 +139,7 @@ each:
 	   $(MAKE) VOICE=$$i $(BINDIR)/flite_$$i ; \
 	done
 
-$(BINDIR)/flite_${VOICE}: flite_main.o flite_lang_list $(flite_LIBS_deps)
-	$(TOP)/tools/make_voice_list $(VOICE)
-	rm -f flite_voice_list.o
-	$(MAKE) flite_voice_list.o
+$(BINDIR)/flite_${VOICE}: flite_main.o flite_voice_list.o flite_lang_list.o $(flite_LIBS_deps)
 	$(CC) $(CFLAGS) -o $@ flite_main.o flite_voice_list.o flite_lang_list.o $(flite_LIBS_flags) $(LDFLAGS)
 
 install:
