@@ -128,6 +128,17 @@ $(LIBDIR)/%.so: $(LIBDIR)/%.shared.a
 	@ (cd $(LIBDIR) && ln -s `basename $@.${PROJECT_SHLIB_VERSION}` `basename $@` )
 	@ rm -rf shared_os
 
+# Used in the lib/ directory and in building new voices
+$(LIBDIR)/%.dylib: $(LIBDIR)/%.shared.a
+	@ echo making $@
+	@ rm -rf shared_os && mkdir shared_os
+	@ rm -f $@ $@.${PROJECT_VERSION} $@.${PROJECT_SHLIB_VERSION}
+	@ (cd shared_os && ar x ../$<)
+	@ (cd shared_os && $(CC) -dynamiclib -install_name ${INSTALLLIBDIR}/`basename $@ ${SHEXT}`${PROJECT_SHLIB_VERSION}.${SHEXT} -current_version ${PROJECT_VERSION} -compatibility_version ${PROJECT_SHLIB_VERSION} -o ../${@:${SHEXT}=${PROJECT_VERSION}.${SHEXT}} *.os $(LDFLAGS) $(addprefix ../,$(filter-out $<,${^:${SHEXT}=${PROJECT_VERSION}.${SHEXT}})))
+	@ (cd $(LIBDIR) && ln -s `basename $@ ${SHEXT}`${PROJECT_VERSION}.${SHEXT} `basename $@ ${SHEXT}`${PROJECT_SHLIB_VERSION}.${SHEXT} )
+	@ (cd $(LIBDIR) && ln -s `basename $@ ${SHEXT}`${PROJECT_SHLIB_VERSION}.${SHEXT} `basename $@` )
+	@ rm -rf shared_os
+
 $(OBJDIR)/.make_build_dirs:
 	@ echo making in $(DIRNAME) ...
 ifdef BUILD_DIRS

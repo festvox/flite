@@ -72,13 +72,18 @@ include $(TOP)/config/common_make_rules
 # We need to set these vars, even if we're not going to build them
 # so make clean can remove them
 SHAREDARLIBS= $(flite_LIBS:%=$(LIBDIR)/lib%.shared.a)
-SHAREDLIBS = $(SHAREDARLIBS:%.shared.a=%.so)
-SHAREDMODS = $(flite_MODS:%=$(LIBDIR)/lib%.so)
-SHAREDusenMODS = $(LIBDIR)/libflite_cmu_time_awb.so $(LIBDIR)/libflite_cmu_us_awb.so $(LIBDIR)/libflite_cmu_us_kal16.so $(LIBDIR)/libflite_cmu_us_kal.so $(LIBDIR)/libflite_cmu_us_rms.so $(LIBDIR)/libflite_cmu_us_slt.so $(LIBDIR)/libflite_cmu_indic_lang.so
-SHAREDcmulexMODS = $(LIBDIR)/libflite_cmu_time_awb.so $(LIBDIR)/libflite_cmu_us_awb.so $(LIBDIR)/libflite_cmu_us_kal16.so $(LIBDIR)/libflite_cmu_us_kal.so $(LIBDIR)/libflite_cmu_us_rms.so $(LIBDIR)/libflite_cmu_us_slt.so  $(LIBDIR)/libflite_cmu_indic_lex.so
-SHAREDindicMODS = $(LIBDIR)/libflite_cmu_indic_lex.so
+SHAREDLIBS = $(SHAREDARLIBS:%.shared.a=%.$(SHEXT))
+SHAREDMODS = $(flite_MODS:%=$(LIBDIR)/lib%.$(SHEXT))
+SHAREDusenMODS = $(LIBDIR)/libflite_cmu_time_awb.$(SHEXT) $(LIBDIR)/libflite_cmu_us_awb.$(SHEXT) $(LIBDIR)/libflite_cmu_us_kal16.$(SHEXT) $(LIBDIR)/libflite_cmu_us_kal.$(SHEXT) $(LIBDIR)/libflite_cmu_us_rms.$(SHEXT) $(LIBDIR)/libflite_cmu_us_slt.$(SHEXT) $(LIBDIR)/libflite_cmu_indic_lang.$(SHEXT)
+SHAREDcmulexMODS = $(LIBDIR)/libflite_cmu_time_awb.$(SHEXT) $(LIBDIR)/libflite_cmu_us_awb.$(SHEXT) $(LIBDIR)/libflite_cmu_us_kal16.$(SHEXT) $(LIBDIR)/libflite_cmu_us_kal.$(SHEXT) $(LIBDIR)/libflite_cmu_us_rms.$(SHEXT) $(LIBDIR)/libflite_cmu_us_slt.$(SHEXT)  $(LIBDIR)/libflite_cmu_indic_lex.$(SHEXT)
+SHAREDindicMODS = $(LIBDIR)/libflite_cmu_indic_lex.$(SHEXT)
+ifneq ($(SHEXT),dylib)
 VERSIONSHAREDLIBS = $(SHAREDLIBS:%=%.${PROJECT_VERSION}) \
                     $(SHAREDLIBS:%=%.${PROJECT_SHLIB_VERSION})
+else
+VERSIONSHAREDLIBS = $(SHAREDLIBS:%$(SHEXT)=%${PROJECT_VERSION}.$(SHEXT)) \
+                    $(SHAREDLIBS:%$(SHEXT)=%${PROJECT_SHLIB_VERSION}.$(SHEXT))
+endif
 
 flite_time_LIBS = flite_cmu_time_awb flite_usenglish flite_cmulex
 flite_time_LIBS_flags = -L$(LIBDIR) $(flite_time_LIBS:%=-l%)
@@ -91,13 +96,13 @@ LOCAL_CLEAN = $(BINDIR)/flite$(EXEEXT) $(BINDIR)/flite_time$(EXEEXT) \
               flite_voice_list.c
 
 ifdef SHFLAGS
-$(SHAREDMODS): $(LIBDIR)/libflite.so
+$(SHAREDMODS): $(LIBDIR)/libflite.$(SHEXT)
 $(SHAREDMODS): LDFLAGS+=-L../$(LIBDIR) -lflite
-$(SHAREDusenMODS): $(LIBDIR)/libflite_usenglish.so
+$(SHAREDusenMODS): $(LIBDIR)/libflite_usenglish.$(SHEXT)
 $(SHAREDusenMODS): LDFLAGS+=-L../$(LIBDIR) -lflite_usenglish
-$(SHAREDcmulexMODS): $(LIBDIR)/libflite_cmulex.so
+$(SHAREDcmulexMODS): $(LIBDIR)/libflite_cmulex.$(SHEXT)
 $(SHAREDcmulexMODS): LDFLAGS+=-L../$(LIBDIR) -lflite_cmulex
-$(SHAREDindicMODS): $(LIBDIR)/libflite_cmu_indic_lang.so
+$(SHAREDindicMODS): $(LIBDIR)/libflite_cmu_indic_lang.$(SHEXT)
 $(SHAREDindicMODS): LDFLAGS+=-L../$(LIBDIR) -lflite_cmu_indic_lang
 shared_libs: $(SHAREDLIBS)
 else

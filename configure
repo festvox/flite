@@ -631,6 +631,7 @@ AUDIODRIVER
 STDIOTYPE
 MMAPTYPE
 SHFLAGS
+SHEXT
 OTHERLIBS
 HOST_CPU
 HOST_OS
@@ -4206,6 +4207,7 @@ HOST_OS=$host_os
 
 
 SHFLAGS=
+SHEXT=".so"
 OTHERLIBS=
 
 if grep -q Pandora /proc/cpuinfo
@@ -4242,6 +4244,10 @@ if test "$shared" = true; then
 	solaris*)
 		SHFLAGS="-fPIC"
 		OTHERLIBS="-lsocket -ldl"
+        ;;
+	darwin*)
+		SHFLAGS="-fPIC"
+		SHEXT="dylib"
         ;;
 	*)
 	;;

@@ -248,6 +248,7 @@ AC_SUBST(HOST_OS)
 AC_SUBST(HOST_CPU)
 
 SHFLAGS=
+SHEXT="so"
 OTHERLIBS=
 
 dnl For OpenPandora and other (softfloat) ARMs with neon
@@ -282,6 +283,10 @@ if test "$shared" = true; then
 		SHFLAGS="-fPIC"
 		OTHERLIBS="-lsocket -ldl"
         ;;
+	darwin*)
+		SHFLAGS="-fPIC"
+		SHEXT="dylib"
+        ;;
 	*)
 	;;
    esac
@@ -299,6 +304,7 @@ esac
 
 AC_SUBST(OTHERLIBS)
 AC_SUBST(SHFLAGS)
+AC_SUBST(SHEXT)
 
 AC_ARG_ENABLE( sockets, 
                [  --disable-sockets     without socket support],
