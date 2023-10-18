@@ -136,17 +136,11 @@ dnl         ;;
                 # For the Windows under mingw32 environment
                 # http://www.mingw.org
 		shared=false
-     	        CFLAGS="$CFLAGS -DCST_NO_SOCKETS -DUNDER_WINDOWS -DWIN32"
-                PREFLEN=`expr match "$CC" ".*-gcc"`
-                if expr $PREFLEN != 0 > /dev/null; then
-                    # When $CC includes "-gcc", use the preceding
-                    # charactors + '-' as MINGPREF.
-                    # for example:
-                    #   CC=x86_64-w64-mingw32-gcc.exe
-                    #   --> MINGWPREF=x86_64-w64-mingw32-
-                    PREFLEN=`expr $PREFLEN - 3`
-                    MINGPREF=`expr substr $CC 1 $PREFLEN`
-                fi
+     	        CFLAGS="$CFLAGS -DCST_NO_SOCKETS -DUNDER_WINDOWS -DWIN32 -shared"
+                MINGWPREF="i386-mingw32-"
+                CC="${MINGWPREF}gcc"
+                RANLIB="${MINGWPREF}ranlib"
+                AR="${MINGWPREF}ar"
                 WINDRES="${MINGWPREF}windres"
                 DLLTOOL="${MINGWPREF}dlltool"
                 DLLWRAP="${MINGWPREF}dllwrap"
@@ -157,49 +151,42 @@ dnl         ;;
                 # http://developer.android.com/sdk/ndk/index.html
 		shared=false
 
-		# We target our compilation to android-14 (4.0) platform
-		ANDROID_NDK_PLATFORM_PATH="$ANDROID_NDK/platforms/android-14"
+                ANDROID_NDK_VERSION=r23c
+                ANDROID_NDK_PLATFORM_VERSION=21
+                ANDROID_API_VERSION=33
 
-		ANDROID_GCC_VERSION=4.6
-
-		if test "$target_cpu" = "armeabi" 
-                then
-		   ANDROID_TOOLCHAIN="arm-linux-androideabi-$ANDROID_GCC_VERSION"
-		   ANDROID_NDK_SYSROOT="$ANDROID_NDK_PLATFORM_PATH/arch-arm"
-		   ANDROIDBIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-$ANDROID_GCC_VERSION/prebuilt/linux-x86/bin/arm-linux-androideabi"
-      		   CFLAGS="$CFLAGS -fpic -mthumb -O3 -DANDROID --sysroot=$ANDROID_NDK_SYSROOT"
-                fi
+                ANDROID_HOST_TAG=darwin-x86_64
+                ANDROID_TOOLCHAIN_DIR=${ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_HOST_TAG}
 
 		if test "$target_cpu" = "armeabiv7a" 
                 then
-		   ANDROID_TOOLCHAIN="arm-linux-androideabi-$ANDROID_GCC_VERSION"
-		   ANDROID_NDK_SYSROOT="$ANDROID_NDK_PLATFORM_PATH/arch-arm"
-		   ANDROIDBIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-$ANDROID_GCC_VERSION/prebuilt/linux-x86/bin/arm-linux-androideabi"
-      		   CFLAGS="$CFLAGS -fpic -march=armv7-a -mfloat-abi=softfp -O3 -DANDROID --sysroot=$ANDROID_NDK_SYSROOT"
+                   CC="${ANDROID_TOOLCHAIN_DIR}/bin/armv7-linux-androideabi${ANDROID_NDK_PLATFORM_VERSION}-clang"
+		   CFLAGS="$CFLAGS -fpic -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -O3 -DANDROID"
 		   LDFLAGS="$LDFLAGS -Wl,--fix-cortex-a8"
                 fi
 
-		if test "$target_cpu" = "x86"
+		if test "$target_cpu" = "aarch64"
 		then
-		   ANDROID_TOOLCHAIN="x86-$ANDROID_GCC_VERSION"
-		   ANDROID_NDK_SYSROOT="$ANDROID_NDK_PLATFORM_PATH/arch-x86"
-		   ANDROIDBIN="$ANDROID_NDK/toolchains/x86-$ANDROID_GCC_VERSION/prebuilt/linux-x86/bin/i686-linux-android"
-      		   CFLAGS="$CFLAGS -fpic -O3 -DANDROID --sysroot=$ANDROID_NDK_SYSROOT"
+                   CC="${ANDROID_TOOLCHAIN_DIR}/bin/aarch64-linux-android${ANDROID_NDK_PLATFORM_VERSION}-clang"
+      		   CFLAGS="$CFLAGS -fpic -O3 -DANDROID"
 		fi
 
-		if test "$target_cpu" = "mips"
+		if test "$target_cpu" = "x86"
 		then
-		   ANDROID_TOOLCHAIN="mipsel-linux-android-$ANDROID_GCC_VERSION"
-		   ANDROID_NDK_SYSROOT="$ANDROID_NDK_PLATFORM_PATH/arch-mips"
-		   ANDROIDBIN="$ANDROID_NDK/toolchains/mipsel-linux-android-$ANDROID_GCC_VERSION/prebuilt/linux-x86/bin/mipsel-linux-android"
-      		   CFLAGS="$CFLAGS -fpic -O3 -DANDROID --sysroot=$ANDROID_NDK_SYSROOT"
+                   CC="${ANDROID_TOOLCHAIN_DIR}/bin/i686-linux-android${ANDROID_NDK_PLATFORM_VERSION}-clang"
+      		   CFLAGS="$CFLAGS -fpic -O3 -DANDROID"
+		fi
+
+		if test "$target_cpu" = "x86_64"
+		then
+                   CC="${ANDROID_TOOLCHAIN_DIR}/bin/x86_64-linux-android${ANDROID_NDK_PLATFORM_VERSION}-clang"
+      		   CFLAGS="$CFLAGS -fpic -O3 -DANDROID"
 		fi
 
 		# Common to all android variants
-                CC="${ANDROIDBIN}-gcc"
-                RANLIB="${ANDROIDBIN}-ranlib"
-                AR="${ANDROIDBIN}-ar"
-                NM="${ANDROIDBIN}-nm"
+                RANLIB="${ANDROID_TOOLCHAIN_DIR}/bin/llvm-ranlib"
+                AR="${ANDROID_TOOLCHAIN_DIR}/bin/llvm-ar"
+                NM="${ANDROID_TOOLCHAIN_DIR}/bin/llvm-nm"
 
         ;;
         chrome*)
@@ -216,9 +203,6 @@ dnl         ;;
 	darwin*)
 		CFLAGS="$CFLAGS -no-cpp-precomp"
 	;;
-        wasi*)
-		CFLAGS="$CFLAGS -DDIE_ON_ERROR -DCST_NO_SOCKETS -DWASM32_WASI"
-        ;;
 esac
 
 AC_SUBST(TARGET_OS)
@@ -392,22 +376,22 @@ AC_CHECK_HEADER(sys/audioio.h,
 AC_CHECK_HEADER(alsa/asoundlib.h,
               [AUDIODRIVER="alsa"
 	       AUDIODEFS=-DCST_AUDIO_ALSA
-               AUDIOLIBS=`pkg-config --libs alsa`
-               if test "$shared" = false; then
-                   AUDIOLIBS=`pkg-config --libs --static alsa`
-               fi])
+               AUDIOLIBS=-lasound])
 AC_CHECK_HEADER(mmsystem.h,
 	      [AUDIODRIVER="wince"
 	       AUDIODEFS=-DCST_AUDIO_WINCE
-	       AUDIOLIBS=-lwinmm],
-	      [],
-	      [#include <windows.h>])
+	       AUDIOLIBS=-lwinmm])
 
 dnl I don't care what you ask for, for wince you get wince
 case "$target_os" in
      wince*)
         AUDIODRIVER="wince"
         AUDIODEFS=-DCST_AUDIO_WINCE
+        AUDIOLIBS=
+     ;;
+     mingw*)
+        AUDIODRIVER="none"
+        AUDIODEFS=-DCST_AUDIO_NONE
         AUDIOLIBS=
      ;;
      android*)
