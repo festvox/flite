@@ -152,12 +152,12 @@ $(BINDIR)/flite_${VOICE}: flite_main.o flite_lang_list $(flite_LIBS_deps)
 
 install:
 #       The basic binaries
-	@ $(INSTALL) -m 755 $(BINDIR)/flite $(DESTDIR)$(INSTALLBINDIR)
+	@ $(INSTALL) -m 755 $(BINDIR)/flite$(EXEEXT) $(DESTDIR)$(INSTALLBINDIR)
 	@ for i in $(VOICES) ; \
 	do \
-	   $(INSTALL) $(BINDIR)/flite_$$i $(DESTDIR)$(INSTALLBINDIR); \
+	   $(INSTALL) $(BINDIR)/flite_$$i$(EXEEXT) $(DESTDIR)$(INSTALLBINDIR); \
 	done
-	$(INSTALL) -m 755 $(BINDIR)/flite_time $(DESTDIR)$(INSTALLBINDIR)
+	$(INSTALL) -m 755 $(BINDIR)/flite_time$(EXEEXT) $(DESTDIR)$(INSTALLBINDIR)
 #       The libraries: static and shared (if built)
 	cp $(CP_FLAGS) $(flite_LIBS_deps) $(DESTDIR)$(INSTALLLIBDIR)
 ifdef SHFLAGS
