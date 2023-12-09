@@ -48,6 +48,8 @@ extern "C" {
 #include "cst_synth.h"
 
 void cmu_indic_lang_init(cst_voice *v);
+int indic_digit_to_offset(const char *ind_digit);
+
 extern const cst_phoneset cmu_indic_phoneset;
 extern const cst_cart cmu_indic_phrasing_cart; 
 
