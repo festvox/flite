@@ -7,3 +7,4 @@ config.status
 include/flite_version.h
 main/flite_lang_list.c
 main/flite_voice_list.c
+*.o
