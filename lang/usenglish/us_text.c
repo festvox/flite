@@ -687,7 +687,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	aaa = cst_strdup(name);
 	aaa[cst_strlen(name)-1] = '\0';
     r = val_append(us_tokentowords_one(token,aaa),
-                    cons_val(string_val("thousands"),0));
+                    cons_val(string_val("thousand"),0));
 	cst_free(aaa);
     }
     else if (cst_regex_match(numek,name)) 
@@ -695,7 +695,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	aaa = cst_strdup(name);
 	aaa[cst_strlen(name)-1] = '\0';
     r = val_append(us_tokentowords_one(token,aaa),
-                    cons_val(string_val("thousands"),0));
+                    cons_val(string_val("thousand"),0));
 	cst_free(aaa);
     }
     else if (contains_unicode_single_quote(name))
