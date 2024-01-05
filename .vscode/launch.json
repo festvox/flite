@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "C Debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/bin/flite", // Replace with your executable name
+        "args": ["-pw", "FBI and CIA, please give me 50 billon"],
+        "MIMode": "lldb",
+        "cwd": "${workspaceFolder}"
+      }
+    ]
+  }
+  

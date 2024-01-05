@@ -314,7 +314,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 		j++;
 	    }
 	aaa[j] = '\0';
-	r = en_exp_letters(aaa);
+	r = en_exp_letters(aaa, 0);
 	cst_free(aaa);
     }
     else if (cst_regex_match(cst_rx_commaint,name))
@@ -390,7 +390,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	    r = val_append(r,en_exp_id(bbb));
 	/* r = add_break(r); */
 
-        r = val_append(r,en_exp_letters(ccc));
+        r = val_append(r,en_exp_letters(ccc, 0));
 
 	cst_free(aaa);
 	cst_free(bbb);
@@ -485,10 +485,10 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	    else if (section_like(token))
 		r = en_exp_number(n);
 	    else
-		r = en_exp_letters(name);
+		r = en_exp_letters(name, 0);
 	}
 	else
-	    r = en_exp_letters(name);
+	    r = en_exp_letters(name, 0);
     }
     else if (cst_regex_match(drst,name))  
     {   /* St Andrew's St, Dr King Dr */
@@ -568,11 +568,11 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
     else if (cst_streq(name,"am") || cst_streq(name,"AM"))
     {
         if (!cst_streq(name,item_name(token)))
-            r = en_exp_letters(name);
+            r = en_exp_letters(name, 0);
         else if (item_prev(token) &&
                  (cst_regex_match(numbertime,ffeature_string(token,"p.name")) ||
                   cst_regex_match(cst_rx_digits,ffeature_string(token,"p.name"))))
-            r = en_exp_letters(name);
+            r = en_exp_letters(name, 1);
         else 
             r = cons_val(string_val(name),NULL);
     }
@@ -826,7 +826,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
         /* it too -- but user_lex isn't user setable yet */
 	/* Need common exception list */
 	/* unpronouncable list of alphas */
-	r = en_exp_letters(name);
+	r = en_exp_letters(name, 1);
 
     /* buckets of other stuff missing */
 

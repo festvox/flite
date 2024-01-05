@@ -353,17 +353,27 @@ cst_val *en_exp_digits(const char *numstring)
     return val_reverse(d);
 }
 
-cst_val *en_exp_letters(const char *lets)
+cst_val *en_exp_letters(const char *lets, int add_comma)
 {
     /* returns these as list of single char symbols */
+    int str_len;
+    for (str_len=0; lets[str_len] != '\0'; str_len++);
+
     char *aaa;
     cst_val *r;
     int i;
 
-    aaa = cst_alloc(char,2);
+    aaa = cst_alloc(char,3);
+    if(add_comma > 0)
+    aaa[1] = ',';
+    else
     aaa[1] = '\0';
-    for (r=0,i=0; lets[i] != '\0'; i++)
+    aaa[2] = '\0';
+    for (r=0,i=0; i<str_len; i++)
     {
+    if(i == str_len - 1){
+        aaa[1] = '\0'; // removing last comma
+    }
 	aaa[0] = lets[i];
 	if (isupper((int)aaa[0])) 
 	    aaa[0] = tolower((int)aaa[0]);

@@ -48,7 +48,7 @@ cst_val *en_exp_number(const char *numstring);
 cst_val *en_exp_digits(const char *numstring);
 cst_val *en_exp_id(const char *numstring);
 cst_val *en_exp_ordinal(const char *numstring);
-cst_val *en_exp_letters(const char *lets);
+cst_val *en_exp_letters(const char *lets, int add_comma);
 cst_val *en_exp_real(const char *numstring);
 int en_exp_roman(const char *roman);
 
