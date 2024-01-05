@@ -89,6 +89,29 @@ static const cst_regex numess_rx = {
 };
 const cst_regex * const numess = &numess_rx;
 
+static const unsigned char numek_rxprog[] = {
+   156, 6, 0, 31, 1, 0, 3, 11, 0, 17, 4, 0, 0, 48, 49, 50, 
+   51, 52, 53, 54, 55, 56, 57, 0, 8, 0, 5, 107, 0, 2, 0, 3, 
+   0, 0, 0, 
+};
+static const cst_regex numek_rx = {
+   0, 1, NULL, 0, 35,
+   (char *)numek_rxprog
+};
+const cst_regex * const numek = &numek_rx;
+
+static const unsigned char numepointnumek_rxprog[] = {
+   156, 6, 0, 53, 1, 0, 3, 11, 0, 17, 4, 0, 0, 48, 49, 50, 
+   51, 52, 53, 54, 55, 56, 57, 0, 8, 0, 5, 46, 0, 11, 0, 17, 
+   4, 0, 0, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 8, 0, 
+   5, 107, 0, 2, 0, 3, 0, 0, 0, 
+};
+static const cst_regex numepointnumek_rx = {
+   0, 1, NULL, 0, 57,
+   (char *)numepointnumek_rxprog
+};
+const cst_regex * const numepointnumek = &numepointnumek_rx;
+
 static const unsigned char leadingzerodigits_rxprog[] = {
    156, 6, 0, 31, 1, 0, 3, 8, 0, 5, 48, 0, 11, 0, 17, 4, 
    0, 0, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 2, 0, 3, 

@@ -6,7 +6,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/bin/flite", // Replace with your executable name
-        "args": ["-pw", "FBI and CIA, please give me 50 billon"],
+        "args": ["-pw", "a 5.4k"],
         "MIMode": "lldb",
         "cwd": "${workspaceFolder}"
       }
