@@ -51,6 +51,24 @@ static cst_val *state_name(const char *name,cst_item *t);
 #include "us_regexes.h"
 
 /* Note you need to also update the wandm regex in make_us_regexes too */
+int hasat(const char * name){
+    int i=0;
+    while(name[i] != '\0'){
+        if(name[i] == '@')
+            return 1;
+        i++;
+    }
+    return 0;
+}
+int hasdot(const char * name){
+    int i=0;
+    while(name[i] != '\0'){
+        if(name[i] == '.')
+            return 1;
+        i++;
+    }
+    return 0;
+}
 static const char * const wandm_abbrevs[99][2] =
 {
     { "LB", "pounds" },
@@ -254,7 +272,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
     const char *p;
     char *aaa, *bbb, *ccc, *ppp;
     int i,j,k,l;
-    cst_val *r, *s, *ss;
+    cst_val *r=0, *s, *ss;
     const cst_val *rr;
     const char *nsw = "";
     const char *ssml_alias = "";
@@ -490,6 +508,51 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	else
 	    r = en_exp_letters(name, 0);
     }
+    else if (hasat(name))  
+    {   /* Story rd, San Jose */
+        char *domainpart = cst_strdup(name);
+
+        int i = 0;
+        int offset = 0;
+        while(name[i] != '\0'){
+            if (name[i] == '@'){
+                domainpart[i] = '\0';
+
+                if (r == 0){
+                    if (offset - i != 0){
+                     r = us_tokentowords_one(token, domainpart + offset);
+                     r = val_append(r, cons_val(string_val("at"),NULL));
+                    }
+                    else
+                    r = cons_val(string_val("at"),NULL);
+                }
+                else{
+                   if (offset - i != 0){
+                    r = val_append(r, us_tokentowords_one(token, domainpart + offset));
+                    r = val_append(r, cons_val(string_val("at"),NULL)); 
+                   }
+                   else
+                   r = val_append(r, cons_val(string_val("at"),NULL));
+                }
+                
+                offset = i + 1;
+            }
+            i++;
+        }
+
+        if (offset - i != 0){
+            if (r == 0){
+                r = us_tokentowords_one(token, domainpart + offset);
+            }
+            else{
+                r = val_append(r, us_tokentowords_one(token, domainpart + offset));
+            }
+        }
+    }
+    else if (cst_regex_match(rd,name))  
+    {   /* Story rd, San Jose */
+        r = cons_val(string_val("road"),NULL); 
+    }
     else if (cst_regex_match(drst,name))  
     {   /* St Andrew's St, Dr King Dr */
 	const char *street;
@@ -513,7 +576,9 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	{
 	    const char *pname = ffeature_string(token,"p.name");
 	    const char *nname = ffeature_string(token,"n.name");
-	    if ((pname[0] >= 'A') && (pname[0] <= 'Z') &&
+        if(nname[0] == ',')
+        r = cons_val(string_val(street),NULL); 
+	    else if ((pname[0] >= 'A') && (pname[0] <= 'Z') &&
 		(nname[0] >= 'a') && (nname[0] <= 'z'))
 		r = cons_val(string_val(street),NULL);
 	    else if ((pname[0] >= '0') && (pname[0] <= '9') &&
@@ -572,7 +637,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
         else if (item_prev(token) &&
                  (cst_regex_match(numbertime,ffeature_string(token,"p.name")) ||
                   cst_regex_match(cst_rx_digits,ffeature_string(token,"p.name"))))
-            r = en_exp_letters(name, 1);
+            r = en_exp_letters(name, 0);
         else 
             r = cons_val(string_val(name),NULL);
     }
@@ -815,6 +880,47 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 
         cst_free(aaa);
     }
+    else if (hasdot(name))  
+    {   /* Story rd, San Jose */
+        char *domainpart = cst_strdup(name);
+
+        int i = 0;
+        int offset = 0;
+        while(name[i] != '\0'){
+            if (name[i] == '.'){
+                domainpart[i] = '\0';
+
+                if (r == 0){
+                    if (offset - i != 0){
+                     r = us_tokentowords_one(token, domainpart + offset);
+                     r = val_append(r, cons_val(string_val("dot"),NULL));
+                    }
+                    else
+                    r = cons_val(string_val("dot"),NULL);
+                }
+                else{
+                   if (offset - i != 0){
+                    r = val_append(r, us_tokentowords_one(token, domainpart + offset));
+                    r = val_append(r, cons_val(string_val("dot"),NULL)); 
+                   }
+                   else
+                   r = val_append(r, cons_val(string_val("dot"),NULL));
+                }
+                
+                offset = i + 1;
+            }
+            i++;
+        }
+
+        if (offset - i != 0){
+            if (r == 0){
+                r = us_tokentowords_one(token, domainpart + offset);
+            }
+            else{
+                r = val_append(r, us_tokentowords_one(token, domainpart + offset));
+            }
+        }
+    }
     else if ((cst_strlen(name) > 1) && (!cst_regex_match(cst_rx_alpha,name)))
     {   /* its not just alphas */
 	for (i=0; name[i] != '\0'; i++)
@@ -842,7 +948,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
         /* it too -- but user_lex isn't user setable yet */
 	/* Need common exception list */
 	/* unpronouncable list of alphas */
-	r = en_exp_letters(name, 1);
+	r = en_exp_letters(name, 0);
 
     /* buckets of other stuff missing */
 

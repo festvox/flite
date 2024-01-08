@@ -380,7 +380,7 @@ cst_val *en_exp_letters(const char *lets, int add_comma)
 	if (strchr("0123456789",aaa[0]))
 	    r = cons_val(string_val(digit2num[aaa[0]-'0']),r);
 	else if (cst_streq(aaa,"a"))
-	    r = cons_val(string_val("_a"),r);
+	    r = cons_val(string_val("a,"),r);
 	else
 	    r = cons_val(string_val(aaa),r);
     }

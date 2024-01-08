@@ -72,11 +72,22 @@ static const unsigned char drst_rxprog[] = {
    115, 0, 4, 0, 6, 116, 84, 0, 31, 0, 3, 2, 0, 3, 0, 0, 
    0, 
 };
+
 static const cst_regex drst_rx = {
    0, 1, NULL, 0, 49,
    (char *)drst_rxprog
 };
 const cst_regex * const drst = &drst_rx;
+
+static const unsigned char rd_rxprog[] = {
+   156, 6, 0, 20, 1, 0, 3, 4, 0, 6, 82, 114, 0, 8, 0, 5, 
+   100, 0, 2, 0, 3, 0, 0, 0, 
+};
+static const cst_regex rd_rx = {
+   0, 1, NULL, 0, 24,
+   (char *)rd_rxprog
+};
+const cst_regex * const rd = &rd_rx;
 
 static const unsigned char numess_rxprog[] = {
    156, 6, 0, 31, 1, 0, 3, 11, 0, 17, 4, 0, 0, 48, 49, 50, 
