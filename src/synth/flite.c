@@ -367,10 +367,10 @@ float flite_text_to_speech(const char *text,
     float dur;
 
     u = flite_synth_text(text,voice);
-    dur = flite_process_output(u,outtype,FALSE);
+    // dur = flite_process_output(u,outtype,FALSE);
     delete_utterance(u);
 
-    return dur;
+    return 0.0;
 }
 
 float flite_phones_to_speech(const char *text,

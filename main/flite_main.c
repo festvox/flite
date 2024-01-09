@@ -419,21 +419,21 @@ loop:
             durs = flite_file_to_speech(filename,v,outtype);
     }
 
-    gettimeofday(&tv,NULL);
-    time_end = ((double)(tv.tv_sec))+((double)tv.tv_usec/1000000.0);
+    // gettimeofday(&tv,NULL);
+    // time_end = ((double)(tv.tv_sec))+((double)tv.tv_usec/1000000.0);
 
-    if (flite_verbose || (flite_bench && bench_iter == ITER_MAX))
-	printf("times faster than real-time: %f\n(%f seconds of speech synthesized in %f)\n",
-	       durs/(float)(time_end-time_start),
-	       durs,
-	       (float)(time_end-time_start));
+    // if (flite_verbose || (flite_bench && bench_iter == ITER_MAX))
+	// printf("times faster than real-time: %f\n(%f seconds of speech synthesized in %f)\n",
+	//        durs/(float)(time_end-time_start),
+	//        durs,
+	//        (float)(time_end-time_start));
 
-    if (flite_loop || (flite_bench && bench_iter++ < ITER_MAX))
-	    goto loop;
+    // if (flite_loop || (flite_bench && bench_iter++ < ITER_MAX))
+	//     goto loop;
 
-    delete_features(extra_feats);
-    delete_val(flite_voice_list); flite_voice_list=0;
-    /*    cst_alloc_debug_summary(); */
+    // delete_features(extra_feats);
+    // delete_val(flite_voice_list); flite_voice_list=0;
+    // /*    cst_alloc_debug_summary(); */
 
     return 0;
 }
