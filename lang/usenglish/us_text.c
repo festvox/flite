@@ -60,14 +60,17 @@ int hasat(const char * name){
     }
     return 0;
 }
-int hasdot(const char * name){
+int isdomain(const char * name){
     int i=0;
+    int num_dots=0, num_non_dots=0;
     while(name[i] != '\0'){
         if(name[i] == '.')
-            return 1;
+            num_dots++;
+        else
+            num_non_dots++;
         i++;
     }
-    return 0;
+    return (num_dots > 0) * (num_non_dots > 0);
 }
 static const char * const wandm_abbrevs[99][2] =
 {
@@ -880,7 +883,7 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 
         cst_free(aaa);
     }
-    else if (hasdot(name))  
+    else if (isdomain(name))  
     {   /* Story rd, San Jose */
         char *domainpart = cst_strdup(name);
 
