@@ -41,9 +41,6 @@
 #include <math.h>
 #include <string.h>
 
-/* To allow some normally const fields to manipulated during building */
-#define const
-
 #include "cst_args.h"
 #include "cst_wave.h"
 #include "cst_track.h"
@@ -132,16 +129,16 @@ cst_sts *find_sts(cst_wave *sig, cst_track *lpc)
 			lpc->frames[i],lpc->num_channels,
 			resd,
 			size);
-	sts[i].size = size;
+	*(int *)(&sts[i].size) = size;
 	sts[i].frame = cst_alloc(unsigned short,lpc->num_channels-1);
 	for (j=1; j < lpc->num_channels; j++)
-	    sts[i].frame[j-1] = (unsigned short)
+	    *(unsigned short *)(&sts[i].frame[j-1]) = (unsigned short)
 		(((lpc->frames[i][j]-lpc_min)/lpc_range)*65535);
         if (cst_streq(residual_codec,"ulaw"))
         {
             sts[i].residual = cst_alloc(unsigned char,size);
             for (j=0; j < size; j++)
-                sts[i].residual[j] = cst_short_to_ulaw((short)resd[j]);
+                *(unsigned char *)(&sts[i].residual[j]) = cst_short_to_ulaw((short)resd[j]);
         }
         else if (cst_streq(residual_codec,"g721"))
         {
@@ -189,7 +186,7 @@ cst_sts *find_sts(cst_wave *sig, cst_track *lpc)
             {
                 sts[i].residual = cst_alloc(unsigned char,size);
                 for (j=0; j < size; j++)
-                    sts[i].residual[j] = cst_short_to_ulaw((short)resd[j]);
+                    *(unsigned char *)(&sts[i].residual[j]) = cst_short_to_ulaw((short)resd[j]);
             } 
             else /* Unvoiced frame */
             {
