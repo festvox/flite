@@ -88,6 +88,9 @@ float flite_file_to_speech(const char *filename,
 float flite_text_to_speech(const char *text, 
 			   cst_voice *voice,
 			   const char *outtype);
+void flite_text_to_ipa(const char *text,
+			     cst_voice *voice,
+			   const char *outtype);
 float flite_phones_to_speech(const char *text, 
 			     cst_voice *voice,
 			     const char *outtype);

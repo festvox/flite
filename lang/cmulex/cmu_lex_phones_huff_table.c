@@ -252,3 +252,5 @@
    "\007" , /* 0.026273 */ 
    "\024" , /* 0.026581 */ 
    "\020" , /* 0.029376 */ 
+
+// Octal numbers that are indices in the cmu_lex_phone_table (cmu_lex_entries.c) without the epsilon entry

@@ -232,6 +232,9 @@ static cst_lts_phone apply_model(cst_lts_letter *vals,cst_lts_addr start,
 
 	cst_lts_get_state(&state,model,nstate,sizeof_cst_lts_rule);
     }
+	// Fix `suggest` to remove the 'g' sound before the jh
+	if (strstr(vals, "sugest") && state.val == 43)
+		return 0; 
 
     return (cst_lts_phone)state.val;
 }

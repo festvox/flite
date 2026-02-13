@@ -109,7 +109,8 @@ static void fix_ah(cst_utterance *u)
 static cst_utterance *cmu_us_kal_postlex(cst_utterance *u)
 {
     cmu_postlex(u);
-    fix_ah(u);
+    /* Why? what was wrong with the ah? This seems wrong to me. ah sounds were good. Maybe you meant to change them to shcwa? */
+    /* fix_ah(u); */
 
     return u;
 }

@@ -4,6 +4,7 @@ EXPORTS
 	flite_voice_select
 	flite_file_to_speech
 	flite_text_to_speech
+	flite_text_to_ipa
 	flite_phones_to_speech
 	flite_ssml_file_to_speech
 	flite_ssml_text_to_speech

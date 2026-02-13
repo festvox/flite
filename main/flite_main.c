@@ -88,6 +88,7 @@ static void flite_usage()
            "  -f TEXTFILE Explicitly set input filename\n"
            "  -t TEXT     Explicitly set input textstring\n"
            "  -p PHONES   Explicitly set input textstring and synthesize as phones\n"
+           "  -i          Print IPA output to screen or to output wavefile if it was given\n"
            "  --set F=V   Set feature (guesses type)\n"
            "  -s F=V      Set feature (guesses type)\n"
            "  --seti F=V  Set int feature\n"
@@ -206,7 +207,7 @@ int main(int argc, char **argv)
     int i;
     float durs;
     double time_start, time_end;
-    int flite_verbose, flite_loop, flite_bench;
+    int flite_verbose, flite_loop, ipa_only, flite_bench;
     int explicit_filename, explicit_text, explicit_phones, ssml_mode;
 #define ITER_MAX 3
     int bench_iter = 0;
@@ -214,11 +215,14 @@ int main(int argc, char **argv)
     const char *lex_addenda_file = NULL;
     const char *voicedumpfile = NULL;
     cst_audio_streaming_info *asi;
+    FILE *fd;
+    long length;
 
     filename = 0;
     outtype = "play";   /* default is to play */
     flite_verbose = FALSE;
     flite_loop = FALSE;
+    ipa_only = FALSE;
     flite_bench = FALSE;
     explicit_text = explicit_filename = explicit_phones = FALSE;
     ssml_mode = FALSE;
@@ -249,6 +253,8 @@ int main(int argc, char **argv)
         }
 	else if (cst_streq(argv[i],"-l"))
 	    flite_loop = TRUE;
+	else if (cst_streq(argv[i],"-i"))
+	    ipa_only = TRUE;
 	else if (cst_streq(argv[i],"-b"))
 	{
 	    flite_bench = TRUE;
@@ -393,19 +399,28 @@ int main(int argc, char **argv)
 
     if (flite_bench)
     {
-	outtype = "none";
-	filename = "A whole joy was reaping, but they've gone south, you should fetch azure mike.";
-	explicit_text = TRUE;
+        outtype = "none";
+        filename = "A whole joy was reaping, but they've gone south, you should fetch azure mike.";
+        explicit_text = TRUE;
     }
+
 
 loop:
     gettimeofday(&tv,NULL);
     time_start = (double)(tv.tv_sec)+(((double)tv.tv_usec)/1000000.0);
 
-    if (explicit_phones)
-	durs = flite_phones_to_speech(filename,v,outtype);
-    else if ((strchr(filename,' ') && !explicit_filename) || explicit_text)
+    if (explicit_phones) {
+        /* filename is actually input phones and not filename */
+	    durs = flite_phones_to_speech(filename,v,outtype);
+        return 0;
+    }
+    else if ((strchr(filename,' ') && !explicit_filename) || explicit_text || access(filename, F_OK) != 0)
     {
+        /* filename is actually input text and not filename */
+        if (ipa_only) {
+            flite_text_to_ipa(filename, v, outtype);
+            return 0;
+        }
         if (ssml_mode)
             durs = flite_ssml_text_to_speech(filename,v,outtype);
         else
@@ -413,6 +428,28 @@ loop:
     }
     else
     {
+        if (ipa_only) {
+            FILE *fd = fopen(filename, "r");
+            if (fd == NULL)
+            {
+                cst_errmsg("flite_text_to_ipa: can't open file \"%s\"\n", filename);
+                return 1;
+            }
+            fseek(fd, 0, SEEK_END);
+            length = ftell(fd);
+            fseek(fd, 0, SEEK_SET);
+            filename = malloc (length);
+            if (filename == NULL)
+            {
+                cst_errmsg("flite_text_to_ipa: failed to allocated %d bytes\n", length);
+                return 1;
+            }
+            fread(filename, length, 1, fd);
+            fclose(fd);
+            flite_text_to_ipa(filename, v, outtype);
+            free(filename);
+            return 0;
+        }
         if (ssml_mode)
             durs = flite_ssml_file_to_speech(filename,v,outtype);
         else

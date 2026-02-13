@@ -42,10 +42,10 @@
 #include "us_text.h"
 #include "us_ffeatures.h"
 
-static const char * const us_english_punctuation = "\"'`.,:;!?(){}[]";
-static const char * const us_english_prepunctuation = "\"'`({[";
+static const char * const us_english_punctuation = "\"'`.,:;!?(){}[]*/+#$%^&";
+static const char * const us_english_prepunctuation = "\"'`.,:;!?(){}[]*/+#$%^&";
 static const char * const us_english_singlecharsymbols = "";
-static const char * const us_english_whitespace = " \t\n\r";
+static const char * const us_english_whitespace = " \t\n\r-_";
 
 void usenglish_init(cst_voice *v)
 {

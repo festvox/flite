@@ -46,6 +46,7 @@
 #include "cst_units.h"
 #include "cst_synth.h"
 #include "cst_phoneset.h"
+#include <assert.h>
 
 CST_VAL_REGISTER_FUNCPTR(breakfunc,cst_breakfunc)
 
@@ -150,7 +151,18 @@ cst_utterance *apply_synth_module(cst_utterance *u,
     if (v)
 	return (*val_uttfunc(v))(u);
     if (mod->defhook)
-	return (*mod->defhook)(u);
+        /*
+        default_tokenization
+        default_textanalysis
+        default_pos_tagger
+        default_phrasing
+        default_lexical_insertion
+        default_pause_insertion
+        cart_intonation
+        cmu_us_kal_postlex
+        cart_duration
+        */
+	    return (*mod->defhook)(u);
     return u;
 }
 
@@ -219,8 +231,9 @@ cst_utterance *default_tokenization(cst_utterance *u)
     while(!ts_eof(fd))
     {
 	token = ts_get(fd);
-	if (cst_strlen(token) > 0)
-	{
+    /* allow empty token for cases where we have a puncuation on it's own. Example - "I . am"*/
+	// if (cst_strlen(token) > 0)
+	// {
 	    t = relation_append(r,NULL);
 	    item_set_string(t,"name",token);
 	    item_set_string(t,"whitespace",fd->whitespace);
@@ -228,7 +241,7 @@ cst_utterance *default_tokenization(cst_utterance *u)
 	    item_set_string(t,"punc",fd->postpunctuation);
 	    item_set_int(t,"file_pos",fd->file_pos);
 	    item_set_int(t,"line_number",fd->line_number);
-	}
+	// }
     }
 
     ts_close(fd);

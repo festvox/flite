@@ -43,6 +43,7 @@
 #include "cst_alloc.h"
 #include "cst_clunits.h"
 #include "cst_cg.h"
+#include <fcntl.h>
 
 #ifdef WIN32
 /* For Visual Studio 2012 global variable definitions */
@@ -371,6 +372,162 @@ float flite_text_to_speech(const char *text,
     delete_utterance(u);
 
     return dur;
+}
+
+const char* flite_phoneme_to_ipa(const char* flite_phoneme) {
+    
+    /* Vowels */
+    if (strcmp(flite_phoneme, "aa") == 0) return "ɑ";
+    if (strcmp(flite_phoneme, "ae") == 0) return "æ";
+    if (strcmp(flite_phoneme, "ah") == 0) return "ʌ";
+    if (strcmp(flite_phoneme, "ao") == 0) return "ɔ";
+    if (strcmp(flite_phoneme, "aw") == 0) return "aʊ";
+    if (strcmp(flite_phoneme, "ax") == 0) return "ə";
+    if (strcmp(flite_phoneme, "axr") == 0) return "ɚ";
+    if (strcmp(flite_phoneme, "ay") == 0) return "aɪ";
+    if (strcmp(flite_phoneme, "eh") == 0) return "ɛ";
+    if (strcmp(flite_phoneme, "er") == 0) return "ɝ";
+    if (strcmp(flite_phoneme, "ey") == 0) return "eɪ";
+    if (strcmp(flite_phoneme, "ih") == 0) return "ɪ";
+    if (strcmp(flite_phoneme, "iy") == 0) return "i";
+    if (strcmp(flite_phoneme, "ow") == 0) return "oʊ";
+    if (strcmp(flite_phoneme, "oy") == 0) return "ɔɪ";
+    if (strcmp(flite_phoneme, "uh") == 0) return "ʊ";
+    if (strcmp(flite_phoneme, "uw") == 0) return "u";
+    if (strcmp(flite_phoneme, "ux") == 0) return "ʉ";
+
+    /* Consonants */
+    if (strcmp(flite_phoneme, "b") == 0) return "b";
+    if (strcmp(flite_phoneme, "ch") == 0) return "tʃ";
+    if (strcmp(flite_phoneme, "d") == 0) return "d";
+    if (strcmp(flite_phoneme, "dh") == 0) return "ð";
+    if (strcmp(flite_phoneme, "dx") == 0) return "ɾ";
+    if (strcmp(flite_phoneme, "el") == 0) return "ɫ";
+    if (strcmp(flite_phoneme, "em") == 0) return "m̩";
+    if (strcmp(flite_phoneme, "en") == 0) return "n̩";
+    if (strcmp(flite_phoneme, "f") == 0) return "f";
+    if (strcmp(flite_phoneme, "g") == 0) return "ɡ";
+    if (strcmp(flite_phoneme, "hh") == 0) return "h";
+    if (strcmp(flite_phoneme, "jh") == 0) return "dʒ";
+    if (strcmp(flite_phoneme, "k") == 0) return "k";
+    if (strcmp(flite_phoneme, "l") == 0) return "l";
+    if (strcmp(flite_phoneme, "m") == 0) return "m";
+    if (strcmp(flite_phoneme, "n") == 0) return "n";
+    if (strcmp(flite_phoneme, "ng") == 0) return "ŋ";
+    if (strcmp(flite_phoneme, "nx") == 0) return "ɾ̃";
+    if (strcmp(flite_phoneme, "p") == 0) return "p";
+    if (strcmp(flite_phoneme, "q") == 0) return "ʔ";
+    if (strcmp(flite_phoneme, "r") == 0) return "ɹ";
+    if (strcmp(flite_phoneme, "s") == 0) return "s";
+    if (strcmp(flite_phoneme, "sh") == 0) return "ʃ";
+    if (strcmp(flite_phoneme, "t") == 0) return "t";
+    if (strcmp(flite_phoneme, "th") == 0) return "θ";
+    if (strcmp(flite_phoneme, "v") == 0) return "v";
+    if (strcmp(flite_phoneme, "w") == 0) return "w";
+    if (strcmp(flite_phoneme, "wh") == 0) return "ʍ";
+    if (strcmp(flite_phoneme, "y") == 0) return "j";
+    if (strcmp(flite_phoneme, "z") == 0) return "z";
+    if (strcmp(flite_phoneme, "zh") == 0) return "ʒ";
+
+    /* Default case: if no match found, return the original phoneme */
+    return flite_phoneme;
+}
+
+/* A function to print the IPA transcription of the input utterance */
+void print_ipa_transcription(cst_utterance *utt, FILE *fd) {
+    cst_item *token;
+    cst_item *word;
+    float prev_seg_end = 0;
+
+    /* Iterate over each token in the "Token" relation */
+    for (token = utt_rel_head(utt, "Token"); token; token = item_next(token)) {
+
+        if (item_feat_present(token, "whitespace")) {
+            fprintf(fd, "%s", item_feat_string(token, "whitespace"));
+        }
+        if (item_feat_present(token, "prepunctuation"))
+            fprintf(fd, "%s", item_feat_string(token, "prepunctuation"));
+
+        for (word = item_daughter(token); word; word = item_next(word)) {        
+	        cst_item *first_syl = item_as(path_to_item(word,"R:SylStructure.daughter1"),"Syllable");
+	        cst_item *cur_syl = first_syl;
+	        cst_item *last_syl = item_as(path_to_item(word,"R:SylStructure.daughtern"),"Syllable");
+            uint8_t syl_done = 0;
+            for (; cur_syl && syl_done == 0; cur_syl = item_next(cur_syl)) {
+                /* Add stress marks */
+                if (item_feat_present(cur_syl, "stress")) {
+                    const char *stress = item_feat_string(cur_syl, "stress");
+                    if ((strcmp(stress, "1") == 0) && (first_syl != cur_syl)) {
+                        fprintf(fd, "ˈ"); /* Primary stress */
+                    } else if (strcmp(stress, "2") == 0) {
+                        fprintf(fd, "ˌ"); /* Secondary stress. Doesn't actually exist, but in case it's ever added */
+                    }
+                }
+                /* if (item_feat_present(cur_syl, "accent"))
+                    fprintf(fd, "\ncur_syl accent - %s\n", item_feat_string(cur_syl, "accent"));
+                if (item_feat_present(cur_syl, "endtone"))
+                    fprintf(fd, "\ncur_syl endtone - %s\n", item_feat_string(cur_syl, "endtone"));*/
+
+                cst_item *cur_seg = item_as(path_to_item(cur_syl,"R:SylStructure.daughter1"),"Segment");
+                cst_item *last_seg = item_as(path_to_item(cur_syl,"R:SylStructure.daughtern"),"Segment");
+                uint8_t seg_done = 0;
+                for (; cur_seg && seg_done == 0; cur_seg = item_next(cur_seg)) {
+                    if (item_feat_present(cur_seg, "name"))
+                        fprintf(fd, "%s", flite_phoneme_to_ipa(item_name(cur_seg)));
+                    if (item_equal(cur_seg, last_seg))
+                        seg_done = 1;
+                    /* if (item_feat_present(cur_seg, "end")) { 
+                        // the time for the segments seems to be wrong. I can't get the correct length markings from it
+                        float cur_seg_end = item_feat_float(cur_seg, "end");
+                        fprintf(fd, "\ncur_seg end - %f\n", cur_seg_end - prev_seg_end);
+                        prev_seg_end = cur_seg_end;
+                    usefull functions
+                    cst_ffeatures->syl_vowel - checks if item is a vowel sylable
+                    } */
+                }
+                if (item_equal(cur_syl, last_syl))
+                    syl_done = 1;
+
+            }
+        }
+
+        if (item_feat_present(token, "punc"))
+            fprintf(fd, "%s", item_feat_string(token, "punc"));
+    }
+
+    fprintf(fd, "\n");
+}
+
+void flite_text_to_ipa(const char *text,
+			     cst_voice *voice,
+			   const char *outtype)
+{
+    cst_utterance *u;
+    FILE *fd;
+
+    u = flite_synth_text(text,voice);
+
+    /* No need for this since I can't failed to extract the length signs from this data */
+    /* utt_wave(u); */
+
+    if (cst_streq(outtype,"play") || cst_streq(outtype,"stream") || cst_streq(outtype,"none"))
+        print_ipa_transcription(u, stdout);
+    else
+    {
+        /* save to out file (outtype) */
+        fd = fopen(outtype, "w");
+        if (fd == NULL)
+        {
+            cst_errmsg("flite_text_to_ipa: can't open file \"%s\"\n", outtype);
+            return;
+        }
+        
+        print_ipa_transcription(u, fd);
+        fclose(fd);
+        
+    }
+
+    delete_utterance(u);
 }
 
 float flite_phones_to_speech(const char *text,

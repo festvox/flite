@@ -121,6 +121,7 @@ const char * const cmu_lts_letter_table[30] =
     NULL
 };
 
+//index into the cmu_lts_model.c table
 const cst_lts_addr cmu_lts_letter_index[27] = 
 {
     0, /* a */

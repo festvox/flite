@@ -824,9 +824,14 @@ static cst_val *us_tokentowords_one(cst_item *token, const char *name)
 	     (!us_aswd(name)))
         /* Still not quiet right, if there is a user_lex we need to check */
         /* it too -- but user_lex isn't user setable yet */
-	/* Need common exception list */
-	/* unpronouncable list of alphas */
-	r = en_exp_letters(name);
+        /* Need common exception list */
+        /* unpronouncable list of alphas */
+
+        /* I had some misspelled word in my input (wannth), and got a weird output- 
+        dʌbəljueɪɛnɛntieɪtʃ (In the spoken wav file as well)
+        I think it both reads better and sounds better when I do this*/
+        r = cons_val(string_val(name),NULL);
+        /* r = en_exp_letters(name); */
 
     /* buckets of other stuff missing */
 
